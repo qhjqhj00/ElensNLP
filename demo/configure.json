@@ -1,0 +1,45 @@
+{
+  "predict":
+    {
+      "cn_s": {
+        "execute": false,
+        "language": "cn",
+        "type": "ner",
+        "model_path": "ner_models/cn/cn_s.pt"
+      },
+      "en_s": {
+        "execute": false,
+        "language": "en",
+        "type": "ner",
+        "model_path": "ner_models/en/en_s.pt"
+      },
+      "uy_s": {
+        "execute": false,
+        "language": "uy",
+        "type": "ner",
+        "model_path": "ner_models/uy/uy_s.pt"
+      },
+      "cn_15": {
+        "execute": true,
+        "language": "cn",
+        "type": "clf",
+        "model_path": "clf_models/cn/cn_15.pt"
+      }
+    },
+  "train":{
+    "test_ner":{
+      "task_type":"ner",
+      "train_file":"./dataset/MSRA_TRAIN_ALL.txt",
+      "test_file":"./dataset/MSRA_TEST_ALL.txt",
+      "language":"CN_char",
+      "out_path":"./dataset"
+    },
+    "test_clf":{
+      "task_type":"clf",
+      "train_file":"./dataset/train.txt",
+      "test_file":"./dataset/test.txt",
+      "language":"CN_char",
+      "out_path":"./dataset"
+    }
+  }
+}
