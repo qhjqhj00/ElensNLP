@@ -253,21 +253,20 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
 
-class DocumentCNN1DEmbedding(DocumentEmbeddings):
+class DocumentCNN1DEmbeddings(DocumentEmbeddings):
 
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  embedding_type: str = 'static',
                  dropout: float = 0.5,
-                 kernel_size: List = [1,2,3,5],
-                 kernel_nums: List = [256,256,256,256],
+                 kernel_size: List = [3,4,5],
+                 kernel_nums: List = [256,256,256],
                  in_channel = 1,
                  hidden_size: int = 256
                  ):
 
         """搞一个RNN类的特征提取
         :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
-        :param embedding_type: ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
         :param dropout: dropout多少
         :param kernel_size:卷积核的大小
         :param kernel_nums: 卷积核个数
@@ -277,33 +276,21 @@ class DocumentCNN1DEmbedding(DocumentEmbeddings):
 
         self.embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
 
-        self.embedding_type = embedding_type
         self.in_channel = in_channel
         self.dropout = dropout
         self.kernel_size = kernel_size
         self.kernel_nums = kernel_nums
         self.hidden_size = hidden_size
+        self.name = f'document_{embedding_type}'
 
         self.length_of_all_token_embeddings: int = self.embeddings.embedding_length
         self.__embedding_length = hidden_size
 
-        if self.embedding_type=='static':
-            self.static_embeddings = True
-        elif self.embedding_type=='non_static':
-            self.static_embeddings = False
-        elif self.embedding_type == 'multichannel':
-            self.embeddings2: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
-            self.embeddings2.weight.requires_grad = False
-            self.in_channel = 2
-        else:
-            pass
-
         self.embeddings_dimension: int = self.length_of_all_token_embeddings
 
-        self.convs = nn.ModuleList(
-            [nn.Conv1d(self.in_channel, num, self.embeddings_dimension * size, stride=self.embeddings_dimension) for size, num in
-             zip(self.kernel_size, self.kernel_nums)])
-        self.fc = nn.Linear(sum(self.kernel_nums), self.hidden_size)
+        self.convs = torch.nn.ModuleList(
+            [torch.nn.Conv1d(self.embeddings_dimension, num, size, stride=1) for size, num in zip(self.kernel_size, self.kernel_nums)])
+        self.fc = torch.nn.Linear(sum(self.kernel_nums), self.hidden_size)
 
         self.to(device)
 
@@ -353,21 +340,20 @@ class DocumentCNN1DEmbedding(DocumentEmbeddings):
 
             # 加到一个list中
             all_sentence_tensors.append(sentence_states.unsqueeze(1))
-
         # 得到batch的特征
-        sentence_tensor = torch.cat(all_sentence_tensors, 1)
+        sentence_tensor = torch.stack(all_sentence_tensors)
+        sentence_tensor = torch.squeeze(sentence_tensor)
+        sentence_tensor = sentence_tensor.permute(0, 2, 1)
 
-        self.conv_results = [
-            F.max_pool1d(F.relu(self.convs[i](sentence_tensor)), self.max_seq_len - self.kernel_sizes[i] + 1)
-                .view(-1, self.kernel_nums[i])
-            for i in range(len(self.convs))]
+        self.conv_results = [F.max_pool1d(F.relu(self.convs[i](sentence_tensor)),longest_token_sequence_in_batch - self.kernel_size[i] + 1).view(-1,self.kernel_nums[i]) for i in range(len(self.convs))]
+
         x = torch.cat(self.conv_results, 1)
         x = F.dropout(x, p=self.dropout, training=self.training)
         outputs = self.fc(x)
 
         # 获得句的特征
         for sentence_no, length in enumerate(lengths):
-            last_rep = outputs[length - 1, sentence_no]
+            last_rep = outputs[sentence_no, :]
 
             embedding = last_rep
 
