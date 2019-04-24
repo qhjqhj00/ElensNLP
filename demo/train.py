@@ -31,7 +31,8 @@ if configure['task_type'] == 'ner':
 
     columns = {0: 'text', 1: 'ner'}  # 数据集每一行的类型，CONLL03 数据集为 {0: 'text', 1: 'pos', 2: 'chunk', 3: 'chunk'}
     data_folder = '.'  # 数据集的路径
-
+    if 'test_file' not in configure:
+        configure['test_file'] = None
     # 为了方便多数据集合并，支持多文件传入，如 ['data_1.txt','data_2.txt','data_3.txt']
     corpus: TaggedCorpus = load_column_corpus(data_folder, columns, train_file=[configure['train_file']],
                                               test_file=configure['test_file'],lang=configure['language'])

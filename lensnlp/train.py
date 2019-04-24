@@ -52,7 +52,7 @@ class cls_train:
                 self.corpus = load_clf_data('CN_char',Path(path) / train_file, Path(path) / test_file)
             else:
                 self.corpus = load_clf_data('CN_char', Path(path) / train_file)
-            self.embedding = [WordEmbeddings('cn_glove')]
+            self.embedding_list = [WordEmbeddings('cn_glove')]
         elif language == 'en':
             if test_file is not None:
                 self.corpus = load_clf_data('EN',Path(path) / train_file, Path(path) / test_file)
