@@ -25,7 +25,7 @@ all_configure['predict'][args.name] = {
         "model_path": configure['out_path']+"/best-model.pt",}
 
 with open(args.configure,'w') as f:
-    json.dump(f, all_configure)
+    json.dump(all_configure, f, indent=4)
 
 if configure['task_type'] == 'ner':
 
