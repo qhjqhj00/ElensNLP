@@ -4,6 +4,7 @@ import logging
 from typing import List, Union, Dict
 from pathlib import Path
 from gensim.models import KeyedVectors
+from gensim.models.wrappers import FastText
 
 import numpy as np
 import torch
@@ -77,15 +78,20 @@ class WordEmbeddings(TokenEmbeddings):
 
         if embeddings.lower() == 'en_glove':
             embeddings = Path(CACHE_ROOT) / 'language_model/en_glove_300d'
+            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
 
         elif embeddings.lower() == 'cn_glove':
             embeddings = Path(CACHE_ROOT) / 'language_model/cn_glove_300d'
+            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
+
+        elif embeddings.lower() == 'cn_fasttext':
+            embeddings = Path(CACHE_ROOT) / 'language_model/zh'
+            self.precomputed_word_embeddings = FastText.load_fasttext_format(str(embeddings))
+        else:
+            raise ValueError('Please specify another embeddings!')
 
         self.name: str = str(embeddings)
         self.static_embeddings = True
-
-        self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
-
         self.__embedding_length: int = self.precomputed_word_embeddings['0'].shape[0]
         super().__init__()
 
