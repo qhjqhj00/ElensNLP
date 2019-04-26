@@ -116,7 +116,10 @@ def load_clf_data(tag, train_file, test_file=None):
 
     train_data = [re.split("\s+", doc) for doc in train_data]
     train_y = [doc[0] for doc in train_data]
-    train_X = [doc[1].replace(' ','') for doc in train_data]
+        if tag in ['CN_char', 'CN_token']:
+                train_X = [doc[1].replace(' ','') for doc in train_data]
+        elif tag == 'EN':
+                train_X = [' '.join(doc[1:]) for doc in train_data]
     train_ = [Sentence(train_X[i], tag, [train_y[i]]) for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
@@ -126,7 +129,11 @@ def load_clf_data(tag, train_file, test_file=None):
         test_data = open(str(test_file), encoding='utf-8').read().strip().split('\n')
         test_data = [doc.split('\t') for doc in test_data]
         test_y = [doc[0] for doc in test_data]
-        test_X = [doc[1].replace(' ','') for doc in test_data]
+#         test_X = [doc[1].replace(' ','') for doc in test_data]
+        if tag in ['CN_char', 'CN_token']:
+            test_X = [doc[1].replace(' ', '') for doc in train_data]
+        elif tag == 'EN':
+            test_X = [' '.join(doc[1:]) for doc in train_data]
         test_ = [Sentence(test_X[i], tag, [test_y[i]]) for i in range(len(test_X)) if len(test_X[i]) > 0]
     else:
         test_: List[Sentence] = [train_[i] for i in
