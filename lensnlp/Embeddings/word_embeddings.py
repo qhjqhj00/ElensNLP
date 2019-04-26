@@ -92,7 +92,7 @@ class WordEmbeddings(TokenEmbeddings):
 
         self.name: str = str(embeddings)
         self.static_embeddings = True
-        self.__embedding_length: int = self.precomputed_word_embeddings['0'].shape[0]
+        self.__embedding_length: int = self.precomputed_word_embeddings['的'].shape[0]
         super().__init__()
 
     @property
