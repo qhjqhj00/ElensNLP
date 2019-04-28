@@ -124,7 +124,10 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
         self.__embedding_length: int = hidden_size
         if self.bidirectional:
-            self.__embedding_length *= 4
+            if use_attention:
+                self.__embedding_length *= 2
+            else:
+                self.__embedding_length *= 4
 
         self.embeddings_dimension: int = self.length_of_all_token_embeddings
         if self.reproject_words and reproject_words_dimension is not None:
@@ -158,18 +161,21 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         return self.__embedding_length
 
     def attention(self, rnn_out, state):
-        """
-        :param rnn_out: rnn的输出
-        :param state: 序列的隐藏状态
-        :return: 每个cell的一个注意力权重
-        """
-        merged_state = torch.cat([s for s in state],1)
-        merged_state = merged_state.squeeze(0).unsqueeze(2)
+    """
+    :param rnn_out: rnn的输出
+    :param state: 序列的隐藏状态
+    :return: 每个cell的一个注意力权重
+    """
+        batch_size = state.size()[1]
+        state = state.view(self.rnn_layers, batch_size, -1)
+        merged_state = torch.cat([s for s in state],1)  #shape = [batch, hidden*direction]
+        # print(merged_state.size())
+        merged_state = merged_state.unsqueeze(2)
         # (batch, seq_len, cell_size) * (batch, cell_size, 1) = (batch, seq_len, 1)
-        weights = torch.bmm(rnn_out, merged_state)
+        weights = torch.bmm(rnn_out.permute(1,0,2), merged_state)
         weights = torch.nn.functional.softmax(weights.squeeze(2)).unsqueeze(2)
         # (batch, cell_size, seq_len) * (batch, seq_len, 1) = (batch, cell_size, 1)
-        return torch.bmm(torch.transpose(rnn_out, 1, 2), weights).squeeze(2)
+        return torch.bmm(rnn_out.permute(1,2,0), weights).squeeze(2)
 
     def embed(self, sentences: Union[List[Sentence], Sentence]):
         """
