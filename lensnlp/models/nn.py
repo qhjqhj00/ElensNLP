@@ -8,7 +8,7 @@ from lensnlp.utilis.data import Sentence, Label
 
 
 class Model(torch.nn.Module):
-
+    """模型的基础类"""
     @abstractmethod
     def forward_loss(self, sentences: Union[List[Sentence], Sentence]) -> torch.tensor:
         pass
@@ -42,7 +42,7 @@ class LockedDropout(torch.nn.Module):
 
 class WordDropout(torch.nn.Module):
     """
-    随机扔embedding
+    随机扔词的embedding
     """
     def __init__(self, dropout_rate=0.05):
         super(WordDropout, self).__init__()

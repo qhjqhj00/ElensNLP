@@ -30,7 +30,7 @@ setup(
         "deprecated>=1.2.4",
         "hyperopt>=0.1.1",
         "bpemb>=0.2.9",
-        "regex==2018.1.10",
+        "regex>=2018.1.10",
         "pypinyin>=0.35.0"
     ],
     include_package_data=True,

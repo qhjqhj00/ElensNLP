@@ -23,7 +23,28 @@ log = logging.getLogger('lensnlp')
 
 
 class ModelTrainer:
+    """
+    训练器类
+    :param model: 序列标注模型或者分类模型
+    :param corpus: 语料数据
+    :param optimizer: 优化器，默认为SGD
+    :param epoch: epoch数量
+    例如：
+    >>>from lensnlp.models import SequenceTagger
+    >>>from lensnlp.Embeddings import WordEmbeddings
+    >>>from lensnlp.utilis.data_load import load_column_corpus
 
+    >>>corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
+
+    >>>emb = WordEmbeddings('cn_glove')
+
+    >>>tagger = SequenceTagger(hidden_size=256,
+    >>>                         embeddings = emb)
+
+    >>>from lensnlp.trainers import ModelTrainer
+    >>>trainer = ModelTrainer(tagger,corpus)
+    >>>trainer.train()
+    """
     def __init__(self,
                  model: nn.Model,
                  corpus: Corpus,
@@ -61,6 +82,22 @@ class ModelTrainer:
               test_mode: bool = False,
               **kwargs
               ) -> dict:
+        """
+        模型训练
+        :param base_path: 输出路径
+        :param evaluation_metric: 评测指标
+        :param learning_rate: 学习率
+        :param mini_batch_size: batch size
+        :param max_epochs: 最大epoch数
+        :param anneal_factor: 学习率衰减率
+        :param patience: 不收敛忍耐epoch数量
+        :param anneal_against_train_loss: 是否以训练loss为学习率衰减指标
+        :param train_with_dev: 是否把验证集加入训练数据
+        :param monitor_train: 是否evaluate训练集
+        :param embeddings_in_memory: 是否把embeddings放到内存
+        :param checkpoint: 是否开启checkpoint
+        :param save_final_model: 是否保存最后的model
+        """
 
         if eval_mini_batch_size is None:
             eval_mini_batch_size = mini_batch_size

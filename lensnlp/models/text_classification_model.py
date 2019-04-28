@@ -19,7 +19,22 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
 class TextClassifier(nn.Model):
     """
-    文本分类模型，把文本向量通过线性层，获得标签
+    序列标注模型
+    :param document_embeddings: 传入一个doc embedding
+    :param label_dictionary: label的匹配词典
+    :param multi_label: 是否采用多标签
+    用例：
+    >>>from lensnlp.models import TextClassifier
+    >>>from lensnlp.Embeddings import WordEmbeddings,DocumentPoolEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>sent = Sentence('北京一览群智。')
+    >>>emb_list = [WordEmbeddings('cn_glove')]
+    >>>doc_emb = DocumentPoolEmbeddings(emb_list)
+    >>>clf = TextClassifier(document_embeddings=doc_emb,
+    >>>                         label_dictionary=None)
+    >>>
+    >>>cn_clf = TextClassifier.load('cn_clf') # 加载预训练模型
+    >>>cn_clf.predict(sent) # 预测
     """
 
     def __init__(self,
@@ -46,9 +61,11 @@ class TextClassifier(nn.Model):
         self.to(device)
 
     def _init_weights(self):
+        """初始化权重"""
         torch.nn.init.xavier_uniform_(self.decoder.weight)
 
     def forward(self, sentences) -> List[List[float]]:
+        """forward获取特征"""
         self.document_embeddings.embed(sentences)
 
         text_embedding_list = [sentence.get_embedding().unsqueeze(0) for sentence in sentences]
@@ -108,6 +125,7 @@ class TextClassifier(nn.Model):
 
     @classmethod
     def load_checkpoint(cls, model_file: Union[str, Path]):
+        """加载断电模型"""
         state = TextClassifier._load_state(model_file)
         model = TextClassifier.load_from_file(model_file)
 
@@ -234,14 +252,18 @@ class TextClassifier(nn.Model):
 
     @staticmethod
     def load(model_file: str):
-        if model_file == 'cn_15':
-            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/cn/cn_15.pt')
-        elif model_file == 'cn_x':
-            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/cn/cn_x.pt')
-        elif model_file == 'en_s':
-            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/en/en_s.pt')
-        elif model_file == 'en_x':
-            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/en/en_x.pt')
+        if model_file == 'cn_clf':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/cn/cn_clf.pt')
+        elif model_file == 'cn_emo':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/cn/cn_emo.pt')
+        elif model_file == 'uy_clf':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/uy/uy_clf.pt')
+        elif model_file == 'uy_emo':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/uy/uy_emo.pt')
+        elif model_file == 'en_clf':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/en/en_clf.pt')
+        elif model_file == 'en_emo':
+            classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / 'clf_models/en/en_emo.pt')
         else:
             try:
                 classifier: TextClassifier = TextClassifier.load_from_file(Path(CACHE_ROOT) / model_file)

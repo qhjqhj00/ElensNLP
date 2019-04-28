@@ -14,9 +14,17 @@ log = logging.getLogger('qhj')
 
 
 class DocumentPoolEmbeddings(DocumentEmbeddings):
-    """篇章级求向量
-    :param embeddings:一堆词向量
+    """
+    最简单的句向量计算方式
+    :param embeddings:一个词向量列表，用于给句中的词加向量。
     :param mode: 三种pool的方式 ['mean', 'max', 'min']
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentPoolEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Embed_list = [WordEmbeddings('cn_glove')]
+    >>>Docum_embed = DocumentPoolEmbeddings(Embed_list)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Docum_embed.embed((sent))
     """
 
     def __init__(self, embeddings: List[TokenEmbeddings], mode: str = 'mean'):
@@ -42,11 +50,12 @@ class DocumentPoolEmbeddings(DocumentEmbeddings):
 
     @property
     def embedding_length(self) -> int:
+        """返回向量的长度"""
         return self.__embedding_length
 
     def embed(self, sentences: Union[List[Sentence], Sentence]):
         """
-        :param sentences
+        :param sentences：单个Sentence或者Sentence的列表
         :return: 句子级别的向量，由词向量求得
         """
         everything_embedded: bool = True
@@ -82,7 +91,25 @@ class DocumentPoolEmbeddings(DocumentEmbeddings):
 
 class DocumentRNNEmbeddings(DocumentEmbeddings):
     """
-    用RNN类网络来获得句子级别的向量
+    用RNN类神经网络来获得篇章级别的向量表示。
+    :param embeddings: 一个词向量列表，用于给句中的词加向量。
+    :param hidden_size: 输出的向量维度
+    :param rnn_layers: 几层RNN
+    :param reproject_words: 是否线性转换一下词向量
+    :param reproject_words_dimension: 如果线性转换词向量，输出的维度
+    :param bidirectional: 是否用双向RNN网络
+    :param dropout: dropout率
+    :param word_dropout: word_drop_out率
+    :param locked_dropout: locked_dropout率
+    :param rnn_type: 'GRU', 'LSTM',  'RNN_TANH' or 'RNN_RELU'
+    :param:use_attention: 是否使用注意力
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentRNNEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Embed_list = [WordEmbeddings('cn_glove')]
+    >>>Docum_embed = DocumentRNNEmbeddings(Embed_list)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Docum_embed.embed((sent))
     """
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
@@ -96,19 +123,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
                  locked_dropout: float = 0.0,
                  rnn_type='LSTM',
                  use_attention = False):
-        """搞一个RNN类的特征提取
-        :param embeddings: 一堆堆向量
-        :param hidden_size: 输出的向量
-        :param rnn_layers: 几层
-        :param reproject_words: 要不要先映射一下下？
-        :param reproject_words_dimension: 如果要映射，映射多少维呢？
-        :param bidirectional: 要不要用双向的
-        :param dropout: dropout多少
-        :param word_dropout: word_drop_out多少
-        :param locked_dropout: locked_dropout多少
-        :param rnn_type: 'GRU', 'LSTM',  'RNN_TANH' or 'RNN_RELU'
-        :param:use_attention: True 则使用注意力
-        """
+
         super().__init__()
 
         self.embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
@@ -124,7 +139,10 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
         self.__embedding_length: int = hidden_size
         if self.bidirectional:
-            self.__embedding_length *= 4
+            if use_attention:
+                self.__embedding_length *= 2
+            else:
+                self.__embedding_length *= 4
 
         self.embeddings_dimension: int = self.length_of_all_token_embeddings
         if self.reproject_words and reproject_words_dimension is not None:
@@ -155,6 +173,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
     @property
     def embedding_length(self) -> int:
+        """返回向量维度"""
         return self.__embedding_length
 
     def attention(self, rnn_out, state):
@@ -173,7 +192,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
     def embed(self, sentences: Union[List[Sentence], Sentence]):
         """
-        :param sentences:
+        :param sentences: 单个Sentence或者Sentence的列表
         :return: embedding存在了Sentence.embeddings中
         """
         if type(sentences) is Sentence:
@@ -253,44 +272,65 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
 
-class DocumentCNN1DEmbeddings(DocumentEmbeddings):
 
+class DocumentCNN1DEmbedding(DocumentEmbeddings):
+    """
+    TextCNN 1D 来获得篇章级别的向量表示。
+    :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
+    :param embedding_type: ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
+    :param dropout: dropout率
+    :param kernel_size:卷积核的大小
+    :param kernel_nums: 卷积核个数
+    :param:in_channel:  当embedding_type 为双通道时，embedding更新的通道
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentCNN1DEmbedding
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Embed_list = [WordEmbeddings('cn_glove')]
+    >>>Docum_embed = DocumentCNN1DEmbedding(Embed_list)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Docum_embed.embed((sent))
+    """
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  embedding_type: str = 'static',
                  dropout: float = 0.5,
-                 kernel_size: List = [3,4,5],
-                 kernel_nums: List = [256,256,256],
+                 kernel_size: List = [1,2,3,5],
+                 kernel_nums: List = [256,256,256,256],
                  in_channel = 1,
                  hidden_size: int = 256
                  ):
 
-        """搞一个RNN类的特征提取
-        :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
-        :param dropout: dropout多少
-        :param kernel_size:卷积核的大小
-        :param kernel_nums: 卷积核个数
-        :param:in_channel:  当embedding_type 为双通道时，embedding更新的通道
-        """
         super().__init__()
 
         self.embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
 
+        self.embedding_type = embedding_type
         self.in_channel = in_channel
         self.dropout = dropout
         self.kernel_size = kernel_size
         self.kernel_nums = kernel_nums
         self.hidden_size = hidden_size
-        self.name = f'document_{embedding_type}'
 
         self.length_of_all_token_embeddings: int = self.embeddings.embedding_length
         self.__embedding_length = hidden_size
 
+        if self.embedding_type=='static':
+            self.static_embeddings = True
+        elif self.embedding_type=='non_static':
+            self.static_embeddings = False
+        elif self.embedding_type == 'multichannel':
+            self.embeddings2: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
+            self.embeddings2.weight.requires_grad = False
+            self.in_channel = 2
+        else:
+            pass
+
         self.embeddings_dimension: int = self.length_of_all_token_embeddings
 
-        self.convs = torch.nn.ModuleList(
-            [torch.nn.Conv1d(self.embeddings_dimension, num, size, stride=1) for size, num in zip(self.kernel_size, self.kernel_nums)])
-        self.fc = torch.nn.Linear(sum(self.kernel_nums), self.hidden_size)
+        self.convs = nn.ModuleList(
+            [nn.Conv1d(self.in_channel, num, self.embeddings_dimension * size, stride=self.embeddings_dimension) for size, num in
+             zip(self.kernel_size, self.kernel_nums)])
+        self.fc = nn.Linear(sum(self.kernel_nums), self.hidden_size)
 
         self.to(device)
 
@@ -340,20 +380,21 @@ class DocumentCNN1DEmbeddings(DocumentEmbeddings):
 
             # 加到一个list中
             all_sentence_tensors.append(sentence_states.unsqueeze(1))
+
         # 得到batch的特征
-        sentence_tensor = torch.stack(all_sentence_tensors)
-        sentence_tensor = torch.squeeze(sentence_tensor)
-        sentence_tensor = sentence_tensor.permute(0, 2, 1)
+        sentence_tensor = torch.cat(all_sentence_tensors, 1)
 
-        self.conv_results = [F.max_pool1d(F.relu(self.convs[i](sentence_tensor)),longest_token_sequence_in_batch - self.kernel_size[i] + 1).view(-1,self.kernel_nums[i]) for i in range(len(self.convs))]
-
+        self.conv_results = [
+            F.max_pool1d(F.relu(self.convs[i](sentence_tensor)), self.max_seq_len - self.kernel_sizes[i] + 1)
+                .view(-1, self.kernel_nums[i])
+            for i in range(len(self.convs))]
         x = torch.cat(self.conv_results, 1)
         x = F.dropout(x, p=self.dropout, training=self.training)
         outputs = self.fc(x)
 
         # 获得句的特征
         for sentence_no, length in enumerate(lengths):
-            last_rep = outputs[sentence_no, :]
+            last_rep = outputs[length - 1, sentence_no]
 
             embedding = last_rep
 
@@ -400,7 +441,22 @@ class DocumentLMEmbeddings(DocumentEmbeddings):
 
 
 class DocumentCNN2DEmbedding(DocumentEmbeddings):
-
+    """
+    TextCNN 2D 来获得篇章级别的向量表示。
+    :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
+    :param embedding_type: ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
+    :param dropout: dropout率
+    :param kernel_size:卷积核的大小
+    :param kernel_nums: 卷积核个数
+    :param:in_channel:  当embedding_type 为双通道时，embedding更新的通道
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentCNN2DEmbedding
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Embed_list = [WordEmbeddings('cn_glove')]
+    >>>Docum_embed = DocumentCNN2DEmbedding(Embed_list)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Docum_embed.embed((sent))
+    """
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  embedding_type='static',

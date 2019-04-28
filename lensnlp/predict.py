@@ -1,9 +1,17 @@
 from lensnlp.models import SequenceTagger, TextClassifier
 from lensnlp.utilis.data_preprocess import cn_prepare, en_prepare, uy_prepare, clf_preprocess
-from lensnlp.hyper_parameters import id_to_label_15
+from lensnlp.hyper_parameters import cn_clf,en_clf,uy_clf,emo
 
 
 class ner:
+    """
+    实体识别模型，提供中文，英文，维吾尔语三个语种的预训练模型。
+    示例:
+    >>>from lensnlp import ner
+    >>>sent = '北京一览群智。'
+    >>>cn_tagger = ner('cn')
+    >>>cn_tagger.predict(sent)
+    """
     def __init__(self,language):
 
         self.language = language
@@ -37,23 +45,49 @@ class ner:
 
 
 class clf:
+    """
+    文本分类模型，提供中文，英文，维吾尔语文本分类模型。
+    示例:
+    >>>from lensnlp import clf
+    >>>sent = '北京一览群智。'
+    >>>cn_clf = clf('cn_clf')
+    >>>cn_clf.predict(sent)
+    """
     def __init__(self,language):
         self.language = language
-        if self.language == 'cn':
-            self.clf = TextClassifier.load('cn_15')
+        if self.language == 'cn_clf':
+            self.clf = TextClassifier.load('cn_clf')
+        elif self.language == 'en_clf':
+            self.clf = TextClassifier.load('en_clf')
+        elif self.language == 'uy_clf':
+            self.clf = TextClassifier.load('uy_clf')
+        elif self.language == 'cn_emo':
+            self.clf = TextClassifier.load('cn_emo')
+        elif self.language == 'en_emo':
+            self.clf = TextClassifier.load('en_emo')
+        elif self.language == 'uy_emo':
+            self.clf = TextClassifier.load('uy_emo')
+
         else:
             raise ValueError('Not yet!')
 
     def preprocess(self,text):
-        if self.language == 'cn':
-            return clf_preprocess(text)
-        else:
-            raise ValueError('Not yet!')
+        return clf_preprocess(text,self.language)
 
     def predict(self,text):
         sentences = self.preprocess(text)
         self.clf.predict(sentences)
         result = []
         for s in sentences:
-            result.append(id_to_label_15[int(s.labels[0].value)])
+            if self.language == 'cn_clf':
+                result.append(cn_clf[int(s.labels[0].value)])
+            elif self.language == 'en_clf':
+                result.append(en_clf[int(s.labels[0].value)])
+            elif self.language == 'uy_clf':
+                result.append(uy_clf[int(s.labels[0].value)])
+            elif 'emo' in self.language:
+                result.append(emo[int(s.labels[0].value)])
+            else:
+                raise ValueError('Not yet!')
+
         return result

@@ -1,7 +1,7 @@
 {
     "predict": {
         "cn_s": {
-            "execute": false,
+            "execute": true,
             "language": "cn",
             "type": "ner",
             "model_path": "ner_models/cn/cn_s.pt"
@@ -12,6 +12,18 @@
             "type": "ner",
             "model_path": "ner_models/en/en_s.pt"
         },
+        "en_x": {
+            "execute": false,
+            "language": "en",
+            "type": "ner",
+            "model_path": "ner_models/en/en_x.pt"
+        },
+        "cn_x": {
+            "execute": false,
+            "language": "cn",
+            "type": "ner",
+            "model_path": "ner_models/cn/cn_x.pt"
+        },
         "uy_s": {
             "execute": false,
             "language": "uy",
@@ -19,7 +31,7 @@
             "model_path": "ner_models/uy/uy_s.pt"
         },
         "cn_15": {
-            "execute": true,
+            "execute": false,
             "language": "cn",
             "type": "clf",
             "model_path": "clf_models/cn/cn_15.pt"

@@ -6,7 +6,7 @@ from lensnlp.utilis.data import Sentence
 
 
 class Embeddings(torch.nn.Module):
-    """所有词向量类的基础类"""
+    """所有Embedding类的基础类，Embedding类都继承这个类"""
 
     @property
     @abstractmethod
@@ -17,10 +17,15 @@ class Embeddings(torch.nn.Module):
     @property
     @abstractmethod
     def embedding_type(self) -> str:
+        """返回向量的类别"""
         pass
 
     def embed(self, sentences: Union[Sentence, List[Sentence]]) -> List[Sentence]:
-        """给词加上词向量"""
+        """
+        此函数给输入的句子加入向量
+        :param sentences: 单个Sentence或者Sentence的列表
+        :return: 储存好向量的sentences
+        """
 
         if type(sentences) is Sentence:
             sentences = [sentences]
@@ -42,7 +47,7 @@ class Embeddings(torch.nn.Module):
 
     @abstractmethod
     def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
-        """Private method for adding embeddings to all words in a list of sentences."""
+        """给句子中的每个词加入向量"""
         pass
 
 
@@ -57,6 +62,7 @@ class TokenEmbeddings(Embeddings):
 
     @property
     def embedding_type(self) -> str:
+        """返回 word-level"""
         return 'word-level'
 
 class DocumentEmbeddings(Embeddings):
@@ -65,8 +71,10 @@ class DocumentEmbeddings(Embeddings):
     @property
     @abstractmethod
     def embedding_length(self) -> int:
+        """返回词向量的长度"""
         pass
 
     @property
     def embedding_type(self) -> str:
+        """返回 sentence-level"""
         return 'sentence-level'

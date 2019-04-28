@@ -1,3 +1,3 @@
-from .base import TokenEmbeddings, DocumentEmbeddings
-from .doc_embeddings import DocumentRNNEmbeddings, DocumentPoolEmbeddings,DocumentLMEmbeddings
-from .word_embeddings import WordEmbeddings, FlairEmbeddings, BytePairEmbeddings, StackedEmbeddings, BertEmbeddings
+from .base import *
+from .doc_embeddings import *
+from .word_embeddings import *

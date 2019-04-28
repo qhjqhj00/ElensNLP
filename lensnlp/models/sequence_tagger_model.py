@@ -28,15 +28,18 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
 
 def to_scalar(var):
-    return var.view(-1).detach().tolist()[0]  #变为常量
+    """tensor变为普通常量"""
+    return var.view(-1).detach().tolist()[0]
 
 
 def argmax(vec):
+    """求argmax"""
     _, idx = torch.max(vec, 1)
     return to_scalar(idx)
 
 
 def log_sum_exp(vec):
+    """求log sum exp"""
     max_score = vec[0, argmax(vec)]
     max_score_broadcast = max_score.view(1, -1).expand(1, vec.size()[1])
     return max_score + \
@@ -44,11 +47,13 @@ def log_sum_exp(vec):
 
 
 def argmax_batch(vecs):
+    """给一个batch求求argmax"""
     _, idx = torch.max(vecs, 1)
     return idx
 
 
 def log_sum_exp_batch(vecs):
+    """给一个batch求log sum exp"""
     maxi = torch.max(vecs, 1)[0]
     maxi_bc = maxi[:, None].repeat(1, vecs.shape[1])
     recti_ = torch.log(torch.sum(torch.exp(vecs - maxi_bc), 1))
@@ -73,7 +78,27 @@ def pad_tensors(tensor_list):
 class SequenceTagger(nn.Model):
     """
     序列标注模型
-    rnn种类提供了GRU 和 LSTM
+    :param hidden_size: 隐藏层尺寸
+    :param embeddings: Embedding数量
+    :param tag_dictionary: 标签字典
+    :param tag_type: 标签类型 如：'ner'
+    :param use_crf: 是否用crf
+    :param use_rnn: 是否用rnn
+    :param rnn_layers: rnn的层数
+    :param dropout: dropout率
+    :param word_dropout: word_dropout率
+    :param locked_dropout: locked_dropout率
+    用例：
+    >>>from lensnlp.models import SequenceTagger
+    >>>from lensnlp.Embeddings import WordEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>sent = Sentence('北京一览群智。')
+    >>>emb = WordEmbeddings('cn_glove')
+    >>>tagger = SequenceTagger(hidden_size=256,
+    >>>                         embeddings = emb)
+    >>>
+    >>>cn_ner = SequenceTagger.load('cn_s') # 加载预训练模型
+    >>>tagger.predict(sent) # 预测
     """
 
     def __init__(self,
@@ -88,6 +113,7 @@ class SequenceTagger(nn.Model):
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
                  ):
+
 
         super(SequenceTagger, self).__init__()
 
@@ -158,6 +184,7 @@ class SequenceTagger(nn.Model):
 
 
     def save(self, model_file: Union[str, Path]):
+        """保存模型"""
         model_state = {
             'state_dict': self.state_dict(),
             'embeddings': self.embeddings,
@@ -175,6 +202,7 @@ class SequenceTagger(nn.Model):
 
     def save_checkpoint(self, model_file: Union[str, Path], optimizer_state: dict, scheduler_state: dict, epoch: int,
                         loss: float):
+        """保存checkpoint"""
         model_state = {
             'state_dict': self.state_dict(),
             'embeddings': self.embeddings,
@@ -196,6 +224,7 @@ class SequenceTagger(nn.Model):
 
     @classmethod
     def load_from_file(cls, model_file: Union[str, Path]):
+        """加载模型"""
         state = SequenceTagger._load_state(model_file)
 
         use_dropout = 0.0 if not 'use_dropout' in state.keys() else state['use_dropout']
@@ -224,6 +253,7 @@ class SequenceTagger(nn.Model):
 
     @classmethod
     def load_checkpoint(cls, model_file: Union[str, Path]):
+        """加载checkpoint"""
         state = SequenceTagger._load_state(model_file)
         model = SequenceTagger.load_from_file(model_file)
 
@@ -239,17 +269,19 @@ class SequenceTagger(nn.Model):
 
     @classmethod
     def _load_state(cls, model_file: Union[str, Path]):
-
+        """加载模型中的属性"""
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore")
             state = torch.load(str(model_file), map_location=device)
         return state
 
     def forward_loss(self, sentences: Union[List[Sentence], Sentence]) -> torch.tensor:
+        """计算loss"""
         features, lengths, tags = self.forward(sentences)
         return self._calculate_loss(features, lengths, tags)
 
     def forward_labels_and_loss(self, sentences: Union[List[Sentence], Sentence]) -> (List[List[Label]], torch.tensor):
+        """获得预测的标签和计算loss，预测时会调用"""
         with torch.no_grad():
             feature, lengths, tags = self.forward(sentences)
             loss = self._calculate_loss(feature, lengths, tags)
@@ -257,6 +289,12 @@ class SequenceTagger(nn.Model):
             return tags, loss
 
     def predict(self, sentences: Union[List[Sentence], Sentence], mini_batch_size=32) -> List[Sentence]:
+        """
+        预测标签
+        :param sentences: 句子
+        :param mini_batch_size: batch size
+        :return: 有标签的句子
+        """
         with torch.no_grad():
             if type(sentences) is Sentence:
                 sentences = [sentences]
@@ -280,6 +318,7 @@ class SequenceTagger(nn.Model):
             return sentences
 
     def forward(self, sentences: List[Sentence],sort=True):
+        """forward，获得特征"""
         self.zero_grad()
 
         self.embeddings.embed(sentences)
@@ -371,6 +410,7 @@ class SequenceTagger(nn.Model):
         return score
 
     def _calculate_loss(self, features, lengths, tags) -> float:
+        """计算loss"""
         if self.use_crf:
             tags, _ = pad_tensors(tags)
 
@@ -391,6 +431,7 @@ class SequenceTagger(nn.Model):
             return score
 
     def _obtain_labels(self, feature, lengths) -> List[List[Label]]:
+        """获得标签"""
         tags = []
 
         for feats, length in zip(feature, lengths):
@@ -518,7 +559,7 @@ class SequenceTagger(nn.Model):
 
     @staticmethod
     def load(model_file: str):
-
+        """加载预训练模型"""
         if model_file == 'cn_s':
             tagger: SequenceTagger = SequenceTagger.load_from_file(Path(CACHE_ROOT) / 'ner_models/cn/cn_s.pt')
         elif model_file == 'cn_x':
@@ -529,9 +570,11 @@ class SequenceTagger(nn.Model):
             tagger: SequenceTagger = SequenceTagger.load_from_file(Path(CACHE_ROOT) / 'ner_models/en/en_x.pt')
         elif model_file == 'uy_s':
             tagger: SequenceTagger = SequenceTagger.load_from_file(Path(CACHE_ROOT) / 'ner_models/uy/uy_s.pt')
+        elif model_file == 'cn_5':
+            tagger: SequenceTagger = SequenceTagger.load_from_file(Path(CACHE_ROOT) / 'ner_models/cn/cn_5.pt')
         else:
             try:
                 tagger: SequenceTagger = SequenceTagger.load_from_file(Path(CACHE_ROOT) / model_file)
-            except NameError('No such a model!'):
-                raise
+            except NameError:
+                print('No such a model!')
         return tagger

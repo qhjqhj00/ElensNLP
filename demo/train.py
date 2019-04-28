@@ -75,9 +75,7 @@ if configure['task_type'] == 'ner':
 elif configure['task_type'] == 'clf':
 
     from torch.optim.adam import Adam
-    
-    if 'test_file' not in configure:
-        configure['test_file'] = None
+
     corpus = load_clf_data('CN_char',configure['train_file'],
                            configure['test_file'])  # 加载数据
     label_dictionary = corpus.make_label_dictionary()  # 获得标签字典

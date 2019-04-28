@@ -24,9 +24,21 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
 
 class StackedEmbeddings(TokenEmbeddings):
-    """多种词向量叠加"""
+    """
+    使用多种词向量
+    :param embeddings: 一个embedding的列表，包含多种embedding方式
+    :param detach: 是否静态向量，True为静态
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings, FlairEmbeddings, StackedEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Embed_list = [WordEmbeddings('cn_glove'),FlairEmbeddings('cn_forward_small')]
+    >>>Word_embed = StackedEmbeddings(Embed_list)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Word_embed.embed((sent))
+    """
 
     def __init__(self, embeddings: List[TokenEmbeddings], detach: bool = True):
+
         super().__init__()
 
         self.embeddings = embeddings
@@ -72,7 +84,16 @@ class StackedEmbeddings(TokenEmbeddings):
 
 
 class WordEmbeddings(TokenEmbeddings):
-    """基本的静态词向量，如glove fasttext等"""
+    """
+    使用 key-value 类型的词向量，如glove，word2vec，fasttext等。
+    :param embeddings: 向量的名称
+    例子：
+    >>>from lensnlp.Embeddings import WordEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Word_embed = WordEmbeddings('cn_glove')
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Word_embed.embed((sent))
+    """
 
     def __init__(self, embeddings: str):
 
@@ -125,7 +146,17 @@ class WordEmbeddings(TokenEmbeddings):
 class FlairEmbeddings(TokenEmbeddings):
     """
     字符级 Contextualized Embedding，为每个单词根据前后文生成向量。
-
+    :param model: 模型的名称
+    :param trans: 语种，中文:PY，维吾尔语:UY，英文默认
+    :param detach: 是否更新词向量，默认False
+    :param use_cache: 是否保存词向量，默认True
+    :param cache_directory: 词向量的保存路径
+    例子：
+    >>>from lensnlp.Embeddings import FlairEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Word_embed = FlairEmbeddings('cn_forward_small')
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Word_embed.embed((sent))
     """
     def __init__(self, model: str, trans: str = None, detach: bool = True,
             use_cache: bool = True, cache_directory: Path = None):
@@ -316,10 +347,21 @@ class BPEmbSerializable(BPEmb):
 
 class BytePairEmbeddings(TokenEmbeddings):
     """
-    用Bpemb预训练语言模型来得到词向量
+    Bytes Pair Embeddings，参数选择请参考http://nlp.h-its.org/bpemb/
+    :param language: 语种
+    :param dim: 50-300
+    :param syllables: 多少词的模型，10,000-100,000
+    :param cache_dir:缓存的路径
+    例子：
+    >>>from lensnlp.Embeddings import BytePairEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Word_embed = BytePairEmbeddings('ug',300,50000)
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Word_embed.embed((sent))
     """
     def __init__(self, language: str, dim: int = 50, syllables: int = 100000,
                  cache_dir=Path(os.path.expanduser(os.path.join('~', '.uy'))) / 'embeddings'):
+
         self.name: str = f'bpe-{language}-{syllables}-{dim}'
         self.static_embeddings = True
         self.embedder = BPEmbSerializable(lang=language, vs=syllables, dim=dim, cache_dir=cache_dir)
@@ -361,16 +403,23 @@ class BytePairEmbeddings(TokenEmbeddings):
 
 
 class BertEmbeddings(TokenEmbeddings):
-
+    """
+    Bert Embeddings，详情参考 pytorch_pretrained_bert
+    :param bert_model_or_path: Bert模型的名称
+    :param layers: 使用bert的几个encoder block
+    :param pooling_operation: 词被拆分的时候怎么选择向量，"first":保留第一个向量; "pool":求均值
+    例子：
+    >>>from lensnlp.Embeddings import BertEmbeddings
+    >>>from lensnlp.utilis.data import Sentence
+    >>>Word_embed = BertEmbeddings('chinese-base-uncased')
+    >>>sent = Sentence('北京一览群智数据有限公司。')
+    >>>Word_embed.embed((sent))
+    """
     def __init__(self,
                  bert_model_or_path: str = 'bert-base-uncased',
                  layers: str = '-1,-2,-3,-4',
                  pooling_operation: str = 'first'):
-        """
-        :param bert_model_or_path: 模型的名字
-        :param layers: 选择用那几层
-        :param pooling_operation: 词分成多个部分的时候的pool操作方式
-        """
+
         super().__init__()
 
         self.tokenizer = BertTokenizer.from_pretrained(bert_model_or_path)

@@ -10,7 +10,7 @@ from functools import reduce
 
 
 class Metric(object):
-
+    """计算evaluation的指标"""
     def __init__(self, name):
         self.name = name
 
@@ -151,7 +151,7 @@ class EvaluationMetric(Enum):
 
 
 class WeightExtractor(object):
-
+    """提取模型权重"""
     def __init__(self, directory: Path, number_of_weights: int = 10):
         self.weights_file = init_output_file(directory, 'weights.txt')
         self.weights_dict = defaultdict(lambda: defaultdict(lambda: list()))
@@ -198,8 +198,8 @@ class WeightExtractor(object):
 
 def clear_embeddings(sentences: List[Sentence], also_clear_word_embeddings=False):
     """
-    Clears the embeddings from all given sentences.
-    :param sentences: list of sentences
+    把句子的embedding删除
+    :param sentences: Sentence的list
     """
     for sentence in sentences:
         sentence.clear_embeddings(also_clear_word_embeddings=also_clear_word_embeddings)
@@ -207,10 +207,9 @@ def clear_embeddings(sentences: List[Sentence], also_clear_word_embeddings=False
 
 def init_output_file(base_path: Path, file_name: str) -> Path:
     """
-    Creates a local file.
-    :param base_path: the path to the directory
-    :param file_name: the file name
-    :return: the created file
+    在本地生成一个文件
+    :param base_path: 路径
+    :param file_name: 文件名
     """
     base_path.mkdir(parents=True, exist_ok=True)
 
@@ -221,19 +220,20 @@ def init_output_file(base_path: Path, file_name: str) -> Path:
 
 def convert_labels_to_one_hot(label_list: List[List[str]], label_dict: Dictionary) -> List[List[int]]:
     """
-    Convert list of labels (strings) to a one hot list.
-    :param label_list: list of labels
-    :param label_dict: label dictionary
-    :return: converted label list
+    将标签变为one-hot
+    :param label_list: 标签list
+    :param label_dict: 标签匹配字典
     """
     return [[1 if l in labels else 0 for l in label_dict.get_items()] for labels in label_list]
 
 
 def log_line(log):
+    """log横分隔线"""
     log.info('-' * 100)
 
 
 def init_log(log, output_file):
+    """初始化log设置"""
     output_file.mkdir(parents=True, exist_ok=True)
     output_file = output_file / 'training.log'
     fh = logging.FileHandler(output_file, mode='a')

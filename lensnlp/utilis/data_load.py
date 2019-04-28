@@ -17,6 +17,31 @@ def load_column_corpus(
         dev_file=None,
         tag_to_biloes=None,
         lang=None) -> TaggedCorpus:
+    """
+    加载标准的序列标注数据
+    格式例如：
+    Beijing B-LOC
+    is O
+    a O
+    foggy O
+    city O
+    where O
+    Elensdata B-ORG
+    locates O
+    . O
+
+    :param data_folder: 数据文件夹路径
+    :param column_format: 数据格式，两列ner为 {1:'token',2:'ner'}
+    :param train_file: 训练数据文件名
+    :param test_file:  测试数据文件名
+    :param dev_file:  验证数据文件名
+    :param tag_to_biloes: 是否换为bioes标签策略
+    :param lang: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
+    :return: corpus
+    例如：
+    >>>from lensnlp.utilis.data_load import load_column_corpus
+    >>>corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
+    """
 
     if type(data_folder) == str:
         data_folder: Path = Path(data_folder)
@@ -63,6 +88,12 @@ def load_column_corpus(
 
 
 def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang):
+    """
+    :param path_to_column_file: 数据文件夹路径
+    :param column_name_map: 数据格式，两列ner为 {1:'token',2:'ner'}
+    :param lang: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
+    :return: corpus
+    """
 
     sentences: List[Sentence] = []
     ner_list = tag_filter  # 不在这个列表中的标签会被标称 O
@@ -111,12 +142,22 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
 
 
 def load_clf_data(tag, train_file, test_file=None):
+    """
+    加载文本分类的数据
+    :param tag: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
+    :param train_file: 训练数据文件路径
+    :param test_file: 测试数据文件路径
+    :return:
+    """
 
     train_data = open(str(train_file), encoding='utf-8').read().strip().split('\n')
 
-    train_data = [re.split("\s+", doc) for doc in train_data]
+    train_data = [re.split("\t", doc) for doc in train_data]
     train_y = [doc[0] for doc in train_data]
-    train_X = [doc[1].replace(' ','') for doc in train_data]
+    if tag == 'CN_char':
+        train_X = [doc[1].replace(' ','') for doc in train_data]
+    else:
+        train_X = [doc[1] for doc in train_data]
     train_ = [Sentence(train_X[i], tag, [train_y[i]]) for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
@@ -142,6 +183,11 @@ def load_clf_data(tag, train_file, test_file=None):
 
 
 def __sample(total_number_of_sentences: int, percentage: float = 0.1) -> List[int]:
+    """
+    :param total_number_of_sentences: 数据集的大小
+    :param percentage: 提取比例
+    :return: sample的indices
+    """
     import random
     sample_size: int = round(total_number_of_sentences * percentage)
     sample = random.sample(range(1, total_number_of_sentences), sample_size)
