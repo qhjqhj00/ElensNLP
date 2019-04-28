@@ -161,11 +161,11 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         return self.__embedding_length
 
     def attention(self, rnn_out, state):
-    """
-    :param rnn_out: rnn的输出
-    :param state: 序列的隐藏状态
-    :return: 每个cell的一个注意力权重
-    """
+        """
+        :param rnn_out: rnn的输出
+        :param state: 序列的隐藏状态
+        :return: 每个cell的一个注意力权重
+        """
         batch_size = state.size()[1]
         state = state.view(self.rnn_layers, batch_size, -1)
         merged_state = torch.cat([s for s in state],1)  #shape = [batch, hidden*direction]
