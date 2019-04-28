@@ -581,3 +581,127 @@ class DocumentCNN2DEmbedding(DocumentEmbeddings):
 
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
+class DocmentRNN_CNNEmbedding(DocumentEmbeddings):
+    def __init__(self,
+                 embeddings: List[TokenEmbeddings],
+                 lstm_hidden_state = 100,
+                 hidden_size=128,
+                 bidirectional: bool = False,
+                 dropout: float = 0.5,
+                 word_dropout: float = 0.0,
+                 locked_dropout: float = 0.0, ):
+
+        super().__init__()
+
+        self.embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
+        self.lstm_hidden_state = lstm_hidden_state
+        self.hidden_size = hidden_size
+        self.bidirectional = bidirectional
+        self.use_gpu = torch.cuda.is_available()
+        self.length_of_all_token_embeddings: int = self.embeddings.embedding_length
+
+
+        self.__embedding_length: int = self.hidden_size
+        # if self.bidirectional:
+        #     self.__embedding_length *= 2
+
+        self.embeddings_dimension: int = self.length_of_all_token_embeddings
+
+        self.lstm = torch.nn.LSTM(self.embeddings_dimension, self.lstm_hidden_state, bidirectional=self.bidirectional)
+        # self.hidden = self.init_hidden(self.batch_size)
+        self.content_dim = 256
+        if self.bidirectional:
+            self.conv = torch.nn.Conv1d(in_channels=self.lstm_hidden_state*2, out_channels=self.content_dim,
+                                    kernel_size=self.lstm_hidden_state * 2, stride= self.embeddings_dimension)
+        else:
+            self.conv = torch.nn.Conv1d(in_channels=self.lstm_hidden_state, out_channels=self.content_dim,
+                                        kernel_size=self.lstm_hidden_state * 2, stride=self.embeddings_dimension)
+        self.fc = torch.nn.Linear(self.content_dim , self.hidden_size)
+
+        self.name = 'document_' + self.lstm._get_name()
+
+        if locked_dropout > 0.0:
+            self.dropout: torch.nn.Module = nn.LockedDropout(locked_dropout)
+        else:
+            self.dropout = torch.nn.Dropout(dropout)
+
+        self.use_word_dropout: bool = word_dropout > 0.0
+        if self.use_word_dropout:
+            self.word_dropout = nn.WordDropout(word_dropout)
+        self.to(device)
+
+    @property
+    def embedding_length(self) -> int:
+        return self.__embedding_length
+
+    def init_hidden(self, batch_size):
+        if self.use_gpu:
+            h0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).cuda())  # (1, 32, 128)
+            c0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).cuda())  # (1, 32, 128)
+        else:
+            h0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state))
+            c0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state))
+        return (h0, c0)
+
+    def embed(self, sentences: Union[List[Sentence], Sentence]):
+
+        if type(sentences) is Sentence:
+            sentences = [sentences]
+
+        self.lstm.zero_grad()
+        self.conv.zero_grad()
+
+        sentences.sort(key=lambda x: len(x), reverse=True)
+
+        self.embeddings.embed(sentences)
+
+        longest_token_sequence_in_batch: int = len(sentences[0])
+
+        all_sentence_tensors = []
+        lengths: List[int] = []
+
+        for i, sentence in enumerate(sentences):
+
+            lengths.append(len(sentence.tokens))
+
+            word_embeddings = []
+
+            for token, token_idx in zip(sentence.tokens, range(len(sentence.tokens))):
+                token: Token = token
+                word_embeddings.append(token.get_embedding().unsqueeze(0))
+
+            for add in range(longest_token_sequence_in_batch - len(sentence.tokens)):
+                word_embeddings.append(
+                    torch.zeros(self.length_of_all_token_embeddings,
+                                dtype=torch.float).unsqueeze(0)
+                )
+
+            word_embeddings_tensor = torch.cat(word_embeddings, 0).to(device)
+
+            sentence_states = word_embeddings_tensor  # shape = [seq_len, emb_dim]
+
+            # 加到一个list中
+            all_sentence_tensors.append(sentence_states.unsqueeze(1))
+
+        # 得到batch的特征
+        sentence_tensor = torch.cat(all_sentence_tensors, 1)  # shape = [seq_len, batch_size, emb_dim]
+        if self.use_word_dropout:
+            sentence_tensor = self.word_dropout(sentence_tensor)
+        sentence_tensor = self.dropout(sentence_tensor)
+        # print(sentence_tensor.size())
+        start_hidden = self.init_hidden(sentence_tensor.size()[1])
+
+        lstm_out, hidden = self.lstm(sentence_tensor, start_hidden)  # rnn_out = [seq_len, batch_size, hidden_size]
+
+        conv_out = self.conv(lstm_out.permute(1, 2, 0))  # conv_out = [batch_size, content_dim, seq_len - ken_size + 1/stride]
+        outputs = self.fc(conv_out.squeeze(2))
+        outputs = self.dropout(outputs)
+
+        # 获得句的特征
+        for sentence_no in range(outputs.size()[0]):
+            embedding = outputs[sentence_no]
+            sentences[sentence_no].set_embedding(self.name, embedding)
+            # print(embedding.size())
+
+    def _add_embeddings_internal(self, sentences: List[Sentence]):
+        pass
