@@ -261,16 +261,22 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         outputs = self.dropout(outputs)
 
         # 获得句的特征
-        for sentence_no, length in enumerate(lengths):
-            last_rep = outputs[length - 1, sentence_no]
+        if self.use_attention:
+            for sentence_no in range(outputs.size()[0]):
+                # print(sentence_no)
+                embedding = outputs[sentence_no]
+                sentences[sentence_no].set_embedding(self.name, embedding)
+        else:
+            for sentence_no, length in enumerate(lengths):
+                last_rep = outputs[length - 1, sentence_no]
 
-            embedding = last_rep
-            if self.bidirectional:
-                first_rep = outputs[0, sentence_no]
-                embedding = torch.cat([first_rep, last_rep], 0)
+                embedding = last_rep
+                if self.bidirectional:
+                    first_rep = outputs[0, sentence_no]
+                    embedding = torch.cat([first_rep, last_rep], 0)
 
-            sentence = sentences[sentence_no]
-            sentence.set_embedding(self.name, embedding)
+                sentence = sentences[sentence_no]
+                sentence.set_embedding(self.name, embedding)
 
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
