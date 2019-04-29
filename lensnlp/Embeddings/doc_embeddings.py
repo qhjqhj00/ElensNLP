@@ -588,6 +588,31 @@ class DocumentCNN2DEmbedding(DocumentEmbeddings):
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
 class DocmentRNN_CNNEmbedding(DocumentEmbeddings):
+    """
+    RNN_CNN来获得篇章级别的向量表示。
+    Parameters
+    --------------------
+    embeddings: List
+        一个词向量列表，用于给句子中的词加向量
+    stm_hidden_state: int
+        rnn 隐藏节点数
+    hidden_size: int
+        cnn 后接的全连接层输出tensor最后一个维度size
+    bidirectional: bool
+        True:双向rnn, False:单向rnn
+    dropout: float
+        全连接层输出的dropout率
+    word_dropout: float
+        input dropout率
+    locked_dropout: float
+        全连接层输出的dropout
+    >>> from lensnlp.Embeddings import WordEmbeddings, DocmentRNN_CNNEmbedding
+    >>> from lensnlp.utilis.data import Sentence
+    >>> Embed_list = [WordEmbeddings('cn_glove')]
+    >>> Docum_embed = DocmentRNN_CNNEmbedding(Embed_list)
+    >>> sent = Sentence('北京一览群智数据有限公司。')
+    >>> Docum_embed.embed((sent)
+    """
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  lstm_hidden_state = 100,
@@ -596,6 +621,7 @@ class DocmentRNN_CNNEmbedding(DocumentEmbeddings):
                  dropout: float = 0.5,
                  word_dropout: float = 0.0,
                  locked_dropout: float = 0.0, ):
+        
 
         super().__init__()
 
