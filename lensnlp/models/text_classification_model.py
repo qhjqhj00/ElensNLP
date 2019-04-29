@@ -18,24 +18,29 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
 
 class TextClassifier(nn.Model):
-    """
-    序列标注模型
-    :param document_embeddings: 传入一个doc embedding
-    :param label_dictionary: label的匹配词典
-    :param multi_label: 是否采用多标签
-    用例：
-    >>>from lensnlp.models import TextClassifier
-    >>>from lensnlp.Embeddings import WordEmbeddings,DocumentPoolEmbeddings
-    >>>from lensnlp.utilis.data import Sentence
-    >>>sent = Sentence('北京一览群智。')
-    >>>emb_list = [WordEmbeddings('cn_glove')]
-    >>>doc_emb = DocumentPoolEmbeddings(emb_list)
-    >>>clf = TextClassifier(document_embeddings=doc_emb,
-    >>>                         label_dictionary=None)
-    >>>
-    >>>cn_clf = TextClassifier.load('cn_clf') # 加载预训练模型
-    >>>cn_clf.predict(sent) # 预测
-    """
+    """序列标注模型
+
+            Parameters
+            ----------
+            document_embeddings : DocumentEmbeddings
+                词向量
+            label_dictionary : Dictionary
+                label的匹配词典
+            multi_label : bool
+                是否采用多标签
+            Examples
+            --------
+             >>> from lensnlp.models import TextClassifier
+             >>> from lensnlp.Embeddings import WordEmbeddings,DocumentPoolEmbeddings
+             >>> from lensnlp.utilis.data import Sentence
+             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> emb_list = [WordEmbeddings('cn_glove')]
+             >>> doc_emb = DocumentPoolEmbeddings(emb_list)
+             >>> clf = TextClassifier(document_embeddings=doc_emb,label_dictionary=None)
+             >>> cn_clf = TextClassifier.load('cn_clf') # 加载预训练模型
+             >>> cn_clf.predict(sent) # 预测
+            """
+
 
     def __init__(self,
                  document_embeddings: DocumentEmbeddings,

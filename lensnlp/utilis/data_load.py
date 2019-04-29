@@ -21,14 +21,23 @@ def load_column_corpus(
     加载标准的序列标注数据
     格式例如：
     Beijing B-LOC
+
     is O
+
     a O
+
     foggy O
+
     city O
+
     where O
+
     Elensdata B-ORG
+
     locates O
+
     . O
+
 
     :param data_folder: 数据文件夹路径
     :param column_format: 数据格式，两列ner为 {1:'token',2:'ner'}
@@ -38,9 +47,10 @@ def load_column_corpus(
     :param tag_to_biloes: 是否换为bioes标签策略
     :param lang: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
     :return: corpus
-    例如：
-    >>>from lensnlp.utilis.data_load import load_column_corpus
-    >>>corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
+    Examples
+    --------
+    >>> from lensnlp.utilis.data_load import load_column_corpus
+    >>> corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
     """
 
     if type(data_folder) == str:
@@ -147,7 +157,7 @@ def load_clf_data(tag, train_file, test_file=None):
     :param tag: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
     :param train_file: 训练数据文件路径
     :param test_file: 测试数据文件路径
-    :return:
+    :return: corpus
     """
 
     train_data = open(str(train_file), encoding='utf-8').read().strip().split('\n')

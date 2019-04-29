@@ -76,30 +76,39 @@ def pad_tensors(tensor_list):
 
 
 class SequenceTagger(nn.Model):
-    """
-    序列标注模型
-    :param hidden_size: 隐藏层尺寸
-    :param embeddings: Embedding数量
-    :param tag_dictionary: 标签字典
-    :param tag_type: 标签类型 如：'ner'
-    :param use_crf: 是否用crf
-    :param use_rnn: 是否用rnn
-    :param rnn_layers: rnn的层数
-    :param dropout: dropout率
-    :param word_dropout: word_dropout率
-    :param locked_dropout: locked_dropout率
-    用例：
-    >>>from lensnlp.models import SequenceTagger
-    >>>from lensnlp.Embeddings import WordEmbeddings
-    >>>from lensnlp.utilis.data import Sentence
-    >>>sent = Sentence('北京一览群智。')
-    >>>emb = WordEmbeddings('cn_glove')
-    >>>tagger = SequenceTagger(hidden_size=256,
-    >>>                         embeddings = emb)
-    >>>
-    >>>cn_ner = SequenceTagger.load('cn_s') # 加载预训练模型
-    >>>tagger.predict(sent) # 预测
-    """
+    """序列标注模型
+
+            Parameters
+            ----------
+            hidden_size : int
+                隐藏层尺寸
+            embeddings : TokenEmbeddings
+                词向量
+            tag_dictionary : Dictionary
+                标签字典
+            tag_type : str
+                标签类型 如：'ner'
+            use_rnn : bool
+                是否用rnn
+            rnn_layers : int
+                rnn的层数
+            dropout : float
+                dropout率
+            word_dropout : float
+                word_dropout率
+            locked_dropout : float
+                locked_dropout率
+            Examples
+            --------
+             >>> from lensnlp.models import SequenceTagger
+             >>> from lensnlp.Embeddings import WordEmbeddings
+             >>> from lensnlp.utilis.data import Sentence
+             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> emb = WordEmbeddings('cn_glove'
+             >>> tagger = SequenceTagger(hidden_size=256,embeddings = emb)
+             >>> cn_ner = SequenceTagger.load('cn_s') # 加载预训练模型
+             >>> tagger.predict(sent) # 预测
+            """
 
     def __init__(self,
                  hidden_size: int,

@@ -4,14 +4,23 @@ from lensnlp.hyper_parameters import cn_clf,en_clf,uy_clf,emo
 
 
 class ner:
-    """
-    实体识别模型，提供中文，英文，维吾尔语三个语种的预训练模型。
-    示例:
-    >>>from lensnlp import ner
-    >>>sent = '北京一览群智。'
-    >>>cn_tagger = ner('cn')
-    >>>cn_tagger.predict(sent)
-    """
+    """实体识别模型，提供中文，英文，维吾尔语三个语种的预训练模型。
+
+        Parameters
+        ----------
+
+        language : str
+            选择语种
+
+        Examples
+        --------
+         >>> from lensnlp import ner
+         >>> sent = '北京一览群智。'
+         >>> cn_tagger = ner('cn')
+         >>> cn_tagger.predict(sent)
+
+        """
+
     def __init__(self,language):
 
         self.language = language
@@ -45,14 +54,24 @@ class ner:
 
 
 class clf:
-    """
-    文本分类模型，提供中文，英文，维吾尔语文本分类模型。
-    示例:
-    >>>from lensnlp import clf
-    >>>sent = '北京一览群智。'
-    >>>cn_clf = clf('cn_clf')
-    >>>cn_clf.predict(sent)
-    """
+    """文本分类模型，情感分析，提供中文，英文，维吾尔语三个语种的预训练模型。
+
+        Parameters
+        ----------
+
+        language : str
+            选择语种
+
+        Examples
+        --------
+         >>> from lensnlp import clf
+         >>> sent = '北京一览群智。'
+         >>> cn_clf = clf('cn')
+         >>> cn_clf.predict(sent)
+
+        """
+
+
     def __init__(self,language):
         self.language = language
         if self.language == 'cn_clf':

@@ -52,22 +52,26 @@ class Metric(object):
         return self._fns[class_name]
 
     def precision(self, class_name=None):
+        """计算precision"""
         if self.get_tp(class_name) + self.get_fp(class_name) > 0:
             return round(self.get_tp(class_name) / (self.get_tp(class_name) + self.get_fp(class_name)), 4)
         return 0.0
 
     def recall(self, class_name=None):
+        """计算recall"""
         if self.get_tp(class_name) + self.get_fn(class_name) > 0:
             return round(self.get_tp(class_name) / (self.get_tp(class_name) + self.get_fn(class_name)), 4)
         return 0.0
 
     def f_score(self, class_name=None):
+        """计算f1-score"""
         if self.precision(class_name) + self.recall(class_name) > 0:
             return round(2 * (self.precision(class_name) * self.recall(class_name))
                          / (self.precision(class_name) + self.recall(class_name)), 4)
         return 0.0
 
     def accuracy(self, class_name=None):
+        """计算accuracy"""
         if self.get_tp(class_name) + self.get_tn(class_name) + self.get_fp(class_name) + self.get_fn(class_name) > 0:
             return round(
                 (self.get_tp(class_name) + self.get_tn(class_name))
@@ -76,9 +80,11 @@ class Metric(object):
         return 0.0
 
     def micro_avg_f_score(self):
+        """计算MICRO AVERAGE F1 SOCRE"""
         return self.f_score(None)
 
     def macro_avg_f_score(self):
+        """计算MACRO AVERAGE F1 SOCRE"""
         class_precisions = [self.precision(class_name) for class_name in self.get_classes()]
         class_recalls = [self.precision(class_name) for class_name in self.get_classes()]
 
@@ -92,9 +98,11 @@ class Metric(object):
         return 0.0
 
     def micro_avg_accuracy(self):
+        """计算MICRO AVERAGE"""
         return self.accuracy(None)
 
     def macro_avg_accuracy(self):
+        """计算MACRO AVERAGE"""
         class_accuracy = [self.accuracy(class_name) for class_name in self.get_classes()]
 
         if len(class_accuracy) > 0:
@@ -158,6 +166,7 @@ class WeightExtractor(object):
         self.number_of_weights = number_of_weights
 
     def extract_weights(self, state_dict, iteration):
+        """提取模型权重"""
         for key in state_dict.keys():
 
             vec = state_dict[key]

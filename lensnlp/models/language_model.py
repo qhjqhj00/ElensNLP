@@ -12,15 +12,25 @@ from lensnlp.utilis.data import Dictionary
 
 
 class LanguageModel(nn.Module):
-    """
-    语言模型model，为flairembedding提供模型。
-    :param dictionary: 字符id匹配字典
-    :param is_forward_lm: 是否是前向模型
-    :param hidden_size: 隐藏层尺寸
-    :param nlayers: rnn的层数
-    :param embedding_size: 初始化的尺寸
-    :param dropout: dropout率
-    """
+    """语言模型model，为flairembedding提供模型。
+
+            Parameters
+            ----------
+
+            dictionary : Dict
+                字符id匹配字典
+            is_forward_lm : bool
+                是否是前向模型
+            hidden_size : int
+                隐藏层尺寸
+            nlayers : int
+                rnn的层数
+            embedding_size : int
+                初始化的尺寸
+            dropout : float
+                dropout率
+            """
+
 
     def __init__(self,
                  dictionary: Dictionary,

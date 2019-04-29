@@ -8,17 +8,33 @@ from pathlib import Path
 
 
 class seq_train:
-    """
-    序列标注训练
-    示例:
-    >>>from lensnlp import seq_train
-    >>>path = './ner_data'
-    >>>train_file = 'train.txt'
-    >>>test_file = 'test.txt'
-    >>>language = 'cn'
-    >>>out_path = './out'
-    >>>cn_ner_train = seq_train(path,train_file,out_path,language,test_file)
-    """
+    """序列标注训练
+
+            Parameters
+            ----------
+
+            path : str
+                训练文件的路径
+            train_file : str
+                训练数据文件名
+            out_path : str
+                输出路径
+            language : str
+                 数据语言类型
+            test_file : str
+                测试数据文件名
+            Examples
+            --------
+             >>> from lensnlp import seq_train
+             >>> path = './ner_data'
+             >>> train_file = 'train.txt'
+             >>> test_file = 'test.txt'
+             >>> language = 'cn'
+             >>> out_path = './out'
+             >>> cn_ner_train = seq_train(path,train_file,out_path,language,test_file)
+
+            """
+
     def __init__(self,path,train_file,out_path,language,test_file=None):
 
         self.corpus = load_column_corpus(path, {0: 'text', 1: 'ner'}, train_file=[train_file],test_file = test_file)
@@ -55,19 +71,33 @@ class seq_train:
 
 
 class cls_train:
-    """
-    实体识别模型，提供中文，英文，维吾尔语三个语种的预训练模型。
-    示例:
-    >>>from lensnlp import cls_train
-    >>>path = './clf_data'
-    >>>train_file = 'train.txt'
-    >>>test_file = 'test.txt'
-    >>>language = 'cn'
-    >>>out_path = './out'
-    >>>cn_clf_train = cls_train(path,train_file,out_path,language,test_file)
+    """实体识别模型，提供中文，英文，维吾尔语三个语种的预训练模型。
 
-    >>>cn_clf_train.train()
-    """
+            Parameters
+            ----------
+
+            path : str
+                训练文件的路径
+            train_file : str
+                训练数据文件名
+            out_path : str
+                输出路径
+            language : str
+                 数据语言类型
+            test_file : str
+                测试数据文件名
+            Examples
+            --------
+             >>> from lensnlp import cls_train
+             >>> path = './ner_data'
+             >>> train_file = 'train.txt'
+             >>> test_file = 'test.txt'
+             >>> language = 'cn'
+             >>> out_path = './out'
+             >>> cn_ner_train = cls_train(path,train_file,out_path,language,test_file)
+
+            """
+
     def __init__(self, path, train_file, out_path, language, test_file=None):
         if language == 'cn':
             if test_file is not None:

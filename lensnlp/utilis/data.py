@@ -28,7 +28,7 @@ class Dictionary:
             self.add_item('<unk>')
 
     def add_item(self, item: str) -> int:
-
+        """增加字典项"""
         item = item.encode('utf-8')
         if item not in self.item2idx:
             self.idx2item.append(item)
@@ -36,7 +36,7 @@ class Dictionary:
         return self.item2idx[item]
 
     def get_idx_for_item(self, item: str) -> int:
-
+        """获得字典项的序号"""
         item = item.encode('utf-8')
         if item in self.item2idx.keys():
             return self.item2idx[item]
@@ -44,6 +44,7 @@ class Dictionary:
             return 0
 
     def get_items(self) -> List[str]:
+        """获得字典项的列表"""
         items = []
         for item in self.idx2item:
             items.append(item.decode('UTF-8'))
@@ -53,6 +54,7 @@ class Dictionary:
         return len(self.idx2item)
 
     def get_item_for_index(self, idx):
+        """得到字典项的序号"""
         return self.idx2item[idx].decode('UTF-8')
 
     def save(self, savefile):
@@ -91,6 +93,7 @@ class Label:
 
     @property
     def value(self):
+        """label的文本"""
         return self._value
 
     @value.setter
@@ -102,6 +105,7 @@ class Label:
 
     @property
     def score(self):
+        """label的评分"""
         return self._score
 
     @score.setter
@@ -158,18 +162,22 @@ class Token:
         self.tags: Dict[str, Label] = {}
             
     def converter(self):
+        """将汉字变为拼音"""
         p = pinyin(self.text, style=Style.TONE2)
         p = [t[0] for t in p]
         return ' '.join(p)
 
     def add_tag_label(self, tag_type: str, tag: Label):
+        """增加一个标签"""
         self.tags[tag_type] = tag
 
     def add_tag(self, tag_type: str, tag_value: str, confidence=1.0):
+        """增加一个label"""
         tag = Label(tag_value, confidence)
         self.tags[tag_type] = tag
 
     def uyghur_to_latin(self):
+        """将维语转化为拉丁文形式"""
         latin_map = {"ا": "a", "ە": "e", "ى": "i", "ې": "é", "و": "o",
                      "ۇ": "u", "ۆ": "ö", "ۈ": "ü", "ب": "b", "پ": "p", "ت": "t", "ژ": "j",
                      "چ": "ç", "خ": "x", "د": "d", "ر": "r", "ز": "z", "ج": "j", "س": "s",
@@ -186,20 +194,23 @@ class Token:
         return new
 
     def get_tag(self, tag_type: str) -> Label:
+        """返回label"""
         if tag_type in self.tags: return self.tags[tag_type]
         return Label('')
 
     def get_head(self):
         return self.sentence.get_token(self.head_id)
 
-    def set_embedding(self, name: str, vector: torch.autograd.Variable): # 加入向量
+    def set_embedding(self, name: str, vector: torch.autograd.Variable):
+        """加入向量"""
         self._embeddings[name] = vector.cpu()
 
-    def clear_embeddings(self): # 清除向量
+    def clear_embeddings(self):
+        """清除向量"""
         self._embeddings: Dict = {}
 
-    def get_embedding(self) -> torch.FloatTensor: # 获得向量
-
+    def get_embedding(self) -> torch.FloatTensor:
+        """获得向量"""
         embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys())]
 
         if embeddings:
@@ -209,14 +220,17 @@ class Token:
 
     @property
     def start_position(self) -> int:
+        """起始位置"""
         return self.start_pos
 
     @property
     def end_position(self) -> int:
+        """结束位置"""
         return self.end_pos
 
     @property
     def embedding(self):
+        """获得向量"""
         return self.get_embedding()
 
     def __str__(self) -> str:
@@ -228,7 +242,7 @@ class Token:
 
 class Span:
     """
-    实体类
+    Span类，如实体中指一整个实体。
     """
 
     def __init__(self, tokens: List[Token], tag: str = None, score=1.):
@@ -244,9 +258,11 @@ class Span:
 
     @property
     def text(self) -> str:
+        """获得span的文字"""
         return ' '.join([t.text for t in self.tokens])
 
     def to_original_text(self) -> str:
+        """生成原来的文字"""
         str = ''
         pos = self.tokens[0].start_pos
         for t in self.tokens:
@@ -260,6 +276,7 @@ class Span:
         return str
 
     def to_dict(self):
+        """生成span字典"""
         return {
             'text': self.to_original_text(),
             'start_pos': self.start_pos,
@@ -283,8 +300,18 @@ class Sentence:
 
     """
     句子类，针对中文，英文，维语做了不同的分词。
+
     其中，中文额外提供 bpemb分词方法，适应bpemb词向量
-    将来会加入英语的分词包。
+
+    中文按字符分词：CN_char
+
+    中文分词：CN_token
+
+    维吾尔语分词：UY
+
+    中文拼音：PY
+
+    英语分词：EN
     """
 
     def __init__(self, text: str = None, language: str = None,
@@ -374,6 +401,7 @@ class Sentence:
                 return token
 
     def add_token(self, token: Token):
+        """增加token"""
         self.tokens.append(token)
 
         token.sentence = self
@@ -381,7 +409,7 @@ class Sentence:
             token.idx = len(self.tokens)
 
     def get_spans(self, tag_type: str, min_score=-1) -> List[Span]:
-
+        """获得所有的span"""
         spans: List[Span] = []
 
         current_span = []
@@ -443,6 +471,7 @@ class Sentence:
         return spans
 
     def add_label(self, label: Union[Label, str]):
+        """给句子增加标签"""
         if type(label) is Label:
             self.labels.append(label)
 
@@ -450,6 +479,7 @@ class Sentence:
             self.labels.append(Label(label))
 
     def add_labels(self, labels: Union[List[Label], List[str]]):
+        """给句子增加多标签"""
         for label in labels:
             self.add_label(label)
 
@@ -458,9 +488,11 @@ class Sentence:
 
     @property
     def embedding(self):
+        """给句子生成embedding"""
         return self.get_embedding()
 
     def set_embedding(self, name: str, vector):
+        """给句子设置embedding"""
         self._embeddings[name] = vector.cpu()
 
     def get_embedding(self) -> torch.autograd.Variable:
@@ -475,6 +507,7 @@ class Sentence:
         return torch.FloatTensor()
 
     def clear_embeddings(self, also_clear_word_embeddings: bool = True):
+        """清除embedding"""
         self._embeddings: Dict = {}
 
         if also_clear_word_embeddings:
@@ -482,10 +515,12 @@ class Sentence:
                 token.clear_embeddings()
 
     def cpu_embeddings(self):
+        """把embedding放到内存"""
         for name, vector in self._embeddings.items():
             self._embeddings[name] = vector.cpu()
 
     def to_tagged_string(self, main_tag=None) -> str:
+        """返回标注的文本"""
         list = []
         for token in self.tokens:
             list.append(token.text)
@@ -503,6 +538,7 @@ class Sentence:
         return ' '.join(list)
 
     def to_tokenized_string(self, lang: str = None) -> str:
+        """返回分词后的文本"""
         if lang == 'UY':
             return ' '.join([t.latin for t in self.tokens])
         elif lang == 'PY':
@@ -511,6 +547,7 @@ class Sentence:
             return ' '.join([t.text for t in self.tokens])
 
     def to_plain_string(self, lang: str = None):
+        """返回正常文本"""
         plain = ''
         for token in self.tokens:
             if lang == 'UY':
@@ -524,7 +561,7 @@ class Sentence:
         return plain.rstrip()
 
     def convert_tag_scheme(self, tag_type: str = 'ner', target_scheme: str = 'iob'):
-
+        """转换标签策略"""
         tags: List[Label] = []
         for token in self.tokens:
             token: Token = token
@@ -541,7 +578,7 @@ class Sentence:
             self.tokens[index].add_tag(tag_type, tag.value)
 
     def infer_space_after(self):
-
+        """判断token后是否有空格"""
         last_token = None
         quote_count: int = 0
 
@@ -568,6 +605,7 @@ class Sentence:
         return self
 
     def to_original_text(self) -> str:
+        """生成原来的文本"""
         str = ''
         pos = 0
         for t in self.tokens:
@@ -581,6 +619,7 @@ class Sentence:
         return str
 
     def to_dict(self, tag_type: str = None):
+        """生成标签，spans词典"""
         labels = []
         entities = []
 
@@ -669,18 +708,21 @@ class TaggedCorpus(Corpus):
 
     @property
     def train(self) -> List[Sentence]:
+        """训练集"""
         return self._train
 
     @property
     def dev(self) -> List[Sentence]:
+        """验证集"""
         return self._dev
 
     @property
     def test(self) -> List[Sentence]:
+        """测试集"""
         return self._test
 
     def downsample(self, percentage: float = 0.1, only_downsample_train=False):
-
+        """下采样"""
         self._train = self._downsample_to_proportion(self.train, percentage)
         if not only_downsample_train:
             self._dev = self._downsample_to_proportion(self.dev, percentage)
@@ -696,6 +738,7 @@ class TaggedCorpus(Corpus):
         return all_sentences
 
     def convert_scheme(self, type:str='ner',scheme:str='iob'):
+        """更换标签策略"""
         for sent in self.train:
             sent.convert_tag_scheme(type, scheme)
         for sent in self.test:
@@ -705,7 +748,7 @@ class TaggedCorpus(Corpus):
         return True
 
     def make_tag_dictionary(self, tag_type: str) -> Dictionary:
-
+        """生成标签字典"""
         # Make the tag dictionary
         tag_dictionary: Dictionary = Dictionary()
         tag_dictionary.add_item('O')
@@ -718,7 +761,7 @@ class TaggedCorpus(Corpus):
         return tag_dictionary
 
     def make_label_dictionary(self) -> Dictionary:
-
+        """生成句标签字典"""
         labels = set(self._get_all_label_names())
 
         label_dictionary: Dictionary = Dictionary(add_unk=False)
@@ -728,7 +771,7 @@ class TaggedCorpus(Corpus):
         return label_dictionary
 
     def make_vocab_dictionary(self, max_tokens=-1, min_freq=1) -> Dictionary:
-
+        """生成词汇表"""
         tokens = self._get_most_common_tokens(max_tokens, min_freq)
 
         vocab_dictionary: Dictionary = Dictionary()
@@ -738,6 +781,7 @@ class TaggedCorpus(Corpus):
         return vocab_dictionary
 
     def _get_most_common_tokens(self, max_tokens, min_freq) -> List[str]:
+        """获得高频词"""
         tokens_and_frequencies = Counter(self._get_all_tokens())
         tokens_and_frequencies = tokens_and_frequencies.most_common()
 
@@ -757,7 +801,7 @@ class TaggedCorpus(Corpus):
         return list(map((lambda t: t.text), tokens))
 
     def _downsample_to_proportion(self, list: List, proportion: float):
-
+        """下采样"""
         counter = 0.0
         last_counter = None
         downsampled: List = []
@@ -770,7 +814,7 @@ class TaggedCorpus(Corpus):
         return downsampled
 
     def obtain_statistics(self, tag_type: str = None) -> dict:
-
+        """获得数据集统计信息"""
         return {
             "TRAIN": self._obtain_statistics_for(self.train, "TRAIN", tag_type),
             "TEST": self._obtain_statistics_for(self.test, "TEST", tag_type),
@@ -834,7 +878,7 @@ class TaggedCorpus(Corpus):
 
 
 def iob2(tags):
-
+    """将序列标注策略变为iob"""
     for i, tag in enumerate(tags):
         if tag.value == 'O':
             continue
@@ -851,8 +895,9 @@ def iob2(tags):
             tags[i].value = 'B' + tag.value[1:]
     return True
 
-def uy_preprocess(text):
 
+def uy_preprocess(text):
+    """维吾尔语预处理"""
     text = re.sub('،' ,' ، ',text)
     text = re.sub('\.', ' . ', text)
     text = re.sub('!', ' ! ', text)
@@ -870,7 +915,7 @@ def uy_preprocess(text):
     return text
 
 def iob_iobes(tags):
-
+    """将iob策略变为bioes策略"""
     new_tags = []
     for i, tag in enumerate(tags):
         if tag.value == 'O':

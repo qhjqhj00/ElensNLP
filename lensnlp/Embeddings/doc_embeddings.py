@@ -14,18 +14,26 @@ log = logging.getLogger('qhj')
 
 
 class DocumentPoolEmbeddings(DocumentEmbeddings):
-    """
-    最简单的句向量计算方式
-    :param embeddings:一个词向量列表，用于给句中的词加向量。
-    :param mode: 三种pool的方式 ['mean', 'max', 'min']
-    例子：
-    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentPoolEmbeddings
-    >>>from lensnlp.utilis.data import Sentence
-    >>>Embed_list = [WordEmbeddings('cn_glove')]
-    >>>Docum_embed = DocumentPoolEmbeddings(Embed_list)
-    >>>sent = Sentence('北京一览群智数据有限公司。')
-    >>>Docum_embed.embed((sent))
-    """
+
+    """最简单的句向量计算方式
+
+        Parameters
+        ----------
+
+        embeddings : List
+            一个词向量列表，用于给句中的词加向量。
+        mode : str
+            三种pool的方式 ['mean', 'max', 'min']
+        Examples
+        --------
+         >>> from lensnlp.Embeddings import WordEmbeddings, DocumentPoolEmbeddings
+         >>> from lensnlp.utilis.data import Sentence
+         >>> Embed_list = [WordEmbeddings('cn_glove')]
+         >>> Docum_embed = DocumentPoolEmbeddings(Embed_list)
+         >>> sent = Sentence('北京一览群智数据有限公司。')
+         >>> Docum_embed.embed((sent)
+
+        """
 
     def __init__(self, embeddings: List[TokenEmbeddings], mode: str = 'mean'):
 
@@ -90,27 +98,43 @@ class DocumentPoolEmbeddings(DocumentEmbeddings):
 
 
 class DocumentRNNEmbeddings(DocumentEmbeddings):
-    """
-    用RNN类神经网络来获得篇章级别的向量表示。
-    :param embeddings: 一个词向量列表，用于给句中的词加向量。
-    :param hidden_size: 输出的向量维度
-    :param rnn_layers: 几层RNN
-    :param reproject_words: 是否线性转换一下词向量
-    :param reproject_words_dimension: 如果线性转换词向量，输出的维度
-    :param bidirectional: 是否用双向RNN网络
-    :param dropout: dropout率
-    :param word_dropout: word_drop_out率
-    :param locked_dropout: locked_dropout率
-    :param rnn_type: 'GRU', 'LSTM',  'RNN_TANH' or 'RNN_RELU'
-    :param:use_attention: 是否使用注意力
-    例子：
-    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentRNNEmbeddings
-    >>>from lensnlp.utilis.data import Sentence
-    >>>Embed_list = [WordEmbeddings('cn_glove')]
-    >>>Docum_embed = DocumentRNNEmbeddings(Embed_list)
-    >>>sent = Sentence('北京一览群智数据有限公司。')
-    >>>Docum_embed.embed((sent))
-    """
+
+    """用RNN类网络为文本计算向量
+
+        Parameters
+        ----------
+
+        embeddings : List
+            一个词向量列表，用于给句中的词加向量。
+        hidden_size : int
+            输出的向量维度
+        rnn_layers : int
+            几层RNN
+        reproject_words : bool
+             是否线性转换一下词向量
+        reproject_words_dimension : int
+            如果线性转换词向量，输出的维度
+        bidirectional : bool
+            是否用双向RNN网络
+        dropout : float
+            dropout率
+        locked_dropout : float
+            locked_dropout率
+        rnn_type : str
+            'GRU', 'LSTM',  'RNN_TANH' or 'RNN_RELU'
+        use_attention: bool
+            是否使用注意力
+        Examples
+        --------
+         >>> from lensnlp.Embeddings import WordEmbeddings, DocumentRNNEmbeddings
+         >>> from lensnlp.utilis.data import Sentence
+         >>> Embed_list = [WordEmbeddings('cn_glove')]
+         >>> Docum_embed = DocumentRNNEmbeddings(Embed_list)
+         >>> sent = Sentence('北京一览群智数据有限公司。')
+         >>> Docum_embed.embed((sent)
+
+        """
+
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  hidden_size=128,
@@ -283,22 +307,35 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
 
 class DocumentCNN1DEmbedding(DocumentEmbeddings):
-    """
-    TextCNN 1D 来获得篇章级别的向量表示。
-    :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
-    :param embedding_type: ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
-    :param dropout: dropout率
-    :param kernel_size:卷积核的大小
-    :param kernel_nums: 卷积核个数
-    :param:in_channel:  当embedding_type 为双通道时，embedding更新的通道
-    例子：
-    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentCNN1DEmbedding
-    >>>from lensnlp.utilis.data import Sentence
-    >>>Embed_list = [WordEmbeddings('cn_glove')]
-    >>>Docum_embed = DocumentCNN1DEmbedding(Embed_list)
-    >>>sent = Sentence('北京一览群智数据有限公司。')
-    >>>Docum_embed.embed((sent))
-    """
+
+    """TextCNN 1D 来获得篇章级别的向量表示。
+
+        Parameters
+        ----------
+
+        embeddings : List
+            一个词向量列表，用于给句中的词加向量。
+        embedding_type : str
+            ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
+        kernel_size : int
+            卷积核的大小
+        kernel_nums : bool
+             卷积核个数
+        in_channel : int
+            当embedding_type 为双通道时，embedding更新的通道
+        dropout : float
+            dropout率
+        Examples
+        --------
+         >>> from lensnlp.Embeddings import WordEmbeddings, DocumentCNN1DEmbedding
+         >>> from lensnlp.utilis.data import Sentence
+         >>> Embed_list = [WordEmbeddings('cn_glove')]
+         >>> Docum_embed = DocumentCNN1DEmbedding(Embed_list)
+         >>> sent = Sentence('北京一览群智数据有限公司。')
+         >>> Docum_embed.embed((sent)
+
+        """
+
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  embedding_type: str = 'static',
@@ -415,7 +452,27 @@ class DocumentCNN1DEmbedding(DocumentEmbeddings):
 
 
 class DocumentLMEmbeddings(DocumentEmbeddings):
+    """利用预训练的字符级语言模型获得篇章级别的向量表示。
+
+            Parameters
+            ----------
+
+            flair_embeddings : List
+                一个flair词向量列表，用于给句中的词加向量。
+            detach : bool
+                是否更新flair模型中的权重
+            Examples
+            --------
+             >>> from lensnlp.Embeddings import FlairEmbeddings, DocumentLMEmbeddings
+             >>> from lensnlp.utilis.data import Sentence
+             >>> Embed_list = [FlairEmbeddings('cn_forward_small'),FlairEmbeddings('cn_backward_small')]
+             >>> Docum_embed = DocumentLMEmbeddings(Embed_list)
+             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> Docum_embed.embed((sent)
+
+            """
     def __init__(self, flair_embeddings: List[FlairEmbeddings], detach: bool = True):
+
         super().__init__()
 
         self.embeddings = flair_embeddings
@@ -450,22 +507,34 @@ class DocumentLMEmbeddings(DocumentEmbeddings):
 
 
 class DocumentCNN2DEmbedding(DocumentEmbeddings):
-    """
-    TextCNN 2D 来获得篇章级别的向量表示。
-    :param embeddings: 对句子进行embedding的方法选择，输入为向量形式
-    :param embedding_type: ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
-    :param dropout: dropout率
-    :param kernel_size:卷积核的大小
-    :param kernel_nums: 卷积核个数
-    :param:in_channel:  当embedding_type 为双通道时，embedding更新的通道
-    例子：
-    >>>from lensnlp.Embeddings import WordEmbeddings, DocumentCNN2DEmbedding
-    >>>from lensnlp.utilis.data import Sentence
-    >>>Embed_list = [WordEmbeddings('cn_glove')]
-    >>>Docum_embed = DocumentCNN2DEmbedding(Embed_list)
-    >>>sent = Sentence('北京一览群智数据有限公司。')
-    >>>Docum_embed.embed((sent))
-    """
+    """TextCNN 2D 来获得篇章级别的向量表示。
+
+            Parameters
+            ----------
+
+            embeddings : List
+                一个词向量列表，用于给句中的词加向量。
+            embedding_type : str
+                ‘static'：embedding不更新\'non-static'：embedding更新\'multichannel' ：双通道，只更新一个通道
+            kernel_size : int
+                卷积核的大小
+            kernel_nums : bool
+                 卷积核个数
+            in_channel : int
+                当embedding_type 为双通道时，embedding更新的通道
+            dropout : float
+                dropout率
+            Examples
+            --------
+             >>> from lensnlp.Embeddings import WordEmbeddings, DocumentCNN2DEmbedding
+             >>> from lensnlp.utilis.data import Sentence
+             >>> Embed_list = [WordEmbeddings('cn_glove')]
+             >>> Docum_embed = DocumentCNN2DEmbedding(Embed_list)
+             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> Docum_embed.embed((sent)
+
+            """
+
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  embedding_type='static',
@@ -587,7 +656,33 @@ class DocumentCNN2DEmbedding(DocumentEmbeddings):
 
     def _add_embeddings_internal(self, sentences: List[Sentence]):
         pass
-class DocmentRNN_CNNEmbedding(DocumentEmbeddings):
+
+
+class DocmentRCNNEmbedding(DocumentEmbeddings):
+    """RNN_CNN来获得篇章级别的向量表示。
+    Parameters
+    --------------------
+    embeddings: List
+        一个词向量列表，用于给句子中的词加向量
+    stm_hidden_state: int
+        rnn 隐藏节点数
+    hidden_size: int
+        cnn 后接的全连接层输出tensor最后一个维度size
+    bidirectional: bool
+        True:双向rnn, False:单向rnn
+    dropout: float
+        全连接层输出的dropout率
+    word_dropout: float
+        input dropout率
+    locked_dropout: float
+        全连接层输出的dropout
+    >>> from lensnlp.Embeddings import WordEmbeddings, DocmentRCNNEmbedding
+    >>> from lensnlp.utilis.data import Sentence
+    >>> Embed_list = [WordEmbeddings('cn_glove')]
+    >>> Docum_embed = DocmentRCNNEmbedding(Embed_list)
+    >>> sent = Sentence('北京一览群智数据有限公司。')
+    >>> Docum_embed.embed((sent)
+    """
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  lstm_hidden_state = 100,
