@@ -691,6 +691,7 @@ class DocmentRCNNEmbedding(DocumentEmbeddings):
                  dropout: float = 0.5,
                  word_dropout: float = 0.0,
                  locked_dropout: float = 0.0, ):
+        
 
         super().__init__()
 
