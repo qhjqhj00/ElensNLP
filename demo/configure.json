@@ -1,7 +1,7 @@
 {
     "predict": {
         "cn_s": {
-            "execute": true,
+            "execute": false,
             "language": "cn",
             "type": "ner",
             "model_path": "ner_models/cn/cn_s.pt"
@@ -31,7 +31,7 @@
             "model_path": "ner_models/uy/uy_s.pt"
         },
         "cn_15": {
-            "execute": false,
+            "execute": true,
             "language": "cn",
             "type": "clf",
             "model_path": "clf_models/cn/cn_15.pt"

@@ -1,7 +1,7 @@
 from flask import Flask, request, Response
 from lensnlp.utilis.data_preprocess import cn_prepare,en_prepare, clf_preprocess,uy_prepare
 from lensnlp.models import SequenceTagger, TextClassifier
-from lensnlp.hyper_parameters import id_to_label_15
+from lensnlp.hyper_parameters import cn_clf
 import json
 import sys
 import os
@@ -32,7 +32,7 @@ else:
 app = Flask(__name__)
 
 
-@app.route(f'/lensnlp/', methods=['POST', 'GET'])
+@app.route('/lensnlp/', methods=['POST', 'GET'])
 def model():
     input_json = request.get_json(force=True)
     data = input_json['data']
@@ -51,7 +51,7 @@ def model():
         else:
             raise ValueError('Not Yet!')
     elif task_type == 'clf':
-        sentences = clf_preprocess(data)
+        sentences = clf_preprocess(data,'cn')
     else:
         raise NameError('Not Yet!')
 
@@ -63,7 +63,7 @@ def model():
             neural_result = s.to_dict(tag_type='ner')
             result.append(neural_result)
         elif task_type == 'clf':
-            result.append(id_to_label_15[int(s.labels[0].value)])
+            result.append(cn_clf[int(s.labels[0].value)])
         else:
             raise NameError('Not Yet!')
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json; charset=utf-8')

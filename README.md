@@ -14,8 +14,10 @@
 | 命名实体识别 高精度 |维吾尔语  | Elensdata  | 92.8% |  
 | 文本分类 | 中文  | 15类新闻 | 74.8% |  
 |文本分类 |维吾尔语  |  8类新闻  | 86.1% |
+|文本分类 | 英语 | 14类新闻| |
 |情感分析 |维吾尔语  |   Elensdata | 84.4% |
 |情感分析 |英文  |  Elensdata  | 77.5% |
+|情感分析 |中文 | 商品评论 ||
 
 
 ## Quick Start
@@ -58,7 +60,7 @@ print(en_tagger.predict(en_text))
 'confidence': 0.9937465190887451}, {'text': 'Yang Zhou', 'start_pos': 26,
  'end_pos': 35, 'type': 'PER', 'confidence': 0.9306863844394684}]}]
 ```
-文本分类（目前仅支持中文15类分类）：
+文本分类：
 ```python
 from lensnlp import clf
 cn_clf = clf('cn')
