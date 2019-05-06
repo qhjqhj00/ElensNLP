@@ -310,9 +310,11 @@ class ModelTrainer:
 
         test_metric, test_loss = self.evaluate(self.model, self.corpus.test, eval_mini_batch_size=eval_mini_batch_size,
                                                embeddings_in_memory=embeddings_in_memory)
-
-        log.info(f'MICRO_AVG: acc {test_metric.micro_avg_accuracy()} - f1-score {test_metric.micro_avg_f_score()}')
-        log.info(f'MACRO_AVG: acc {test_metric.macro_avg_accuracy()} - f1-score {test_metric.macro_avg_f_score()}')
+        if isinstance(self.model,SequenceTagger):
+            log.info(f'MICRO_AVG: acc {test_metric.micro_avg_accuracy()} - f1-score {test_metric.micro_avg_f_score()}')
+            log.info(f'MACRO_AVG: acc {test_metric.macro_avg_accuracy()} - f1-score {test_metric.macro_avg_f_score()}')
+        elif isinstance(self.model,TextClassifier):
+            log.info(f'acc {test_metric.macro_avg_f_score()} - f1-score {test_metric.micro_avg_f_score()}')
         for class_name in test_metric.get_classes():
             log.info(f'{class_name:<10} tp: {test_metric.get_tp(class_name)} - fp: {test_metric.get_fp(class_name)} - '
                      f'fn: {test_metric.get_fn(class_name)} - tn: {test_metric.get_tn(class_name)} - precision: '
@@ -354,15 +356,19 @@ class ModelTrainer:
 
         metric, loss = ModelTrainer.evaluate(self.model, dataset, eval_mini_batch_size=eval_mini_batch_size,
                                              embeddings_in_memory=embeddings_in_memory, out_path=out_path)
+        if isinstance(self.model,SequenceTagger):
+            if evaluation_metric == EvaluationMetric.MACRO_ACCURACY or evaluation_metric == EvaluationMetric.MACRO_F1_SCORE:
+                f_score = metric.macro_avg_f_score()
+                acc = metric.macro_avg_accuracy()
+            else:
+                f_score = metric.micro_avg_f_score()
+                acc = metric.micro_avg_accuracy()
 
-        if evaluation_metric == EvaluationMetric.MACRO_ACCURACY or evaluation_metric == EvaluationMetric.MACRO_F1_SCORE:
-            f_score = metric.macro_avg_f_score()
-            acc = metric.macro_avg_accuracy()
-        else:
+            log.info(f'{dataset_name:<5}: loss {loss:.8f} - f-score {f_score:.4f} - acc {acc:.4f}')
+        elif isinstance(self.model,TextClassifier):
             f_score = metric.micro_avg_f_score()
-            acc = metric.micro_avg_accuracy()
-
-        log.info(f'{dataset_name:<5}: loss {loss:.8f} - f-score {f_score:.4f} - acc {acc:.4f}')
+            acc = metric.macro_avg_f_score()
+            log.info(f'{dataset_name:<5}: loss {loss:.8f} - f-score {f_score:.4f} - acc {acc:.4f}')
 
         return metric, loss
 
