@@ -164,7 +164,7 @@ def load_clf_data(tag, train_file, test_file=None):
 
     train_data = [re.split("\t", doc) for doc in train_data]
     train_y = [doc[0] for doc in train_data]
-    if tag == 'CN_char':
+    if 'CN' in tag:
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
@@ -178,7 +178,7 @@ def load_clf_data(tag, train_file, test_file=None):
         test_data = [doc.split('\t') for doc in test_data]
         test_y = [doc[0] for doc in test_data]
 #         test_X = [doc[1].replace(' ','') for doc in test_data]
-        if tag == 'CN_char':
+        if 'CN' in tag:
             test_X = [doc[1].replace(' ', '') for doc in test_data]
         else:
             test_X = [doc[1] for doc in test_data]

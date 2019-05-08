@@ -13,7 +13,12 @@ def cn_prepare(text: str) -> List[Sentence]:
     text = re.sub('([。！？\?][”’])([^，。！？\?])', r'\1\n\2', text)
     text = text.split('\n')
     for s in text:
-        sentences.append(Sentence(s,'PY'))
+        if len(s) > 500:
+            n = int(len(s)/500)+1
+            tem = [Sentence(s[i*500:(i+1)*500],'PY') for i in range(n)]
+            sentences.extend(tem)
+        else:
+            sentences.append(Sentence(s,'PY'))
     return sentences
 
 

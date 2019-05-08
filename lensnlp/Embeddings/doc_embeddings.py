@@ -134,7 +134,6 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
          >>> Docum_embed.embed((sent)
 
         """
-
     def __init__(self,
                  embeddings: List[TokenEmbeddings],
                  hidden_size=128,
@@ -153,6 +152,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         self.embeddings: StackedEmbeddings = StackedEmbeddings(embeddings=embeddings)
 
         self.rnn_type = rnn_type
+        self.rnn_layers = rnn_layers
 
         self.reproject_words = reproject_words
         self.bidirectional = bidirectional
@@ -197,13 +197,13 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
     @property
     def embedding_length(self) -> int:
-        """返回向量维度"""
         return self.__embedding_length
+
 
     def attention(self, rnn_out, state):
         """
-        :param rnn_out: rnn的输出
-        :param state: 序列的隐藏状态
+        :param rnn_out: rnn的输出 rnn_out.shape = [seq,batch,hidden*num_direction]
+        :param state: 序列的隐藏状态 hidden = (h_n, c_n) h_n.shape = [num_layer*num_direction, batch, hidden_size]
         :return: 每个cell的一个注意力权重
         """
         batch_size = state.size()[1]
@@ -219,7 +219,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
     def embed(self, sentences: Union[List[Sentence], Sentence]):
         """
-        :param sentences: 单个Sentence或者Sentence的列表
+        :param sentences:
         :return: embedding存在了Sentence.embeddings中
         """
         if type(sentences) is Sentence:
@@ -232,7 +232,6 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         self.embeddings.embed(sentences)
 
         longest_token_sequence_in_batch: int = len(sentences[0])
-
         all_sentence_tensors = []
         lengths: List[int] = []
 
@@ -269,27 +268,30 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
             sentence_tensor = self.word_reprojection_map(sentence_tensor)
 
         sentence_tensor = self.dropout(sentence_tensor)
-
+        #将变长序列进行padding之后压缩输入rnn模型中
         packed = torch.nn.utils.rnn.pack_padded_sequence(sentence_tensor, lengths)
 
         self.rnn.flatten_parameters()
 
         rnn_out, hidden = self.rnn(packed)
-
+        #rnn_out.shape = [seq,batch,hidden*num_direction]
+        #hidden = (h_n, c_n) h_n.shape = [num_layer*num_direction, batch, hidden_size]
+        #将rnn输出进行解压缩，得到output和其实际句长
         outputs, output_lengths = torch.nn.utils.rnn.pad_packed_sequence(rnn_out)
 
         if self.use_attention:
-            h_n, c_n = hidden
-            outputs = self.attention(outputs, h_n)
+            h_n, c_n = hidden   #h_n.shape = [num_layes*direction, batch_size ,hidden_size]
+            outputs = self.attention(outputs, h_n)   #outputs.shape = [batch_size, num_layers*direction*hidden_size]
 
         outputs = self.dropout(outputs)
-
-        # 获得句的特征
+        #use_attention获取句的特征
         if self.use_attention:
             for sentence_no in range(outputs.size()[0]):
                 # print(sentence_no)
                 embedding = outputs[sentence_no]
                 sentences[sentence_no].set_embedding(self.name, embedding)
+
+        # 获得句的特征
         else:
             for sentence_no, length in enumerate(lengths):
                 last_rep = outputs[length - 1, sentence_no]

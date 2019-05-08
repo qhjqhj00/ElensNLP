@@ -117,6 +117,9 @@ class TextClassifier(nn.Model):
         if type(state['document_embeddings']) is dict:
             if state['document_embeddings']['type'] == 'rnn' and state['document_embeddings']['emb'] == 'cn_glove':
                 state['document_embeddings'] = DocumentRNNEmbeddings([WordEmbeddings('cn_glove')])
+            elif state['document_embeddings']['type'] == 'bilstm' and state['document_embeddings']['emb'] == 'cn_glove':
+                state['document_embeddings'] = DocumentRNNEmbeddings([WordEmbeddings('cn_glove')],
+                                                                     bidirectional=True, use_attention=True)
         model = TextClassifier(
             document_embeddings=state['document_embeddings'],
             label_dictionary=state['label_dictionary'],
