@@ -1,39 +1,39 @@
 
-深度学习的python包
+LensNLP 深度学习
 ---
 
-各模块精度，性能测试
+### 预置预训练模型
 
 
 | 模型 | 语言 | 数据集 | F1-score |
-| -------------------------------  | ---  | ----------- | ---------------- | 
-| 命名实体识别 高精度 |中文 |  Elensdata  | 93.2% | 
-| 命名实体识别 高性能 |中文 |   Elensdata | 90.1%   | 
-| 命名实体识别 高精度 |英文 |  ConLL03  | 93.07%  | 
+| -------------------------------  | ---  | ----------- | ---------------- |
+| 命名实体识别 高精度 |中文 |  Elensdata  | 93.2% |
+| 命名实体识别 高性能 |中文 |   Elensdata | 90.1%   |
+| 命名实体识别 高精度 |英文 |  ConLL03  | 93.07% |
 | 命名实体识别 高性能 |英文|  ConLL03| 90.4%|
-| 命名实体识别 高精度 |维吾尔语  | Elensdata  | 92.8% |  
-| 文本分类 | 中文  | 15类新闻 | 74.8% |  
+| 命名实体识别 高精度 |维吾尔语  | Elensdata  | 92.8% |
+| 文本分类 | 中文  | 15类新闻 | 74.8% |
 |文本分类 |维吾尔语  |  8类新闻  | 86.1% |
-|文本分类 | 英语 | 14类新闻| |
 |情感分析 |维吾尔语  |   Elensdata | 86.42% |
 |情感分析 |英文  |  Elensdata  | 77.5% |
 |情感分析 |中文 | Elensdata |75.8%|
 
 
-## Quick Start
+## 快速开始
 
 
-### Requirements and Installation
+### 安装
 
 
-```
+```console
 pip install lensnlp-0.0.0-py3-none-any.whl
 ```
 
-### Example Usage
 
-#### 预测
-实体识别（目前支持中文(cn)，英文(en)，维吾尔语(uy)）
+### 使用示例
+
+#### 利用预训练模型进行预测
+目前实体识别支持中文(cn)，英文(en)，维吾尔语(uy)的通用实体识别，更改ner()中的语言类别即可。
 ```python
 from lensnlp import ner
 
@@ -60,10 +60,10 @@ print(en_tagger.predict(en_text))
 'confidence': 0.9937465190887451}, {'text': 'Yang Zhou', 'start_pos': 26,
  'end_pos': 35, 'type': 'PER', 'confidence': 0.9306863844394684}]}]
 ```
-文本分类：
+目前文本分类支持多种模型，在clf()中更改语言/维吾尔语：uy，英语：en，中文：cn/，和任务类型/分类：clf，情感识别：emo/即可调用对应模型：
 ```python
 from lensnlp import clf
-cn_clf = clf('cn')
+cn_clf = clf('cn_clf')
 # 输入可以为str或者list(str)
 text = '中国科学院国家天文台研究员陆由俊对科技日报记者介绍说：“所有超大质量黑洞都能吞噬附近物质，\
         吸收穿过黑洞事件视界的物质，并以接近光速的速度将其余物质喷射到太空中，天体物理学家称之为‘ \
@@ -120,7 +120,7 @@ language = 'cn'
 out_path = './out'
 cn_clf_train = cls_train(path,train_file,out_path,language,test_file)
 cn_clf_train.train()
-```  
+```
 训练可用demo中的train.py调用，方式如下：  
 命令行训练：  
 先在configure.json中配置训练信息：  
@@ -132,7 +132,7 @@ model_name:{
       "language":"CN_char",
       "out_path":"./dataset"
     }
- ```
+```
  然后，
  ```console
 python train.py --name=""

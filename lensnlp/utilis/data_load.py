@@ -160,9 +160,10 @@ def load_clf_data(tag, train_file, test_file=None):
     :return: corpus
     """
 
-    train_data = open(str(train_file), encoding='utf-8').read().strip().split('\n')
+    train_data = open(str(train_file), encoding='utf-8',errors='ignore').read().strip().split('\n')
 
     train_data = [re.split("\t", doc) for doc in train_data]
+    train_data = [doc for doc in train_data if len(doc) == 2]
     train_y = [doc[0] for doc in train_data]
     if 'CN' in tag:
             train_X = [doc[1].replace(' ','') for doc in train_data]
@@ -174,8 +175,9 @@ def load_clf_data(tag, train_file, test_file=None):
     random.shuffle(train_)
 
     if test_file is not None:
-        test_data = open(str(test_file), encoding='utf-8').read().strip().split('\n')
+        test_data = open(str(test_file), encoding='utf-8',errors='ignore').read().strip().split('\n')
         test_data = [doc.split('\t') for doc in test_data]
+        test_data = [doc for doc in test_data if len(doc) == 2]
         test_y = [doc[0] for doc in test_data]
 #         test_X = [doc[1].replace(' ','') for doc in test_data]
         if 'CN' in tag:

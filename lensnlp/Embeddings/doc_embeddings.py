@@ -213,7 +213,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         merged_state = merged_state.unsqueeze(2)
         # (batch, seq_len, cell_size) * (batch, cell_size, 1) = (batch, seq_len, 1)
         weights = torch.bmm(rnn_out.permute(1,0,2), merged_state)
-        weights = torch.nn.functional.softmax(weights.squeeze(2)).unsqueeze(2)
+        weights = torch.nn.functional.softmax(weights.squeeze(2),dim=1).unsqueeze(2)
         # (batch, cell_size, seq_len) * (batch, seq_len, 1) = (batch, cell_size, 1)
         return torch.bmm(rnn_out.permute(1,2,0), weights).squeeze(2)
 

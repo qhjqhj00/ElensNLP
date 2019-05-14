@@ -30,7 +30,7 @@
             "type": "ner",
             "model_path": "ner_models/uy/uy_s.pt"
         },
-        "cn_15": {
+        "cn_emo": {
             "execute": true,
             "language": "cn",
             "type": "clf",
