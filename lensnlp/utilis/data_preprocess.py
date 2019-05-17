@@ -50,12 +50,14 @@ def clf_preprocess(text:Union[str,list],language):
     """文本分类数据分句"""
     if type(text) is str:
         text = [text]
-    if 'cn' in language:
+    if language == 'CN_char':
         sentences: List[Sentence] = [(Sentence(s[:2000],'CN_char')) for s in text]
-    elif 'uy' in language:
-        sentences: List[Sentence] = [(Sentence(s[:2000], 'UY')) for s in text]
-    elif 'en' in language:
-        sentences: List[Sentence] = [(Sentence(s[:2000], 'EN')) for s in text]
+    elif language == 'CN_token':
+        sentences: List[Sentence] = [(Sentence(s[:2000], 'CN_token')) for s in text]
+    elif language == 'UY':
+        sentences: List[Sentence] = [(Sentence(s, 'UY')[:2000]) for s in text]
+    elif language == 'EN':
+        sentences: List[Sentence] = [(Sentence(s, 'EN')[:2000]) for s in text]
     else:
         raise ValueError('Not Yet!')
     return sentences
