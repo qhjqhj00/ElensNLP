@@ -2,6 +2,8 @@ from lensnlp.utilis.data import Sentence
 import re
 from nltk.tokenize import word_tokenize, sent_tokenize
 from typing import List,Union
+import pymongo
+import requests
 
 
 def cn_prepare(text: str) -> List[Sentence]:
@@ -61,6 +63,30 @@ def clf_preprocess(text:Union[str,list],language):
     else:
         raise ValueError('Not Yet!')
     return sentences
+
+
+def repl_str(matched):
+    replace_str = matched.group('symbol')
+    return ' ' + replace_str + " "
+
+
+def uy_segmentation(word):
+
+    end_shape_affix_list = ['دىكىلەرنىڭ', 'لىقلاردىن', 'لىقلارنىڭ', 'لىقلاردەك', 'لۇقلاركەن', 'لىكلەرنىڭ',
+                                'لىقلارغا', 'لىقلاردا', 'لىرىنىڭ', 'لىرىنىڭ', 'لىقلار', 'لىكلەر', 'لىكتىن', 'چىلىك',
+                                'لىقنى', 'لەردە', 'لاردا', 'لىرىم', 'دىنمۇ', 'دىكى', 'تىكى', 'غىچە', 'قىچە', 'گىچە',
+                                'كىچە', 'لىرى', 'نىڭ', 'دىن', 'تىن', 'دەك', 'تەك', 'لار', 'لەر', 'لىق', 'لىك', 'لىك',
+                                'نى', 'دا', 'دە', 'تا', 'تە', 'چە', 'غا', 'قا', 'گە', 'كە', 'ﯘم', 'دا', 'دە', 'مۇ']
+
+    drop_end = re.sub('(?P<symbol>' + '|'.join([x + '$' for x in end_shape_affix_list]) + ')', repl_str, word, count=1)
+    end = ''
+    if len(drop_end.split()) > 1:
+        end = drop_end.split()[1]
+        drop_end = drop_end.split()[0]
+
+    return [drop_end, end]
+
+
 
 
 
