@@ -562,20 +562,23 @@ class Sentence:
 
     def convert_tag_scheme(self, tag_type: str = 'ner', target_scheme: str = 'iob'):
         """转换标签策略"""
-        tags: List[Label] = []
+        tags = []
         for token in self.tokens:
             token: Token = token
             tags.append(token.get_tag(tag_type))
 
         if target_scheme == 'iob':
             iob2(tags)
+            for index, tag in enumerate(tags):
+                self.tokens[index].add_tag(tag_type, tag.value)
 
         if target_scheme == 'iobes':
             iob2(tags)
             tags = iob_iobes(tags)
+            for index, tag in enumerate(tags):
+                self.tokens[index].add_tag(tag_type, tag)
 
-        for index, tag in enumerate(tags):
-            self.tokens[index].add_tag(tag_type, tag.value)
+
 
     def infer_space_after(self):
         """判断token后是否有空格"""
@@ -896,24 +899,6 @@ def iob2(tags):
     return True
 
 
-def uy_preprocess(text):
-    """维吾尔语预处理"""
-    text = re.sub('،' ,' ، ',text)
-    text = re.sub('\.', ' . ', text)
-    text = re.sub('!', ' ! ', text)
-    text = re.sub('؟', ' ؟ ', text)
-    text = re.sub('\?', ' ? ', text)
-    text = re.sub('\(' ,'( ',text)
-    text = re.sub('\)' ,' )',text)
-    text = re.sub('»' ,' »',text)
-    text = re.sub('«' ,'« ',text)
-    text = re.sub(':' ,' :',text)
-    text = re.sub('"' ,' " ',text)
-    text = re.sub('><' ,'> <',text)
-    text = re.sub(r'( )*-( )*', '-', text)
-
-    return text
-
 def iob_iobes(tags):
     """将iob策略变为bioes策略"""
     new_tags = []
@@ -935,6 +920,25 @@ def iob_iobes(tags):
         else:
             raise Exception('Invalid IOB format!')
     return new_tags
+
+
+def uy_preprocess(text):
+    """维吾尔语预处理"""
+    text = re.sub('،' ,' ، ',text)
+    text = re.sub('\.', ' . ', text)
+    text = re.sub('!', ' ! ', text)
+    text = re.sub('؟', ' ؟ ', text)
+    text = re.sub('\?', ' ? ', text)
+    text = re.sub('\(' ,'( ',text)
+    text = re.sub('\)' ,' )',text)
+    text = re.sub('»' ,' »',text)
+    text = re.sub('«' ,'« ',text)
+    text = re.sub(':' ,' :',text)
+    text = re.sub('"' ,' " ',text)
+    text = re.sub('><' ,'> <',text)
+    text = re.sub(r'( )*-( )*', '-', text)
+
+    return text
 
 
 class MultiCorpus(Corpus):

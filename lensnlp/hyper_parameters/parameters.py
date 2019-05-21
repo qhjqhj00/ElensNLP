@@ -24,7 +24,7 @@ Parameter['cache_path'] = '/mnt/flair_cache/'
 tag_filter = ['B-LOC', 'B-ORG', 'B-PER', 'I-LOC', 'I-ORG', 'I-PER', 'O','B-MOV',
               'I-MOV','B-Time','I-Time','B-NUM','I-NUM','B-MEA','I-MEA','B-PHO',
               'I-PHO','B-WEB','I-WEB','B-POST','I-POST','B-TIME','I-TIME','B-MONEY','I-MONEY',
-              'B-DATE','I-DATE','B-CAT','I-CAT','B-TITLE','I-TITLE']
+              'B-DATE','I-DATE','B-CAT','I-CAT','B-TITLE','I-TITLE','B-MISC','I-MISC']
 
 cn_clf = {0: "体育",1: "健康",2: "军事",3: "国际",4: "娱乐",5: "房产",6: "教育",
                7: "文化",8: "旅游",9: "时政",10: "汽车",11: "法治",12: "社会",13: "科技",14: "财经"}
