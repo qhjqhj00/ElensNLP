@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8a0bc90-668f-4428-90c2-5a6aa5bde82b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lensnlp/modules.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lensnlp/modules/attention.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lensnlp/modules/transformer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/models/text_summary_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRAIN_MODEL.md" beforeDir="false" afterPath="$PROJECT_DIR$/TRAIN_MODEL.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/modules.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/modules/attention.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/modules/attention.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,18 +30,19 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="json" value="3" />
-          <entry key="md" value="5" />
-          <entry key="py" value="67" />
+          <entry key="md" value="7" />
+          <entry key="py" value="71" />
           <entry key="sh" value="2" />
           <entry key="sql" value="1" />
+          <entry key="txt" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="3" />
-          <entry key="Markdown" value="5" />
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="67" />
+          <entry key="Markdown" value="7" />
+          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Python" value="71" />
           <entry key="SQL" value="1" />
         </counts>
       </usages-collector>
@@ -49,7 +50,7 @@
         <counts>
           <entry key="json" value="18" />
           <entry key="md" value="252" />
-          <entry key="py" value="1353" />
+          <entry key="py" value="1863" />
           <entry key="sh" value="42" />
         </counts>
       </usages-collector>
@@ -58,25 +59,13 @@
           <entry key="JSON" value="18" />
           <entry key="Markdown" value="252" />
           <entry key="PLAIN_TEXT" value="42" />
-          <entry key="Python" value="1353" />
+          <entry key="Python" value="1863" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="78" selection-start-line="78" selection-end-line="110" selection-end-column="15" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data_load.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -90,15 +79,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/modules/transformer.py">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+            </state>
+          </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/modules/attention.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+            <state relative-caret-position="612">
+              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -106,58 +99,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/models/nn.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/models/language_model.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <folding>
-                <element signature="e#0#24#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/demo/app_clf.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="525">
-              <caret line="39" column="38" selection-start-line="39" selection-start-column="38" selection-end-line="39" selection-end-column="38" />
-              <folding>
-                <element signature="e#0#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/predict.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="885">
-              <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#57#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lensnlp/models/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="53" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="53" />
+            <state relative-caret-position="796">
+              <caret line="534" column="26" lean-forward="true" selection-start-line="534" selection-start-column="26" selection-end-line="534" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -170,6 +116,12 @@
         <option value="Python Script" />
       </list>
     </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>dropout</find>
+      <find>_filter_empty_sentences</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -186,7 +138,6 @@
         <option value="$PROJECT_DIR$/doc_embeddings.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/lensnlp/utilis/data_load.py" />
-        <option value="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/relation_extraction.py" />
         <option value="$PROJECT_DIR$/lensnlp/utilis/data_re.py" />
         <option value="$PROJECT_DIR$/demo/configure.json" />
@@ -200,7 +151,10 @@
         <option value="$PROJECT_DIR$/lensnlp/models/attention.py" />
         <option value="$PROJECT_DIR$/lensnlp/modules.py" />
         <option value="$PROJECT_DIR$/lensnlp/modules/transformer.py" />
+        <option value="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" />
+        <option value="$PROJECT_DIR$/TRAIN_MODEL.md" />
         <option value="$PROJECT_DIR$/lensnlp/modules/attention.py" />
+        <option value="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" />
       </list>
     </option>
   </component>
@@ -259,19 +213,13 @@
               <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
               <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
               <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
+              <item name="Embeddings" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
-              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
-              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
-              <item name="trainers" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -372,16 +320,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/TRAIN_MODEL.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="2055">
-            <caret line="137" column="34" selection-start-line="137" selection-start-column="34" selection-end-line="137" selection-end-column="34" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/configure.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="600">
@@ -407,13 +345,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11610">
-          <caret line="784" column="39" selection-start-line="784" selection-start-column="39" selection-end-line="784" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -446,16 +377,6 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/demo/ner_evaluation.py" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="390">
-            <caret line="26" selection-start-line="26" selection-end-line="26" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../智语/sql/SVM_clf.sql">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -470,13 +391,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1530">
           <caret line="110" column="18" selection-start-line="110" selection-start-column="18" selection-end-line="110" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8490">
-          <caret line="580" selection-start-line="580" selection-end-line="580" />
         </state>
       </provider>
     </entry>
@@ -533,16 +447,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data_load.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="654">
-          <caret line="108" column="12" selection-start-line="108" selection-start-column="4" selection-end-line="108" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/modules.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -556,13 +460,56 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data_load.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="654">
+          <caret line="108" column="12" selection-start-line="108" selection-start-column="4" selection-end-line="108" selection-end-column="12" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/modules/transformer.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/relation_classification_model.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/TRAIN_MODEL.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="495">
+            <caret line="33" column="6" lean-forward="true" selection-start-line="33" selection-start-column="6" selection-end-line="33" selection-end-column="6" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="389">
+            <caret line="26" selection-start-line="26" selection-end-line="26" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="78" selection-start-line="78" selection-end-line="110" selection-end-column="15" />
+        <state relative-caret-position="700">
+          <caret line="336" lean-forward="true" selection-start-line="336" selection-end-line="336" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>
@@ -571,11 +518,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/modules/attention.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        <state relative-caret-position="612">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="796">
+          <caret line="534" column="26" lean-forward="true" selection-start-line="534" selection-start-column="26" selection-end-line="534" selection-end-column="26" />
         </state>
       </provider>
     </entry>
