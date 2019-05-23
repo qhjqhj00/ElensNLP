@@ -199,24 +199,6 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
     def embedding_length(self) -> int:
         return self.__embedding_length
 
-
-    def attention(self, rnn_out, state):
-        """
-        :param rnn_out: rnn的输出 rnn_out.shape = [seq,batch,hidden*num_direction]
-        :param state: 序列的隐藏状态 hidden = (h_n, c_n) h_n.shape = [num_layer*num_direction, batch, hidden_size]
-        :return: 每个cell的一个注意力权重
-        """
-        batch_size = state.size()[1]
-        state = state.view(self.rnn_layers, batch_size, -1)
-        merged_state = torch.cat([s for s in state],1)  #shape = [batch, hidden*direction]
-        # print(merged_state.size())
-        merged_state = merged_state.unsqueeze(2)
-        # (batch, seq_len, cell_size) * (batch, cell_size, 1) = (batch, seq_len, 1)
-        weights = torch.bmm(rnn_out.permute(1,0,2), merged_state)
-        weights = torch.nn.functional.softmax(weights.squeeze(2),dim=1).unsqueeze(2)
-        # (batch, cell_size, seq_len) * (batch, seq_len, 1) = (batch, cell_size, 1)
-        return torch.bmm(rnn_out.permute(1,2,0), weights).squeeze(2)
-
     def embed(self, sentences: Union[List[Sentence], Sentence]):
         """
         :param sentences:
@@ -268,23 +250,26 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
             sentence_tensor = self.word_reprojection_map(sentence_tensor)
 
         sentence_tensor = self.dropout(sentence_tensor)
-        #将变长序列进行padding之后压缩输入rnn模型中
+        # 将变长序列进行padding之后压缩输入rnn模型中
         packed = torch.nn.utils.rnn.pack_padded_sequence(sentence_tensor, lengths)
 
         self.rnn.flatten_parameters()
 
         rnn_out, hidden = self.rnn(packed)
-        #rnn_out.shape = [seq,batch,hidden*num_direction]
-        #hidden = (h_n, c_n) h_n.shape = [num_layer*num_direction, batch, hidden_size]
-        #将rnn输出进行解压缩，得到output和其实际句长
+        # rnn_out.shape = [seq,batch,hidden*num_direction]
+        # hidden = (h_n, c_n) h_n.shape = [num_layer*num_direction, batch, hidden_size]
+        # 将rnn输出进行解压缩，得到output和其实际句长
         outputs, output_lengths = torch.nn.utils.rnn.pad_packed_sequence(rnn_out)
 
         if self.use_attention:
-            h_n, c_n = hidden   #h_n.shape = [num_layes*direction, batch_size ,hidden_size]
-            outputs = self.attention(outputs, h_n)   #outputs.shape = [batch_size, num_layers*direction*hidden_size]
+            from lensnlp.modules.attention import rnn_attention
+            h_n, c_n = hidden
+            # h_n.shape = [num_layes*direction, batch_size ,hidden_size]
+            outputs = rnn_attention(outputs, h_n, self.rnn_layers)
+            # outputs.shape = [batch_size, num_layers*direction*hidden_size]
 
         outputs = self.dropout(outputs)
-        #use_attention获取句的特征
+        # use_attention获取句的特征
         if self.use_attention:
             for sentence_no in range(outputs.size()[0]):
                 # print(sentence_no)

@@ -4,7 +4,7 @@
 
 #### 词向量
 
-Lensnlp中内置了多种预训练语言模型。在安装lensnlp后，会在用户目录下生成 .lensnlp/ 文件夹，所有的预训练语言模型都需要放置在 .lensnlp/language_model/中。在公司148服务器中 /mnt/词向量/ 目录下可以找到模型文件。
+Lensnlp中内置了多种预训练语言模型。在安装lensnlp后，会在用户目录下生成 .lensnlp/ 文件夹，所有的预训练语言模型都需要放置在 .lensnlp/language_model/中。
 
 1. Word2Vec，Glove，Fasttext类型语言模型：
 
