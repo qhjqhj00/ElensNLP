@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8a0bc90-668f-4428-90c2-5a6aa5bde82b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TRAIN_MODEL.md" beforeDir="false" afterPath="$PROJECT_DIR$/TRAIN_MODEL.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/modules.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/modules/attention.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/modules/attention.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +14,7 @@
     <session id="1464686652">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="15" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="8" />
           <entry key="project.open.time.2" value="1" />
@@ -30,9 +26,9 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="json" value="3" />
-          <entry key="md" value="7" />
+          <entry key="md" value="8" />
           <entry key="py" value="71" />
-          <entry key="sh" value="2" />
+          <entry key="sh" value="3" />
           <entry key="sql" value="1" />
           <entry key="txt" value="1" />
         </counts>
@@ -40,8 +36,8 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="JSON" value="3" />
-          <entry key="Markdown" value="7" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="Markdown" value="8" />
+          <entry key="PLAIN_TEXT" value="4" />
           <entry key="Python" value="71" />
           <entry key="SQL" value="1" />
         </counts>
@@ -49,7 +45,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="json" value="18" />
-          <entry key="md" value="252" />
+          <entry key="md" value="260" />
           <entry key="py" value="1863" />
           <entry key="sh" value="42" />
         </counts>
@@ -57,7 +53,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="18" />
-          <entry key="Markdown" value="252" />
+          <entry key="Markdown" value="260" />
           <entry key="PLAIN_TEXT" value="42" />
           <entry key="Python" value="1863" />
         </counts>
@@ -82,7 +78,7 @@
         <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="330">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+              <caret line="36" selection-start-line="36" selection-end-line="36" />
             </state>
           </provider>
         </entry>
@@ -91,7 +87,7 @@
         <entry file="file://$PROJECT_DIR$/lensnlp/modules/attention.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="612">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+              <caret line="36" selection-start-line="36" selection-end-line="36" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -99,11 +95,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="796">
-              <caret line="534" column="26" lean-forward="true" selection-start-line="534" selection-start-column="26" selection-end-line="534" selection-end-column="26" />
+            <state relative-caret-position="4476">
+              <caret line="429" column="55" selection-start-line="429" selection-start-column="55" selection-end-line="429" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="419">
+                <caret line="28" column="33" lean-forward="true" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/demo/docker.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="390">
+              <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -141,7 +158,6 @@
         <option value="$PROJECT_DIR$/lensnlp/models/relation_extraction.py" />
         <option value="$PROJECT_DIR$/lensnlp/utilis/data_re.py" />
         <option value="$PROJECT_DIR$/demo/configure.json" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/lensnlp/utilis/data_preprocess.py" />
         <option value="$PROJECT_DIR$/demo/app_uy.py" />
         <option value="$PROJECT_DIR$/demo/app_clf.py" />
@@ -155,6 +171,7 @@
         <option value="$PROJECT_DIR$/TRAIN_MODEL.md" />
         <option value="$PROJECT_DIR$/lensnlp/modules/attention.py" />
         <option value="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -203,6 +220,11 @@
             <path>
               <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
               <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="demo" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
@@ -265,7 +287,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16453674" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -338,13 +359,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1785">
           <caret line="119" column="118" selection-start-line="119" selection-start-column="110" selection-end-line="119" selection-end-column="118" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/docker.sh">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="25" selection-start-line="10" selection-start-column="25" selection-end-line="10" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -476,7 +490,7 @@
     <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
         </state>
       </provider>
     </entry>
@@ -488,16 +502,6 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="495">
             <caret line="33" column="6" lean-forward="true" selection-start-line="33" selection-start-column="6" selection-end-line="33" selection-end-column="6" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="389">
-            <caret line="26" selection-start-line="26" selection-end-line="26" />
           </first_editor>
           <second_editor />
         </state>
@@ -519,7 +523,7 @@
     <entry file="file://$PROJECT_DIR$/lensnlp/modules/attention.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+          <caret line="36" selection-start-line="36" selection-end-line="36" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
@@ -528,8 +532,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="796">
-          <caret line="534" column="26" lean-forward="true" selection-start-line="534" selection-start-column="26" selection-end-line="534" selection-end-column="26" />
+        <state relative-caret-position="4476">
+          <caret line="429" column="55" selection-start-line="429" selection-start-column="55" selection-end-line="429" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="419">
+            <caret line="28" column="33" lean-forward="true" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/docker.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="26" selection-end-line="26" selection-end-column="26" />
         </state>
       </provider>
     </entry>
