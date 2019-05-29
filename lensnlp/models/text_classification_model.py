@@ -5,6 +5,8 @@ from typing import List, Union
 import os
 
 import torch
+import torch.nn.functional as F
+
 from lensnlp.hyper_parameters import Parameter,device
 from lensnlp.models import nn
 from lensnlp.Embeddings import TokenEmbeddings, DocumentEmbeddings,DocumentRNNEmbeddings,WordEmbeddings
@@ -165,7 +167,8 @@ class TextClassifier(nn.Model):
         loss = self._calculate_loss(scores, sentences)
         return labels, loss
 
-    def predict(self, sentences: Union[Sentence, List[Sentence]], mini_batch_size: int = 32) -> List[Sentence]:
+    def predict(self, sentences: Union[Sentence, List[Sentence]],
+                mini_batch_size: int = 32, get_prob = False) -> List[Sentence]:
         """
         预测
         输入为 Sentence 数量不限
@@ -182,7 +185,7 @@ class TextClassifier(nn.Model):
 
             for batch in batches:
                 scores = self.forward(batch)
-                predicted_labels = self._obtain_labels(scores)
+                predicted_labels = self._obtain_labels(scores,get_prob)
 
                 for (sentence, labels) in zip(batch, predicted_labels):
                     sentence.labels = labels
@@ -205,13 +208,16 @@ class TextClassifier(nn.Model):
 
         return self._calculate_single_label_loss(scores, sentences)
 
-    def _obtain_labels(self, scores: List[List[float]]) -> List[List[Label]]:
+    def _obtain_labels(self, scores: List[List[float]], get_prob=False) -> List[List[Label]]:
         """
         获得文本标签
         """
 
         if self.multi_label:
             return [self._get_multi_label(s) for s in scores]
+
+        elif get_prob:
+            return [self._get_prob(s) for s in scores]
 
         return [self._get_single_label(s) for s in scores]
 
@@ -227,6 +233,10 @@ class TextClassifier(nn.Model):
                 labels.append(Label(label, conf.item()))
 
         return labels
+
+    def _get_prob(self, label_scores):
+        conf = F.softmax(label_scores,dim=0)
+        return [Label(self.label_dictionary.get_item_for_index(idx),score.item())for idx,score in enumerate(conf)]
 
     def _get_single_label(self, label_scores) -> List[Label]:
         conf, idx = torch.max(label_scores, 0)
