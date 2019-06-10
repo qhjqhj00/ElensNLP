@@ -15,7 +15,7 @@ def load_column_corpus(
         train_file=None,
         test_file=None,
         dev_file=None,
-        tag_to_biloes=None,
+        tag_to_bioes=None,
         lang=None) -> TaggedCorpus:
     """
     加载标准的序列标注数据
@@ -88,11 +88,12 @@ def load_column_corpus(
     else:
         sentences_dev: List[Sentence] = [sentences_train[i] for i in
                                          __sample(len(sentences_train), 0.05)] # 自动切分 验证集
+        sentences_train = [x for x in sentences_train if x not in sentences_dev]
 
-    if tag_to_biloes is not None:
+    if tag_to_bioes is not None:
         for sentence in sentences_train + sentences_test + sentences_dev:
             sentence: Sentence = sentence
-            sentence.convert_tag_scheme(tag_type=tag_to_biloes, target_scheme='iobes')
+            sentence.convert_tag_scheme(tag_type=tag_to_bioes, target_scheme='iobes')
 
     return TaggedCorpus(sentences_train, sentences_dev, sentences_test, name=data_folder.name)
 

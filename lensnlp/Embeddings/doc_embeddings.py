@@ -141,7 +141,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
                  reproject_words: bool = True,
                  reproject_words_dimension: int = None,
                  bidirectional: bool = False,
-                 dropout: float = 0.5,
+                 dropout_rate: float = 0.5,
                  word_dropout: float = 0.0,
                  locked_dropout: float = 0.0,
                  rnn_type='LSTM',
@@ -185,7 +185,7 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         if locked_dropout > 0.0:
             self.dropout: torch.nn.Module = nn.LockedDropout(locked_dropout)
         else:
-            self.dropout = torch.nn.Dropout(dropout)
+            self.dropout = torch.nn.Dropout(dropout_rate)
 
         self.use_word_dropout: bool = word_dropout > 0.0
         if self.use_word_dropout:
