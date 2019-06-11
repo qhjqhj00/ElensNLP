@@ -57,6 +57,18 @@ class Metric(object):
             return round(self.get_tp(class_name) / (self.get_tp(class_name) + self.get_fp(class_name)), 4)
         return 0.0
 
+    def sensitive(self, class_name=None):
+        """sensitive"""
+        if self.get_tp(class_name) + self.get_fn(class_name) > 0:
+            return round(self.get_tp(class_name) / (self.get_tp(class_name) + self.get_fn(class_name)), 4)
+        return 0.0
+
+    def specificity(self, class_name=None):
+        """specificity"""
+        if self.get_fp(class_name) + self.get_tn(class_name) > 0:
+            return round(self.get_tn(class_name) / (self.get_fp(class_name) + self.get_tn(class_name)), 4)
+        return 0.0
+
     def recall(self, class_name=None):
         """计算recall"""
         if self.get_tp(class_name) + self.get_fn(class_name) > 0:

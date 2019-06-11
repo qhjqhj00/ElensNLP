@@ -161,9 +161,10 @@ class TextClassifier(nn.Model):
         scores = self.forward(sentences)
         return self._calculate_loss(scores, sentences)
 
-    def forward_labels_and_loss(self, sentences: Union[Sentence, List[Sentence]]) -> (List[List[Label]], torch.tensor):
+    def forward_labels_and_loss(self, sentences: Union[Sentence, List[Sentence]],
+                                get_prob=False) -> (List[List[Label]], torch.tensor):
         scores = self.forward(sentences)
-        labels = self._obtain_labels(scores)
+        labels = self._obtain_labels(scores,get_prob)
         loss = self._calculate_loss(scores, sentences)
         return labels, loss
 
@@ -235,8 +236,10 @@ class TextClassifier(nn.Model):
         return labels
 
     def _get_prob(self, label_scores):
-        conf = F.softmax(label_scores,dim=0)
-        return [Label(self.label_dictionary.get_item_for_index(idx),score.item())for idx,score in enumerate(conf)]
+        label_scores = F.softmax(label_scores,dim=0)
+        conf, idx = torch.max(label_scores, 0)
+        label = self.label_dictionary.get_item_for_index(idx.item())
+        return [Label(label, conf.item())]
 
     def _get_single_label(self, label_scores) -> List[Label]:
         conf, idx = torch.max(label_scores, 0)

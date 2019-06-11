@@ -98,7 +98,7 @@ def load_column_corpus(
     return TaggedCorpus(sentences_train, sentences_dev, sentences_test, name=data_folder.name)
 
 
-def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang):
+def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang=None):
     """
     :param path_to_column_file: 数据文件夹路径
     :param column_name_map: 数据格式，两列ner为 {1:'token',2:'ner'}
@@ -135,7 +135,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
-            token = Token(fields[text_column],lang=lang)
+            token = Token(fields[text_column], lang=lang)
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:

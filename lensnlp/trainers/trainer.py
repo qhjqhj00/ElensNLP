@@ -452,7 +452,8 @@ class ModelTrainer:
                                   sentences: List[Sentence],
                                   eval_mini_batch_size: int = 32,
                                   embeddings_in_memory: bool = False,
-                                  out_path: Path = None) -> (dict, float):
+                                  out_path: Path = None,
+                                  get_prob=None) -> (dict, float):
 
         with torch.no_grad():
             eval_loss = 0
@@ -465,7 +466,7 @@ class ModelTrainer:
             lines: List[str] = []
             for batch in batches:
 
-                labels, loss = model.forward_labels_and_loss(batch)
+                labels, loss = model.forward_labels_and_loss(batch, get_prob)
 
                 clear_embeddings(batch, also_clear_word_embeddings=not embeddings_in_memory)
 
@@ -479,7 +480,7 @@ class ModelTrainer:
 
                 for sentence, confidence, prediction, true_value in zip(sentences_for_batch, confidences_for_batch,
                                                                         predictions_for_batch, true_values_for_batch):
-                    eval_line = '{}\t{}\t{}\t{}\n'.format(sentence, true_value, prediction, confidence)
+                    eval_line = '{}\t{}\t{}\t{}\n'.format(sentence, true_value[0], prediction[0], confidence[0])
                     lines.append(eval_line)
 
                 for predictions_for_sentence, true_values_for_sentence in zip(predictions_for_batch, true_values_for_batch):
