@@ -6,8 +6,6 @@ import sys
 import os
 from pathlib import Path
 
-CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
-
 tagger = SequenceTagger.load('cn_s')
 app = Flask(__name__)
 

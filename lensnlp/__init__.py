@@ -3,6 +3,7 @@ from . import models
 from . import trainers
 from . import hyper_parameters
 from . import Embeddings
+from . import modules
 
 import logging.config
 from .predict import ner,clf

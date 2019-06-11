@@ -15,7 +15,7 @@ def load_column_corpus(
         train_file=None,
         test_file=None,
         dev_file=None,
-        tag_to_biloes=None,
+        tag_to_bioes=None,
         lang=None) -> TaggedCorpus:
     """
     加载标准的序列标注数据
@@ -88,16 +88,17 @@ def load_column_corpus(
     else:
         sentences_dev: List[Sentence] = [sentences_train[i] for i in
                                          __sample(len(sentences_train), 0.05)] # 自动切分 验证集
+        sentences_train = [x for x in sentences_train if x not in sentences_dev]
 
-    if tag_to_biloes is not None:
+    if tag_to_bioes is not None:
         for sentence in sentences_train + sentences_test + sentences_dev:
             sentence: Sentence = sentence
-            sentence.convert_tag_scheme(tag_type=tag_to_biloes, target_scheme='iobes')
+            sentence.convert_tag_scheme(tag_type=tag_to_bioes, target_scheme='iobes')
 
     return TaggedCorpus(sentences_train, sentences_dev, sentences_test, name=data_folder.name)
 
 
-def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang):
+def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang=None):
     """
     :param path_to_column_file: 数据文件夹路径
     :param column_name_map: 数据格式，两列ner为 {1:'token',2:'ner'}
@@ -134,7 +135,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
-            token = Token(fields[text_column],lang=lang)
+            token = Token(fields[text_column], lang=lang)
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
