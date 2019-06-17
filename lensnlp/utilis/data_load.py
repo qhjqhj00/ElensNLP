@@ -152,12 +152,13 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
     return sentences
 
 
-def load_clf_data(tag, train_file, test_file=None):
+def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
     """
     加载文本分类的数据
     :param tag: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
     :param train_file: 训练数据文件路径
     :param test_file: 测试数据文件路径
+    :param max_length
     :return: corpus
     """
 
@@ -170,7 +171,8 @@ def load_clf_data(tag, train_file, test_file=None):
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
-    train_ = [Sentence(train_X[i], tag, [train_y[i]]) for i in range(len(train_X)) if len(train_X[i]) > 0]
+    train_ = [Sentence(train_X[i], tag, [train_y[i]],max_length=max_length)
+              for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
     random.shuffle(train_)
@@ -185,7 +187,8 @@ def load_clf_data(tag, train_file, test_file=None):
             test_X = [doc[1].replace(' ', '') for doc in test_data]
         else:
             test_X = [doc[1] for doc in test_data]
-        test_ = [Sentence(test_X[i], tag, [test_y[i]]) for i in range(len(test_X)) if len(test_X[i]) > 0]
+        test_ = [Sentence(test_X[i], tag, [test_y[i]], max_length=max_length)
+                 for i in range(len(test_X)) if len(test_X[i]) > 0]
     else:
         test_: List[Sentence] = [train_[i] for i in
                                 __sample(len(train_), 0.2)]

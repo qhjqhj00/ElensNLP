@@ -316,7 +316,7 @@ class Sentence:
 
     def __init__(self, text: str = None, language: str = None,
                  labels: Union[List[Label], List[str]] = None,
-                 bp_encoder: BPEmb = None):
+                 max_length: int = None):
 
         super(Sentence, self).__init__()
 
@@ -328,16 +328,13 @@ class Sentence:
         self.lang = language
 
         if text is not None:
-            if language in ['UY','BP']:
-                if language == 'BP':
-                    text = ' '.join(bp_encoder.encode(text))
-                if language == 'UY':
-                    text = uy_preprocess(text)
+            if language == 'UY':
+                text = uy_preprocess(text)
                 word = ''
                 for index, char in enumerate(text):
                     if char == ' ':
                         if len(word) > 0:
-                            token = Token(word, start_position=index - len(word),lang = language)
+                            token = Token(word, start_position=index - len(word),lang=language)
                             self.add_token(token)
 
                         word = ''
@@ -394,6 +391,9 @@ class Sentence:
                 for index, char in enumerate(text):
                     token = Token(char, start_position=index,lang=language)
                     self.add_token(token)
+
+        if max_length is not None:
+            self.tokens = self.tokens[:max_length]
 
     def get_token(self, token_id: int) -> Token:
         for token in self.tokens:
