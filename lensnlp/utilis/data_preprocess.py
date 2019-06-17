@@ -48,18 +48,18 @@ def uy_prepare(text:str) -> List[Sentence]:
     return sentences
 
 
-def clf_preprocess(text:Union[str,list],language):
+def clf_preprocess(text:Union[str,list],language, max_length: int = 1024):
     """文本分类数据分句"""
     if type(text) is str:
         text = [text]
     if language == 'CN_char':
-        sentences: List[Sentence] = [(Sentence(s[:2000],'CN_char')) for s in text]
+        sentences: List[Sentence] = [(Sentence(s,'CN_char', max_length=max_length)) for s in text]
     elif language == 'CN_token':
-        sentences: List[Sentence] = [(Sentence(s[:2000], 'CN_token')) for s in text]
+        sentences: List[Sentence] = [(Sentence(s, 'CN_token',max_length=max_length)) for s in text]
     elif language == 'UY':
-        sentences: List[Sentence] = [(Sentence(s, 'UY')[:2000]) for s in text]
+        sentences: List[Sentence] = [(Sentence(s, 'UY', max_length=max_length)) for s in text]
     elif language == 'EN':
-        sentences: List[Sentence] = [(Sentence(s, 'EN')[:2000]) for s in text]
+        sentences: List[Sentence] = [(Sentence(s, 'EN', max_length=max_length)) for s in text]
     else:
         raise ValueError('Not Yet!')
     return sentences
@@ -86,6 +86,21 @@ def uy_segmentation(word):
 
     return [drop_end, end]
 
+
+def regx_ner(text):
+    regex_dict = {'MAIL':'[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z\.]{1,18}\.[a-z]{1,6}',
+              'TELE':'\(?0\d{2,3}[)-]?\d{7,8}|(?:(\+\d{2}))?(\d{1,3})\d{8}',
+              'WEB':'([a-zA-Z]+://)?([a-zA-Z0-9._-]{1,66})\.[a-z]{1,5}(:[0-9]{1,4})*(/[a-zA-Z0-9&%_./-~-]*)*',
+              'TERM':'《([^》]*){1,20}》',
+              'TAG':'#([^#]*){1,32}#'}
+    text=text.replace('．','.')
+    text=text.replace('－','-')
+    result = []
+    for key in regex_dict:
+        res = re.finditer(regex_dict[key],text)
+        result.extend([{'text':t.group(),'start_pos':t.start(),
+                   'end_pos':t.end(),'type':key} for t in res])
+    return result
 
 
 
