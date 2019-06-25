@@ -5,7 +5,7 @@ from __future__ import print_function
 import json
 import os
 import tensorflow as tf
-import modeling
+from lensnlp.Embeddings.XLNet import modeling
 
 
 def _get_initializer(FLAGS):

@@ -12,6 +12,15 @@ from bpemb import BPEmb
 from abc import abstractmethod
 import os
 
+import sentencepiece as spm
+from lensnlp.Embeddings.XLNet import xlnet
+from lensnlp.Embeddings.XLNet.prepro_utils import preprocess_text, encode_ids
+from lensnlp.Embeddings.XLNet.classifier_utils import convert_single_example
+import tensorflow as tf
+import collections
+import os
+from pathlib import Path
+
 from lensnlp.utilis.data import Token, Sentence
 
 from pytorch_pretrained_bert import BertTokenizer, BertModel
@@ -594,6 +603,15 @@ class BertEmbeddings(TokenEmbeddings):
         return len(self.layer_indexes) * self.model.config.hidden_size
 
 
+class InputExample(object):
+
+    def __init__(self, guid, text_a, text_b=None, label=None):
+        self.guid = guid
+        self.text_a = text_a
+        self.text_b = text_b
+        self.label = label
+
+
 class XLNetEmbeddings(TokenEmbeddings):
     """使用 key-value 类型的词向量，如glove，word2vec，fasttext等。
 
@@ -606,36 +624,25 @@ class XLNetEmbeddings(TokenEmbeddings):
                 是否静态向量，True为静态
             Examples
             --------
-             >>> from from lensnlp.Embeddings import WordEmbeddings
+             >>> from from lensnlp.Embeddings import XLNetEmbeddings
              >>> from lensnlp.utilis.data import Sentence
-             >>> Word_embed = WordEmbeddings('cn_glove')
-             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> Word_embed = XLNetEmbeddings()
+             >>> sent = Sentence('Trump loves China!','EN')
              >>> Word_embed.embed((sent))
 
             """
 
-    def __init__(self, embeddings: str):
+    def __init__(self):
 
-        if embeddings.lower() == 'en_glove':
-            embeddings = Path(CACHE_ROOT) / 'language_model/en_glove_300d'
-            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
+        self.__embedding_length: int = 1024
 
-        elif embeddings.lower() == 'cn_glove':
-            embeddings = Path(CACHE_ROOT) / 'language_model/cn_glove_300d'
-            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
+        self.sp = spm.SentencePieceProcessor()
+        self.sp.Load(CACHE_ROOT + '/xlnet_cased_L-24_H-1024_A-16/spiece.model')
 
-        elif embeddings.lower() == 'cn_fasttext':
-            embeddings = Path(CACHE_ROOT) / 'language_model/zh'
-            self.precomputed_word_embeddings = FastText.load_fasttext_format(str(embeddings))
-        else:
-            raise ValueError('Please specify another embeddings!')
+        self.xlnet_config = xlnet.XLNetConfig(
+            json_path=CACHE_ROOT + '/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json')
 
-        self.name: str = str(embeddings)
-        self.static_embeddings = True
-        if '的' in self.precomputed_word_embeddings:
-            self.__embedding_length: int = self.precomputed_word_embeddings['的'].shape[0]
-        else:
-            self.__embedding_length: int = self.precomputed_word_embeddings['0'].shape[0]
+        self.name = 'XLNet'
 
         super().__init__()
 
@@ -643,22 +650,68 @@ class XLNetEmbeddings(TokenEmbeddings):
     def embedding_length(self) -> int:
         return self.__embedding_length
 
-    def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
+    @staticmethod
+    def create_run_config(is_training):
+        kwargs = dict(
+            is_training=is_training,
+            use_tpu=False,
+            use_bfloat16=False,
+            dropout=0.1,
+            dropatt=0.1,
+            init="normal",
+            init_range=0.1,
+            init_std=0.02,
+            clamp_len=-1)
 
-        embed_dict = self.precomputed_word_embeddings
+        return xlnet.RunConfig(**kwargs)
+
+    def get_xlnet_embeddings(self, sent, sen_len):
+        example = InputExample(0, sent)
+
+        def tokenize_fn(text):
+            text = preprocess_text(text, lower=False)
+            return encode_ids(self.sp, text)
+
+        feature = convert_single_example(5, example, None, sen_len+2, tokenize_fn)
+
+        features = collections.OrderedDict()
+
+        features["input_ids"] = tf.transpose(tf.Variable([feature.input_ids], dtype=tf.int32, name='input_ids'), [1, 0])
+        features["input_mask"] = tf.transpose(tf.Variable([feature.input_mask], dtype=tf.float32, name='input_mask'),
+                                              [1, 0])
+        features["segment_ids"] = tf.transpose(tf.Variable([feature.segment_ids], dtype=tf.int32, name='segment_ids'),
+                                               [1, 0])
+
+        run_config = self.create_run_config(is_training=True)
+
+        xlnet_model = xlnet.XLNetModel(
+            xlnet_config=self.xlnet_config,
+            run_config=run_config,
+            input_ids=features['input_ids'],
+            seg_ids=features['segment_ids'],
+            input_mask=features['input_mask'])
+
+        summary = xlnet_model.get_pooled_out(summary_type="last")
+        seq_out = xlnet_model.get_sequence_output()
+
+        with tf.Session() as sess:
+            sess.run(tf.initialize_all_variables())
+            sess.run(seq_out)
+
+            embeddings = seq_out.eval()
+        return embeddings
+
+    def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
 
         for i, sentence in enumerate(sentences):
 
             sent_text = sentence.to_tokenized_string()
-
-
+            sen_len = len(sentence)
+            embeddings = self.get_xlnet_embeddings(sent_text,sen_len)
 
             for token, token_idx in zip(sentence.tokens, range(len(sentence.tokens))):
                 token: Token = token
-                if token.text in embed_dict:
-                    word_embedding = embed_dict[token.text]
-                else:
-                    word_embedding = np.random.uniform(-np.sqrt(0.06), np.sqrt(0.06), self.__embedding_length)
+                word_embedding = embeddings[token_idx][0]
 
                 word_embedding = torch.FloatTensor(word_embedding)
 
