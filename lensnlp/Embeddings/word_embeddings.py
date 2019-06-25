@@ -592,3 +592,79 @@ class BertEmbeddings(TokenEmbeddings):
     def embedding_length(self) -> int:
         """返回词向量的长度"""
         return len(self.layer_indexes) * self.model.config.hidden_size
+
+
+class XLNetEmbeddings(TokenEmbeddings):
+    """使用 key-value 类型的词向量，如glove，word2vec，fasttext等。
+
+            Parameters
+            ----------
+
+            embeddings : str
+                向量的名称
+            detach : bool
+                是否静态向量，True为静态
+            Examples
+            --------
+             >>> from from lensnlp.Embeddings import WordEmbeddings
+             >>> from lensnlp.utilis.data import Sentence
+             >>> Word_embed = WordEmbeddings('cn_glove')
+             >>> sent = Sentence('北京一览群智数据有限公司。')
+             >>> Word_embed.embed((sent))
+
+            """
+
+    def __init__(self, embeddings: str):
+
+        if embeddings.lower() == 'en_glove':
+            embeddings = Path(CACHE_ROOT) / 'language_model/en_glove_300d'
+            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
+
+        elif embeddings.lower() == 'cn_glove':
+            embeddings = Path(CACHE_ROOT) / 'language_model/cn_glove_300d'
+            self.precomputed_word_embeddings = KeyedVectors.load(str(embeddings))
+
+        elif embeddings.lower() == 'cn_fasttext':
+            embeddings = Path(CACHE_ROOT) / 'language_model/zh'
+            self.precomputed_word_embeddings = FastText.load_fasttext_format(str(embeddings))
+        else:
+            raise ValueError('Please specify another embeddings!')
+
+        self.name: str = str(embeddings)
+        self.static_embeddings = True
+        if '的' in self.precomputed_word_embeddings:
+            self.__embedding_length: int = self.precomputed_word_embeddings['的'].shape[0]
+        else:
+            self.__embedding_length: int = self.precomputed_word_embeddings['0'].shape[0]
+
+        super().__init__()
+
+    @property
+    def embedding_length(self) -> int:
+        return self.__embedding_length
+
+    def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
+
+        embed_dict = self.precomputed_word_embeddings
+
+        for i, sentence in enumerate(sentences):
+
+            sent_text = sentence.to_tokenized_string()
+
+
+
+            for token, token_idx in zip(sentence.tokens, range(len(sentence.tokens))):
+                token: Token = token
+                if token.text in embed_dict:
+                    word_embedding = embed_dict[token.text]
+                else:
+                    word_embedding = np.random.uniform(-np.sqrt(0.06), np.sqrt(0.06), self.__embedding_length)
+
+                word_embedding = torch.FloatTensor(word_embedding)
+
+                token.set_embedding(self.name, word_embedding)
+
+        return sentences
+
+    def __str__(self):
+        return self.name
