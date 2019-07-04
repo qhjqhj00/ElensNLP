@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c8a0bc90-668f-4428-90c2-5a6aa5bde82b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/训练模型.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/训练模型.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/XLNet/xlnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/Embeddings/XLNet/xlnet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/xlnet_utils.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,16 +15,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3018">
+            <state relative-caret-position="10350">
               <caret line="717" column="45" selection-start-line="717" selection-start-column="41" selection-end-line="717" selection-end-column="45" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
-                <element signature="e#17#98#0" expanded="true" />
-                <element signature="e#17#21#0" expanded="true" />
-                <element signature="e#17#63#0" expanded="true" />
-                <element signature="e#17#66#0" expanded="true" />
-                <element signature="e#17#62#0" expanded="true" />
-                <element signature="e#17#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -37,7 +27,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/xlnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
+            <state relative-caret-position="210">
               <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
               <folding>
                 <element signature="e#0#38#0" expanded="true" />
@@ -49,8 +39,23 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="149" column="47" lean-forward="true" selection-start-line="149" selection-start-column="47" selection-end-line="149" selection-end-column="47" />
+            <state relative-caret-position="2540">
+              <caret line="267" column="29" lean-forward="true" selection-start-line="267" selection-start-column="29" selection-end-line="267" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/classifier_utils.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#22#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -70,6 +75,7 @@
       <find>_filter_empty_sentences</find>
       <find>labels_to</find>
       <find>Sof</find>
+      <find>word_tokenizer</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -123,10 +129,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="180" />
-    <option name="y" value="112" />
-    <option name="width" value="1080" />
-    <option name="height" value="676" />
+    <option name="x" value="-1920" />
+    <option name="width" value="954" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -162,6 +167,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -226,7 +232,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -282,17 +287,17 @@
       <workItem from="1561109327133" duration="236000" />
       <workItem from="1561363177717" duration="11000" />
       <workItem from="1561446177953" duration="3946000" />
+      <workItem from="1561945827323" duration="3006000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20451000" />
+    <option name="totallyTimeSpent" value="23457000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
-    <editor active="true" />
+    <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19170243" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14483494" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -561,13 +566,6 @@
     <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/classifier_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="3" column="18" lean-forward="true" selection-start-line="3" selection-start-column="18" selection-end-line="3" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/data_utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -575,20 +573,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/run_race.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#38#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3056" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/run_race.py" />
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/train.py" />
     <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/function_builder.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -649,19 +635,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/xlnet_utils.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/xlnet_utils.py" />
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="35" column="25" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
+        <state relative-caret-position="10350">
+          <caret line="717" column="45" selection-start-line="717" selection-start-column="41" selection-end-line="717" selection-end-column="45" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#0#46#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/xlnet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
+        <state relative-caret-position="210">
           <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
           <folding>
             <element signature="e#0#38#0" expanded="true" />
@@ -669,26 +656,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/XLNet/classifier_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3018">
-          <caret line="717" column="45" selection-start-line="717" selection-start-column="41" selection-end-line="717" selection-end-column="45" />
+        <state relative-caret-position="255">
+          <caret line="17" column="34" lean-forward="true" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
           <folding>
-            <element signature="e#0#46#0" expanded="true" />
-            <element signature="e#17#98#0" expanded="true" />
-            <element signature="e#17#21#0" expanded="true" />
-            <element signature="e#17#63#0" expanded="true" />
-            <element signature="e#17#66#0" expanded="true" />
-            <element signature="e#17#62#0" expanded="true" />
-            <element signature="e#17#21#0" expanded="true" />
+            <element signature="e#0#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utilis/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="149" column="47" lean-forward="true" selection-start-line="149" selection-start-column="47" selection-end-line="149" selection-end-column="47" />
+        <state relative-caret-position="2540">
+          <caret line="267" column="29" lean-forward="true" selection-start-line="267" selection-start-column="29" selection-end-line="267" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
