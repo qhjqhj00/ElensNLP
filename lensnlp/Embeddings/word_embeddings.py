@@ -16,7 +16,13 @@ from pathlib import Path
 
 from lensnlp.utilis.data import Token, Sentence
 
-from pytorch_pretrained_bert import BertTokenizer, BertModel
+from pytorch_transformers import (
+    BertTokenizer,
+    BertModel,
+    XLNetTokenizer,
+    XLNetModel,
+)
+
 
 from lensnlp.hyper_parameters import device
 
@@ -594,5 +600,69 @@ class BertEmbeddings(TokenEmbeddings):
     def embedding_length(self) -> int:
         """返回词向量的长度"""
         return len(self.layer_indexes) * self.model.config.hidden_size
+
+
+class XLNetEmbeddings(TokenEmbeddings):
+    def __init__(self, model: str = "xlnet-large-cased"):
+        """XLNet embeddings, as proposed in Yang et al., 2019.
+        :param model: name of XLNet model
+        """
+        super().__init__()
+
+        self.tokenizer = XLNetTokenizer.from_pretrained(model)
+        self.model = XLNetModel.from_pretrained(model)
+        self.name = model
+        self.static_embeddings = True
+
+        dummy_sentence: Sentence = Sentence()
+        dummy_sentence.add_token(Token("hello"))
+        embedded_dummy = self.embed(dummy_sentence)
+        self.__embedding_length: int = len(
+            embedded_dummy[0].get_token(1).get_embedding()
+        )
+
+    def __getstate__(self):
+        # Copy the object's state from self.__dict__ which contains
+        # all our instance attributes. Always use the dict.copy()
+        # method to avoid modifying the original state.
+        state = self.__dict__.copy()
+        # Remove the unpicklable entries.
+        state["tokenizer"] = None
+        return state
+
+    def __setstate__(self, d):
+        self.__dict__ = d
+        # Restore unpickable entries
+        self.tokenizer = XLNetTokenizer.from_pretrained(self.name)
+
+    @property
+    def embedding_length(self) -> int:
+        return self.__embedding_length
+
+    def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
+        self.model.to(device)
+        self.model.eval()
+
+        with torch.no_grad():
+            for sentence in sentences:
+                for token in sentence.tokens:
+                    token_text = token.text
+                    subwords = self.tokenizer.tokenize(token_text)
+                    indexed_tokens = self.tokenizer.convert_tokens_to_ids(subwords)
+                    tokens_tensor = torch.Tensor([indexed_tokens])
+                    tokens_tensor = tokens_tensor.to(device)
+
+                    output, hidden_states, new_mems = self.model(tokens_tensor)
+
+                    # Use embedding of first subword
+                    token.set_embedding(self.name, output[0][0])
+
+        return sentences
+
+    def extra_repr(self):
+        return "model={}".format(self.name)
+
+    def __str__(self):
+        return self.name
 
 
