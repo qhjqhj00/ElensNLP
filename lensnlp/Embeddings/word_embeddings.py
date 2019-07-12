@@ -649,7 +649,7 @@ class XLNetEmbeddings(TokenEmbeddings):
                     token_text = token.text
                     subwords = self.tokenizer.tokenize(token_text)
                     indexed_tokens = self.tokenizer.convert_tokens_to_ids(subwords)
-                    tokens_tensor = torch.Tensor([indexed_tokens])
+                    tokens_tensor = torch.tensor([indexed_tokens])
                     tokens_tensor = tokens_tensor.to(device)
 
                     output, hidden_states, new_mems = self.model(tokens_tensor)

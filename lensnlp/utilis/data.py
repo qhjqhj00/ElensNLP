@@ -157,8 +157,9 @@ class Token:
         self.start_pos = start_position
         self.end_pos = start_position + len(text) if start_position is not None else None
 
-        self.sentence: Sentence = None
+        self.relative_position = {}
         self._embeddings: Dict = {}
+        self._pos_embeddings: Dict = {}
         self.tags: Dict[str, Label] = {}
             
     def converter(self):
@@ -296,6 +297,19 @@ class Span:
             if self.tag is not None else '<span ({}): "{}">'.format(ids, self.text)
 
 
+class Relation:
+    def __init__(self, entity_1, entity_2, e1_pos = None, e2_pos = None, relation_type = None):
+
+        self.ent_1 = entity_1
+        self.ent_2 = entity_2
+
+        self.e1_pos = e1_pos
+        self.e2_pos = e2_pos
+
+        self.relation_type = relation_type
+        self.triad = (entity_1, relation_type, entity_2)
+
+
 class Sentence:
 
     """
@@ -316,14 +330,18 @@ class Sentence:
 
     def __init__(self, text: str = None, language: str = None,
                  labels: Union[List[Label], List[str]] = None,
-                 max_length: int = None):
+                 max_length: int = None,
+                 e1: str = None,
+                 e2: str = None,):
 
         super(Sentence, self).__init__()
 
         self.tokens: List[Token] = []
         self.labels: List[Label] = []
-        if labels is not None: self.add_labels(labels)
+        if labels is not None:
+            self.add_labels(labels)
 
+        self.entity = {'e1': e1, 'e2': e2}
         self._embeddings: Dict = {}
         self.lang = language
 
@@ -394,6 +412,23 @@ class Sentence:
 
         if max_length is not None:
             self.tokens = self.tokens[:max_length]
+
+    def generate_relative_pos(self, max_length):
+        if self.entity['e1'] is None or self.entity['e2'] is None:
+            print(self.tokens)
+        for i,token in enumerate(self.tokens):
+            self.tokens[i].relative_position['p1'] = str(max_length - 1 + i - int(self.entity['e1']))
+            self.tokens[i].relative_position['p2'] = str(max_length - 1 + i - int(self.entity['e2']))
+
+    def get_relative_pos(self, index):
+        pos = []
+        for token in self.tokens:
+            if f'p{index}' in token.relative_position:
+                pos.append(token.relative_position[f'p{index}'])
+            else:
+                print(token.relative_position)
+                break
+        return pos
 
     def get_token(self, token_id: int) -> Token:
         for token in self.tokens:
@@ -782,6 +817,24 @@ class TaggedCorpus(Corpus):
             vocab_dictionary.add_item(token)
 
         return vocab_dictionary
+
+    def _get_all_pos(self):
+        pos = []
+        for sent in self.get_all_sentences():
+            pos.extend(sent.get_relative_pos(1))
+            pos.extend(sent.get_relative_pos(2))
+        return pos
+
+    def make_pos_dictionary(self) -> Dictionary:
+
+        pos_list = set(self._get_all_pos())
+
+        pos_dictionary: Dictionary = Dictionary(add_unk=False)
+
+        for pos in pos_list:
+            pos_dictionary.add_item(pos)
+
+        return pos_dictionary
 
     def _get_most_common_tokens(self, max_tokens, min_freq) -> List[str]:
         """获得高频词"""

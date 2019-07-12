@@ -1,6 +1,5 @@
 from lensnlp.models import SequenceTagger, TextClassifier
 from lensnlp.utilis.data_preprocess import cn_prepare, en_prepare, uy_prepare, clf_preprocess
-from lensnlp.hyper_parameters import cn_clf,en_clf,uy_clf,emo
 
 
 class ner:
@@ -99,13 +98,13 @@ class clf:
         result = []
         for s in sentences:
             if self.language == 'cn_clf':
-                result.append(cn_clf[int(s.labels[0].value)])
+                result.append(s.labels[0].value)
             elif self.language == 'en_clf':
-                result.append(en_clf[int(s.labels[0].value)])
+                result.append(int(s.labels[0].value))
             elif self.language == 'uy_clf':
-                result.append(uy_clf[int(s.labels[0].value)])
+                result.append(int(s.labels[0].value))
             elif 'emo' in self.language:
-                result.append(emo[int(s.labels[0].value)])
+                result.append(int(s.labels[0].value))
             else:
                 raise ValueError('Not yet!')
 

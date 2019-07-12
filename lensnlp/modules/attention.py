@@ -90,6 +90,7 @@ class MultiHeadedAttention(torch.nn.Module):
                 mask : bool
                 dropout : torch.nn.Dropout
                 """
+        dropout_layer = torch.nn.Dropout(dropout)
         d_k = query.size(-1)
         scores = torch.matmul(query, key.transpose(-2, -1)) \
                  / math.sqrt(d_k)
@@ -97,5 +98,5 @@ class MultiHeadedAttention(torch.nn.Module):
             scores = scores.masked_fill(mask == 0, -1e9)
         p_attn = F.softmax(scores, dim=-1)
         if dropout is not None:
-            p_attn = torch.nn.Dropout(p_attn,p=dropout)
+            p_attn = dropout_layer(p_attn)
         return torch.matmul(p_attn, value), p_attn

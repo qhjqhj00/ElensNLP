@@ -1,10 +1,13 @@
-from lensnlp.utilis.data import TaggedCorpus, Sentence, Token
+from lensnlp.utilis.data import TaggedCorpus, Sentence, Token, Label
 from typing import List, Dict, Union
 import logging
 
 import re
-from lensnlp.hyper_parameters import tag_filter
+from lensnlp.hyper_parameters import tag_filter, Parameter
 from pathlib import Path
+from segtok.tokenizer import word_tokenizer
+
+from lensnlp.utilis.data_preprocess import re_clean_str
 
 log = logging.getLogger('lensnlp')
 
@@ -212,4 +215,61 @@ def __sample(total_number_of_sentences: int, percentage: float = 0.1) -> List[in
     sample_size: int = round(total_number_of_sentences * percentage)
     sample = random.sample(range(1, total_number_of_sentences), sample_size)
     return sample
+
+
+def load_re_data(train_file, test_file: str = None):
+    train_ = read_re_data(train_file)
+    import random
+    random.shuffle(train_)
+
+    if test_file is not None:
+        test_ = read_re_data(test_file)
+    else:
+        test_: List[Sentence] = [train_[i] for i in
+                                __sample(len(train_), 0.2)]
+        train_ = [sentence for sentence in train_ if sentence not in test_]
+
+    dev_: List[Sentence] = [train_[i] for i in
+                                 __sample(len(train_), 0.2)]
+
+    corpus = TaggedCorpus(train_, dev_, test_)
+    return corpus
+
+
+def read_re_data(path):
+    """
+    :param path:path of file
+    :param tag: language of file
+    :return:
+    """
+    data = []
+    lines = [line.strip() for line in open(path)]
+    for idx in range(0, len(lines), 4):
+        sent = Sentence()
+        id = lines[idx].split("\t")[0]
+        relation = lines[idx + 1]
+
+        sentence = lines[idx].split("\t")[1][1:-1]
+        sentence = sentence.replace('<e1>', ' _e11_ ')
+        sentence = sentence.replace('</e1>', ' _e12_ ')
+        sentence = sentence.replace('<e2>', ' _e21_ ')
+        sentence = sentence.replace('</e2>', ' _e22_ ')
+
+        sentence = re_clean_str(sentence)
+        tokens = word_tokenizer(sentence)
+
+        for i,token in enumerate(tokens):
+
+            if token == 'e12':
+                sent.entity['e1'] = str(i-1)
+            elif token == 'e22':
+                sent.entity['e2'] = str(i-1)
+            sent.add_token(Token(token))
+
+        sent.add_label(Label(relation))
+
+        data.append(sent)
+    for sent in data:
+        sent.generate_relative_pos(Parameter['re_max_length'])
+    return data
 
