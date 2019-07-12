@@ -4,7 +4,7 @@ from abc import abstractmethod
 
 from typing import Union, List
 
-from lensnlp.utilis.data import Sentence, Label
+from lensnlp.utils.data import Sentence, Label
 
 
 class Model(torch.nn.Module):

@@ -1,5 +1,5 @@
 from flask import Flask, request, Response, make_response
-from lensnlp.utilis.data_preprocess import clf_preprocess
+from lensnlp.utils.data_preprocess import clf_preprocess
 from lensnlp.models import TextClassifier
 import json
 import os

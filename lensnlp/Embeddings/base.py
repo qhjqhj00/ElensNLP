@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import List, Union
 import torch
 
-from lensnlp.utilis.data import Sentence
+from lensnlp.utils.data import Sentence
 
 
 class Embeddings(torch.nn.Module):

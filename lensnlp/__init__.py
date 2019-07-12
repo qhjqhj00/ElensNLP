@@ -1,4 +1,4 @@
-from . import utilis
+from . import utils
 from . import models
 from . import trainers
 from . import hyper_parameters

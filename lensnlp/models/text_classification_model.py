@@ -10,8 +10,8 @@ import torch.nn.functional as F
 from lensnlp.hyper_parameters import Parameter,device
 from lensnlp.models import nn
 from lensnlp.Embeddings import TokenEmbeddings, DocumentEmbeddings,DocumentRNNEmbeddings,WordEmbeddings
-from lensnlp.utilis.data import Dictionary, Sentence, Label
-from lensnlp.utilis.training_utils import convert_labels_to_one_hot, clear_embeddings
+from lensnlp.utils.data import Dictionary, Sentence, Label
+from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
 
 
 log = logging.getLogger('lensnlp')

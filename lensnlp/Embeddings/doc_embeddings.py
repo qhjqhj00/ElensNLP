@@ -7,7 +7,7 @@ import torch
 from lensnlp.models import nn
 import torch.nn.functional as F
 
-from lensnlp.utilis.data import Token, Sentence
+from lensnlp.utils.data import Token, Sentence
 from lensnlp.hyper_parameters import Parameter,device
 
 log = logging.getLogger('qhj')
@@ -686,7 +686,6 @@ class DocmentRCNNEmbedding(DocumentEmbeddings):
         self.lstm_hidden_state = lstm_hidden_state
         self.hidden_size = hidden_size
         self.bidirectional = bidirectional
-        self.use_gpu = torch.cuda.is_available()
         self.length_of_all_token_embeddings: int = self.embeddings.embedding_length
 
 
@@ -724,12 +723,8 @@ class DocmentRCNNEmbedding(DocumentEmbeddings):
         return self.__embedding_length
 
     def init_hidden(self, batch_size):
-        if self.use_gpu:
-            h0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).cuda())  # (1, 32, 128)
-            c0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).cuda())  # (1, 32, 128)
-        else:
-            h0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state))
-            c0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state))
+        h0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).to(device))  # (1, 32, 128)
+        c0 = torch.autograd.Variable(torch.zeros(1, batch_size, self.lstm_hidden_state).to(device))  # (1, 32, 128)
         return (h0, c0)
 
     def embed(self, sentences: Union[List[Sentence], Sentence]):
