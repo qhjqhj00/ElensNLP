@@ -22,7 +22,7 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 class RelationExtraction(nn.Model):
 
     def __init__(self,
-                 embeddings: RelationEmbeddings,
+                 embeddings,
                  label_dictionary,
                  hidden_size: int = 300,
                  rnn_layer: int = 1,
@@ -288,8 +288,7 @@ class RelationExtraction(nn.Model):
         :return: 加载好的模型
         """
         state = RelationExtraction._load_state(model_file)
-        if type(state['relation_embeddings']) is str:
-            state['relation_embeddings'] = Relation_Embeddings(state['relation_embeddings'])
+
         model = RelationExtraction(
             embeddings=state['relation_embeddings'],
             label_dictionary=state['label_dictionary'],
