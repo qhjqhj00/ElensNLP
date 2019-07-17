@@ -465,7 +465,7 @@ class BertEmbeddings(TokenEmbeddings):
             Examples
             --------
              >>> from lensnlp.Embeddings import BertEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.utils.data import Sentence
              >>> Word_embed = BertEmbeddings('chinese-base-uncased')
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> Word_embed.embed((sent))
