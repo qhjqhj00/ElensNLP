@@ -1,5 +1,5 @@
 from lensnlp.utils.data_load import load_column_corpus
-from lensnlp.Embeddings import WordEmbeddings, DocumentPoolEmbeddings
+from lensnlp.embeddings import WordEmbeddings, DocumentPoolEmbeddings
 
 from torch.optim.adam import Adam
 from lensnlp.utils.data_load import load_clf_data

@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5269d0ee-3fe5-4872-b2c8-2bfa5fb734be" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/text_classification_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/text_classification_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,11 +29,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="840">
-              <caret line="666" lean-forward="true" selection-start-line="666" selection-end-line="666" />
+            <state relative-caret-position="-423">
+              <caret line="604" column="39" lean-forward="true" selection-start-line="604" selection-start-column="39" selection-end-line="604" selection-end-column="39" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
                 <element signature="e#17#98#0" expanded="true" />
@@ -39,6 +44,48 @@
               </folding>
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/nn.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/relation_classification_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="100">
+              <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/hyper_parameters/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lensnlp/hyper_parameters/parameters.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="45" lean-forward="true" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -80,21 +127,12 @@
         <option value="$PROJECT_DIR$/lensnlp/modules/attention.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" />
+        <option value="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" />
+        <option value="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectConfigurationFiles">
-    <option name="files">
-      <list>
-        <option value="$PROJECT_DIR$/.idea/ElensNLP.iml" />
-        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
-        <option value="$PROJECT_DIR$/.idea/misc.xml" />
-        <option value="$PROJECT_DIR$/.idea/modules.xml" />
-        <option value="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" />
-      </list>
-    </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="-1920" />
     <option name="width" value="1920" />
     <option name="height" value="1080" />
@@ -121,7 +159,7 @@
               <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
               <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
               <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
-              <item name="Embeddings" type="462c0819:PsiDirectoryNode" />
+              <item name="embeddings" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
@@ -177,16 +215,23 @@
       <updated>1563268419855</updated>
       <workItem from="1563268421211" duration="332000" />
       <workItem from="1563272555360" duration="19000" />
-      <workItem from="1563343440792" duration="1124000" />
+      <workItem from="1563343440792" duration="1382000" />
     </task>
+    <task id="LOCAL-00001" summary="0716">
+      <created>1563357345642</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1563357345642</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1475000" />
+    <option name="totallyTimeSpent" value="1733000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="0" width="1920" height="1080" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14110756" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -199,7 +244,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Version Control" order="8" visible="true" weight="0.32970297" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" />
@@ -216,11 +261,12 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="0716" />
+    <option name="LAST_COMMIT_MESSAGE" value="0716" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/lensnlp/modules/transformer.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/modules/attention.py">
@@ -249,10 +295,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="666" lean-forward="true" selection-start-line="666" selection-end-line="666" />
+        <state relative-caret-position="-423">
+          <caret line="604" column="39" lean-forward="true" selection-start-line="604" selection-start-column="39" selection-end-line="604" selection-end-column="39" />
           <folding>
             <element signature="e#0#46#0" expanded="true" />
             <element signature="e#17#98#0" expanded="true" />
@@ -261,6 +307,38 @@
             <element signature="e#17#66#0" expanded="true" />
             <element signature="e#17#62#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/nn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/relation_classification_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="25" column="34" lean-forward="true" selection-start-line="25" selection-start-column="34" selection-end-line="25" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/hyper_parameters/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/hyper_parameters/parameters.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="45" lean-forward="true" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
         </state>
       </provider>
     </entry>
