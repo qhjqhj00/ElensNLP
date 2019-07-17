@@ -52,7 +52,7 @@ def load_column_corpus(
     :return: corpus
     Examples
     --------
-    >>> from lensnlp.utilis.data_load import load_column_corpus
+    >>> from lensnlp.utils.data_load import load_column_corpus
     >>> corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
     """
 
