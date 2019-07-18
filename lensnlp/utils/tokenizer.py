@@ -13,7 +13,7 @@ class Tokenizer:
         if language_type is None and example is None:
             raise ValueError("Must specify language type or provides an example")
 
-        if sp_op is not None and sp_op not in ['char']:
+        if sp_op is not None and sp_op not in ['char', 'lt', 'py']:
             raise ValueError("Not support the operation yet")
 
         if language_type is not None:
@@ -30,6 +30,10 @@ class Tokenizer:
                 for index, char in enumerate(text):
                     token = Token(char, start_position=index)
                     tokenized.append(token)
+            elif self.sp_op == 'py':
+                for index, char in enumerate(text):
+                    token = Token(char, start_position=index,sp=py)
+                    tokenized.append(token)
             else:
                 seg_list = list(jieba.tokenize(text))
                 for t in seg_list:
@@ -42,15 +46,15 @@ class Tokenizer:
             for index, char in enumerate(text):
                 if char == ' ':
                     if len(word) > 0:
-                        token = Token(word, start_position=index - len(word), lang=language)
-                        self.add_token(token)
+                        token = Token(word, start_position=index - len(word), sp=self.sp_op)
+                        tokenized.append(token)
 
                     word = ''
                 else:
                     word += char
             index += 1
             if len(word) > 0:
-                token = Token(word, start_position=index - len(word), lang=language)
+                token = Token(word, start_position=index - len(word), sp=self.sp_op)
                 tokenized.append(token)
 
         elif self.language_type == 'en':
