@@ -613,8 +613,6 @@ class Sentence:
             for index, tag in enumerate(tags):
                 self.tokens[index].add_tag(tag_type, tag)
 
-
-
     def infer_space_after(self):
         """判断token后是否有空格"""
         last_token = None
@@ -696,6 +694,17 @@ class Sentence:
 
     def __len__(self) -> int:
         return len(self.tokens)
+
+
+class SentenceSrc:
+    def __init__(self, src: Sentence, trg: Sentence = None):
+        self.src = src
+        if trg is not None:
+            self.trg = trg
+        else:
+            self.trg = Sentence()
+            token = Token('sos')
+            self.trg.add_token(token)
 
 
 class Corpus:
