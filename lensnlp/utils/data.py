@@ -6,12 +6,7 @@ from pypinyin import pinyin, Style
 from collections import Counter
 from collections import defaultdict
 from bpemb import BPEmb
-import jieba
-
-from segtok.segmenter import split_single
-from segtok.tokenizer import split_contractions
-from segtok.tokenizer import word_tokenizer
-
+from lensnlp.utils import Tokenizer
 import re
 
 
@@ -143,12 +138,12 @@ class Token:
                  head_id: int = None,
                  whitespace_after: bool = True,
                  start_position: int = None,
-                 lang = None
+                 sp: str = None
                  ):
         self.text: str = text
-        if lang == 'UY':
+        if sp == 'lt':
             self.latin = self.uyghur_to_latin()
-        if lang == 'PY':
+        if sp == 'py':
             self.pinyin = self.converter()
         self.idx: int = idx
         self.head_id: int = head_id
@@ -328,11 +323,12 @@ class Sentence:
     英语分词：EN
     """
 
-    def __init__(self, text: str = None, language: str = None,
+    def __init__(self, text: str = None, language_type: str = None, sp_op: str = None,
                  labels: Union[List[Label], List[str]] = None,
                  max_length: int = None,
                  e1: str = None,
-                 e2: str = None,):
+                 e2: str = None,
+                 tokenizer = None):
 
         super(Sentence, self).__init__()
 
@@ -343,72 +339,18 @@ class Sentence:
 
         self.entity = {'e1': e1, 'e2': e2}
         self._embeddings: Dict = {}
-        self.lang = language
+        self.language_type = language_type
+        self.sp_op = sp_op
 
-        if text is not None:
-            if language == 'UY':
-                text = uy_preprocess(text)
-                word = ''
-                for index, char in enumerate(text):
-                    if char == ' ':
-                        if len(word) > 0:
-                            token = Token(word, start_position=index - len(word),lang=language)
-                            self.add_token(token)
+        if tokenizer is not None:
+            self.Tokenizer = tokenizer
+        else:
+            self.Tokenizer = Tokenizer(self.language_type, self.sp_op)
 
-                        word = ''
-                    else:
-                        word += char
-                index += 1
-                if len(word) > 0:
-                    token = Token(word, start_position=index - len(word),lang = language)
-                    self.add_token(token)
+        tokenized = self.Tokenizer.tokenizer(text)
 
-            elif language == 'EN':
-
-                tokens = []
-                sentences = split_single(text)
-                for sentence in sentences:
-                    contractions = split_contractions(word_tokenizer(sentence))
-                    tokens.extend(contractions)
-
-                index = text.index
-                running_offset = 0
-                last_word_offset = -1
-                last_token = None
-                for word in tokens:
-                    try:
-                        word_offset = index(word, running_offset)
-                        start_position = word_offset
-                    except:
-                        word_offset = last_word_offset + 1
-                        start_position = running_offset + 1 if running_offset > 0 else running_offset
-
-                    token = Token(word, start_position=start_position)
-                    self.add_token(token)
-
-                    if word_offset - 1 == last_word_offset and last_token is not None:
-                        last_token.whitespace_after = False
-
-                    word_len = len(word)
-                    running_offset = word_offset + word_len
-                    last_word_offset = running_offset - 1
-                    last_token = token
-
-            elif language == 'CN_char':
-                for index, char in enumerate(text):
-                    token = Token(char, start_position=index)
-                    self.add_token(token)
-
-            elif language == 'CN_token':
-                seg_list = list(jieba.tokenize(text))
-                for t in seg_list:
-                    token = Token(t[0], start_position=t[1])
-                    self.add_token(token)
-
-            elif language == 'PY':
-                for index, char in enumerate(text):
-                    token = Token(char, start_position=index,lang=language)
-                    self.add_token(token)
+        for token in tokenized:
+            self.add_token(token)
 
         if max_length is not None:
             self.tokens = self.tokens[:max_length]
@@ -585,9 +527,9 @@ class Sentence:
         """返回正常文本"""
         plain = ''
         for token in self.tokens:
-            if lang == 'UY':
+            if lang == 'ug':
                 plain += token.latin
-            elif lang == 'PY':
+            elif lang == 'py':
                 plain += token.pinyin
             else:
                 plain += token.text
