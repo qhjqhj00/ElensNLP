@@ -37,9 +37,24 @@ class Tokenizer:
                     tokenized.append(token)
 
         elif self.language_type == 'ug':
-            pass
+            text = uy_preprocess(text)
+            word = ''
+            for index, char in enumerate(text):
+                if char == ' ':
+                    if len(word) > 0:
+                        token = Token(word, start_position=index - len(word), lang=language)
+                        self.add_token(token)
+
+                    word = ''
+                else:
+                    word += char
+            index += 1
+            if len(word) > 0:
+                token = Token(word, start_position=index - len(word), lang=language)
+                tokenized.append(token)
 
         elif self.language_type == 'en':
+            tokenized = []
             tokens = []
             sentences = split_single(text)
             for sentence in sentences:
@@ -59,7 +74,7 @@ class Tokenizer:
                     start_position = running_offset + 1 if running_offset > 0 else running_offset
 
                 token = Token(word, start_position=start_position)
-                self.add_token(token)
+                tokenized.append(token)
 
                 if word_offset - 1 == last_word_offset and last_token is not None:
                     last_token.whitespace_after = False
@@ -71,6 +86,24 @@ class Tokenizer:
 
         return tokenized
 
-
     def sentence_split(self, text) -> List[str]:
         pass
+
+    @staticmethod
+    def uy_preprocess(text):
+        """维吾尔语预处理"""
+        text = re.sub('،', ' ، ', text)
+        text = re.sub(r'\.', ' . ', text)
+        text = re.sub('!', ' ! ', text)
+        text = re.sub('؟', ' ؟ ', text)
+        text = re.sub(r'\?', ' ? ', text)
+        text = re.sub(r'\(', '( ', text)
+        text = re.sub(r'\)', ' )', text)
+        text = re.sub('»', ' »', text)
+        text = re.sub('«', '« ', text)
+        text = re.sub(':', ' :', text)
+        text = re.sub('"', ' " ', text)
+        text = re.sub('><', '> <', text)
+        text = re.sub(r'( )*-( )*', '-', text)
+
+        return text
