@@ -26,7 +26,7 @@ from pytorch_transformers import (
 
 from lensnlp.hyper_parameters import device
 
-log = logging.getLogger('qhj')
+log = logging.getLogger('lensnlp')
 
 CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
