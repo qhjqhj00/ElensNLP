@@ -112,16 +112,10 @@ class RNN2RNN(torch.nn.Module):
 
     def __init__(self,
                  embeddings: WordEmbeddings,
-                 input_dim: int,
-                 output_dim: int,
+                 encoder: torch.nn.Module,
+                 decoder: torch.nn.Module,
                  src_dict,
                  trg_dict,
-                 encoder_dim: int = 256,
-                 decoder_dim: int = 256,
-                 hidden_size: int = 512,
-                 n_layers: int = 2,
-                 encoder_dropout: float = 0.5,
-                 decoder_dropout: float = 0.5
                  ):
 
         super(RNN2RNN,self).__init__()
@@ -132,9 +126,9 @@ class RNN2RNN(torch.nn.Module):
         PAD_IDX = self.src_dict['pad']
 
         self.embeddings = embeddings
-        self.encoder = Encoder(input_dim, encoder_dim, hidden_size, n_layers, encoder_dropout)
-        self.decoder = Decoder(output_dim, decoder_dim, hidden_size, n_layers, decoder_dropout)
-        self.loss_function = torch.nn.CrossEntropyLoss(ignore_index = PAD_IDX)
+        self.encoder = encoder
+        self.decoder = decoder
+        self.loss_function = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 
         self.start_embed = 0 #TODO
 
@@ -155,6 +149,7 @@ class RNN2RNN(torch.nn.Module):
     def forward(self, src: List[Sentence], teacher_forcing_ratio, trg=None):
 
         self.embeddings.embed(src)
+
 
         batch_size = src.shape[1]
         if trg is not None:
@@ -197,7 +192,11 @@ class RNN2RNN(torch.nn.Module):
             'state_dict': self.state_dict(),
             'src_dict': self.src_dict,
             'trg_dict': self.trg_dict,
-            'embeddings': self.embeddings}
+            'embeddings': self.embeddings,
+            'encoder': self.encoder,
+            'decoder': self.decoder
+        }
+
         torch.save(model_state, str(model_file), pickle_protocol=4)
 
     def predict(self, src: List[Sentence], mini_batch_size: int = 32):
@@ -210,11 +209,11 @@ class RNN2RNN(torch.nn.Module):
         with torch.no_grad():
             filtered_sentences = self._filter_empty_sentences(src)
             batches = [filtered_sentences[x:x + mini_batch_size] for x in range(0, len(filtered_sentences), mini_batch_size)]
-
+            trg = []
             for batch in batches:
                 outputs = self.forward(batch, teacher_forcing_ratio=0)
                 predicted_seq = torch.argmax(outputs, dim=1)
-                
+                trg.append(predicted_seq)
                 # TODO
                 clear_embeddings(batch)
 
@@ -234,12 +233,16 @@ class RNN2RNN(torch.nn.Module):
         :param model_file: 模型地址
         :return: 加载好的模型
         """
-        state = RelationExtraction._load_state(model_file)
+        state = RNN2RNN._load_state(model_file)
 
-        model = RelationExtraction(
+        model = RNN2RNN(
             embeddings=state['relation_embeddings'],
-            label_dictionary=state['label_dictionary'],
+            encoder=state['encoder'],
+            decoder=state['decoder'],
+            src_dict=state['src_dict'],
+            trg_dict=state['trg_dict']
         )
+
         model.load_state_dict(state['state_dict'])
         model.eval()
         model.to(device)
@@ -254,12 +257,14 @@ class RNN2RNN(torch.nn.Module):
             state = torch.load(str(model_file), map_location=device)
             return state
 
+    @staticmethod
     def load(model_file: str):
         if model_file == 'seq2seq':
-            classifier: RelationExtraction = RelationExtraction.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
+            classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
         else:
             try:
-                classifier: RelationExtraction = RelationExtraction.load_from_file(Path(CACHE_ROOT) / model_file)
+                classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / model_file)
             except NameError('specify a model!'):
                 raise
         return classifier
+    
