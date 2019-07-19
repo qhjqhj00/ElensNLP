@@ -214,7 +214,7 @@ class RNN2RNN(torch.nn.Module):
             for batch in batches:
                 outputs = self.forward(batch, teacher_forcing_ratio=0)
                 predicted_seq = torch.argmax(outputs, dim=1)
-                
+
                 # TODO
                 clear_embeddings(batch)
 
@@ -234,11 +234,10 @@ class RNN2RNN(torch.nn.Module):
         :param model_file: 模型地址
         :return: 加载好的模型
         """
-        state = RelationExtraction._load_state(model_file)
+        state = RNN2RNN._load_state(model_file)
 
-        model = RelationExtraction(
+        model = RNN2RNN(
             embeddings=state['relation_embeddings'],
-            label_dictionary=state['label_dictionary'],
         )
         model.load_state_dict(state['state_dict'])
         model.eval()
@@ -256,10 +255,10 @@ class RNN2RNN(torch.nn.Module):
 
     def load(model_file: str):
         if model_file == 'seq2seq':
-            classifier: RelationExtraction = RelationExtraction.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
+            classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
         else:
             try:
-                classifier: RelationExtraction = RelationExtraction.load_from_file(Path(CACHE_ROOT) / model_file)
+                classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / model_file)
             except NameError('specify a model!'):
                 raise
         return classifier
