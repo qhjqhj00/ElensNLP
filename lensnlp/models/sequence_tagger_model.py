@@ -326,7 +326,7 @@ class SequenceTagger(nn.Model):
 
             return sentences
 
-    def forward(self, sentences: List[Sentence],sort=True):
+    def forward(self, sentences: List[Sentence], sort=True):
         """forward，获得特征"""
         self.zero_grad()
 

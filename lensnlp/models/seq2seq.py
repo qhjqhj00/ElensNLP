@@ -152,7 +152,9 @@ class RNN2RNN(torch.nn.Module):
         for name, param in m.named_parameters():
             torch.nn.init.uniform_(param.data, -0.08, 0.08)
 
-    def forward(self, src, teacher_forcing_ratio, trg = None):
+    def forward(self, src: List[Sentence], teacher_forcing_ratio, trg=None):
+
+        self.embeddings.embed(src)
 
         batch_size = src.shape[1]
         if trg is not None:
@@ -198,7 +200,7 @@ class RNN2RNN(torch.nn.Module):
             'embeddings': self.embeddings}
         torch.save(model_state, str(model_file), pickle_protocol=4)
 
-    def predict(self, src, mini_batch_size: int = 32):
+    def predict(self, src: List[Sentence], mini_batch_size: int = 32):
         """
         预测
         输入为 Sentence 数量不限
@@ -206,15 +208,17 @@ class RNN2RNN(torch.nn.Module):
         mini_batch_size为每个batch预测的数量
         """
         with torch.no_grad():
+            filtered_sentences = self._filter_empty_sentences(src)
             batches = [filtered_sentences[x:x + mini_batch_size] for x in range(0, len(filtered_sentences), mini_batch_size)]
 
             for batch in batches:
                 outputs = self.forward(batch, teacher_forcing_ratio=0)
                 predicted_seq = torch.argmax(outputs, dim=1)
+                
                 # TODO
                 clear_embeddings(batch)
 
-            return sentences
+            return src, trg
 
     @staticmethod
     def _filter_empty_sentences(sentences: List[Sentence]) -> List[Sentence]:
