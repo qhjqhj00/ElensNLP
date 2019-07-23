@@ -174,7 +174,7 @@ def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
-    train_ = [Sentence(train_X[i], tag, [train_y[i]],max_length=max_length)
+    train_ = [Sentence(train_X[i], tag, [train_y[i]], max_length=max_length)
               for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
@@ -277,5 +277,20 @@ def read_re_data(path):
 def read_seq2seq_data(path):
     data = []
     lines = [line.strip().split('\t') for line in open(path)]
+    for line in lines:
+        src_sentence = Sentence(line[0])
+        trg_sentence = Sentence(line[-1])
+        sentence = SentenceSrc(src_sentence, trg_sentence)
+        data.append(sentence)
+    return data
 
 
+def load_seq2seq_data(train_file, test_file = None):
+    train_ = read_seq2seq_data(train_file)
+    if test_file is not None:
+        test_ = read_seq2seq_data(test_file)
+    else:
+        test_: List[SentenceSrc] = [train_[i] for i in __sample(len(train_), 0.2)]
+        train_ = [sentence for sentence in train_ if sentence not in test_]
+    seq_corpus = Seq2seqCorpus(train_, test_)
+    return seq_corpus
