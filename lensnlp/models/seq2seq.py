@@ -123,7 +123,7 @@ class RNN2RNN(torch.nn.Module):
         self.src_dict = src_dict
         self.trg_dict = trg_dict
 
-        PAD_IDX = self.src_dict['pad']
+        PAD_IDX = self.src_dict['_PAD_']
 
         self.embeddings = embeddings
         self.encoder = encoder
@@ -149,6 +149,7 @@ class RNN2RNN(torch.nn.Module):
     def forward(self, src: List[Sentence], teacher_forcing_ratio, trg=None):
 
         self.embeddings.embed(src)
+
 
 
         batch_size = src.shape[1]

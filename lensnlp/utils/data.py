@@ -516,9 +516,9 @@ class Sentence:
 
     def to_tokenized_string(self, lang: str = None) -> str:
         """返回分词后的文本"""
-        if lang == 'UY':
+        if lang == 'ug':
             return ' '.join([t.latin for t in self.tokens])
-        elif lang == 'PY':
+        elif lang == 'py':
             return ' '.join([t.pinyin for t in self.tokens])
         else:
             return ' '.join([t.text for t in self.tokens])
@@ -645,8 +645,43 @@ class SentenceSrc:
             self.trg = trg
         else:
             self.trg = Sentence()
-            token = Token('sos')
+            token = Token('<sos>')
             self.trg.add_token(token)
+
+
+class Seq2seqCorpus:
+    def __init__(self,
+                 train: List[SentenceSrc],
+                 dev: List[SentenceSrc],
+                 test: List[SentenceSrc],
+                 name: str = 'seq2seq'):
+        self._train: List[SentenceSrc] = train
+        self._dev: List[SentenceSrc] = dev
+        self._test: List[SentenceSrc] = test
+        self.name: str = name
+
+    def _get_most_common_tokens(self, max_tokens, min_freq) -> List[str]:
+        """获得高频词"""
+        tokens_and_frequencies = Counter(self._get_all_tokens())
+        tokens_and_frequencies = tokens_and_frequencies.most_common()
+
+        tokens = []
+        for token, freq in tokens_and_frequencies:
+            if (min_freq != -1 and freq < min_freq) or (max_tokens != -1 and len(tokens) == max_tokens):
+                break
+            tokens.append(token)
+        return tokens
+
+
+    def make_vocab_dictionary(self, max_tokens=-1, min_freq=1) -> Dictionary:
+        """生成词汇表"""
+        tokens = self._get_most_common_tokens(max_tokens, min_freq)
+
+        vocab_dictionary: Dictionary = Dictionary()
+        for token in tokens:
+            vocab_dictionary.add_item(token)
+
+        return vocab_dictionary
 
 
 class Corpus:
