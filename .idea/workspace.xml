@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5269d0ee-3fe5-4872-b2c8-2bfa5fb734be" name="Default Changelist" comment="0716">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lensnlp/utils/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/utils/tokenizer.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,8 +71,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="1098" column="30" selection-start-line="1098" selection-start-column="30" selection-end-line="1098" selection-end-column="30" />
+            <state relative-caret-position="614">
+              <caret line="662" column="46" lean-forward="true" selection-start-line="662" selection-start-column="46" selection-end-line="662" selection-end-column="46" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -251,7 +248,7 @@
       <workItem from="1563501297931" duration="3603000" />
       <workItem from="1563524894092" duration="591000" />
       <workItem from="1563766865128" duration="935000" />
-      <workItem from="1563846281815" duration="6739000" />
+      <workItem from="1563846281815" duration="7427000" />
     </task>
     <task id="LOCAL-00001" summary="0716">
       <created>1563357345642</created>
@@ -264,7 +261,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25536000" />
+    <option name="totallyTimeSpent" value="26224000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
@@ -456,8 +453,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="1098" column="30" selection-start-line="1098" selection-start-column="30" selection-end-line="1098" selection-end-column="30" />
+        <state relative-caret-position="614">
+          <caret line="662" column="46" lean-forward="true" selection-start-line="662" selection-start-column="46" selection-end-line="662" selection-end-column="46" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>

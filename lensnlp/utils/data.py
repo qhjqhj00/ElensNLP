@@ -645,6 +645,8 @@ class Sentence:
 class SentenceSrc:
     def __init__(self, src: Sentence, trg: Sentence = None):
         self.src = src
+        self.src.tokens.insert(0,Token('<sos>'))
+        self.src.tokens.append(Token('<eos>'))
         if trg is not None:
             self.trg = trg
         else:
