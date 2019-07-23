@@ -5,6 +5,7 @@ import jieba
 from segtok.segmenter import split_single
 from segtok.tokenizer import split_contractions
 from segtok.tokenizer import word_tokenizer
+import re
 
 
 class Tokenizer:
@@ -32,7 +33,7 @@ class Tokenizer:
                     tokenized.append(token)
             elif self.sp_op == 'py':
                 for index, char in enumerate(text):
-                    token = Token(char, start_position=index,sp=py)
+                    token = Token(char, start_position=index,sp='py')
                     tokenized.append(token)
             else:
                 seg_list = list(jieba.tokenize(text))
@@ -41,7 +42,7 @@ class Tokenizer:
                     tokenized.append(token)
 
         elif self.language_type == 'ug':
-            text = uy_preprocess(text)
+            text = self.uy_preprocess(text)
             word = ''
             for index, char in enumerate(text):
                 if char == ' ':
