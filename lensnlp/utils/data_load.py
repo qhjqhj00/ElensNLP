@@ -1,4 +1,4 @@
-from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label
+from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label, SentenceSrc, Seq2seqCorpus
 from typing import List, Dict, Union
 import logging
 
@@ -138,7 +138,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
-            token = Token(fields[text_column], lang=lang)
+            token = Token(fields[text_column], sp=lang)
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
@@ -272,4 +272,10 @@ def read_re_data(path):
     for sent in data:
         sent.generate_relative_pos(Parameter['re_max_length'])
     return data
+
+
+def read_seq2seq_data(path):
+    data = []
+    lines = [line.strip().split('\t') for line in open(path)]
+
 

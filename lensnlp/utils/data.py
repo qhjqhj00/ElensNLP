@@ -652,17 +652,25 @@ class SentenceSrc:
 class Seq2seqCorpus:
     def __init__(self,
                  train: List[SentenceSrc],
-                 dev: List[SentenceSrc],
                  test: List[SentenceSrc],
                  name: str = 'seq2seq'):
         self._train: List[SentenceSrc] = train
-        self._dev: List[SentenceSrc] = dev
         self._test: List[SentenceSrc] = test
         self.name: str = name
 
-    def _get_most_common_tokens(self, max_tokens, min_freq) -> List[str]:
+    @property
+    def train(self) -> List[SentenceSrc]:
+        """训练集"""
+        return self._train
+
+    @property
+    def test(self) -> List[SentenceSrc]:
+        """测试集"""
+        return self._test
+
+    def _get_most_common_tokens(self, sentence_type, max_tokens, min_freq) -> List[str]:
         """获得高频词"""
-        tokens_and_frequencies = Counter(self._get_all_tokens())
+        tokens_and_frequencies = Counter(self._get_all_tokens(sentence_type))
         tokens_and_frequencies = tokens_and_frequencies.most_common()
 
         tokens = []
@@ -672,16 +680,26 @@ class Seq2seqCorpus:
             tokens.append(token)
         return tokens
 
-
-    def make_vocab_dictionary(self, max_tokens=-1, min_freq=1) -> Dictionary:
+    def make_vocab_dictionary(self, sentence_type, max_tokens=-1, min_freq=1) -> Dictionary:
         """生成词汇表"""
-        tokens = self._get_most_common_tokens(max_tokens, min_freq)
+        tokens = self._get_most_common_tokens(sentence_type, max_tokens, min_freq)
 
         vocab_dictionary: Dictionary = Dictionary()
         for token in tokens:
             vocab_dictionary.add_item(token)
 
         return vocab_dictionary
+
+    def _get_all_tokens(self, sentence_type) -> List[str]:
+        if sentence_type == 'src':
+            tokens = list(map((lambda s: s.src.tokens), self.train))
+        elif sentence_type == 'trg':
+            tokens = list(map((lambda s: s.trg.tokens), self.train))
+        else:
+            raise ValueError
+        tokens = [token for sublist in tokens for token in sublist]
+        return list(map((lambda t: t.text), tokens))
+
 
 
 class Corpus:
