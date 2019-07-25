@@ -6,7 +6,7 @@ from . import nn
 import torch
 from typing import List, Union
 from lensnlp.embeddings import *
-from lensnlp.utils.data import Dictionary, Sentence, Label, Token
+from lensnlp.utils.data import Dictionary, Sentence, Label, Token, SentenceSrc, Seq2seqCorpus
 from lensnlp.hyper_parameters import Parameter,device
 from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
 import os
@@ -146,11 +146,9 @@ class RNN2RNN(torch.nn.Module):
         for name, param in m.named_parameters():
             torch.nn.init.uniform_(param.data, -0.08, 0.08)
 
-    def forward(self, src: List[Sentence], teacher_forcing_ratio, trg=None):
+    def forward(self, src: List[SentenceSrc], teacher_forcing_ratio, trg=None):
 
         self.embeddings.embed(src)
-
-
 
         batch_size = src.shape[1]
         if trg is not None:
