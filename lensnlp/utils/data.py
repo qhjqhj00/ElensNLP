@@ -692,10 +692,10 @@ class Seq2seqCorpus:
         """生成词汇表"""
         tokens = self._get_most_common_tokens(sentence_type, max_tokens, min_freq)
 
-        vocab_dictionary: Dictionary = Dictionary()
+        vocab_dictionary: Dictionary = Dictionary(add_unk=False)
+        vocab_dictionary.add_item('_PAD_')
         for token in tokens:
             vocab_dictionary.add_item(token)
-        vocab_dictionary.add_item('_PAD_')
         return vocab_dictionary
 
     def _get_all_tokens(self, sentence_type) -> List[str]:

@@ -152,7 +152,7 @@ class Seq2Seq(torch.nn.Module):
             [len(sentences), max_length], dtype=torch.int64, device=device).fill_(self.PAD_IDX)
         for i, sent_zip in enumerate(zip(sentences,sentences_length)):
             sent, length = sent_zip
-            sent_idx = [map_dict[t.text] for t in sent]
+            sent_idx = [map_dict[t.text.encode('utf-8')] for t in sent]
             sentences_idx_tensor[i][:length] = torch.LongTensor(sent_idx)
         sentences_idx_tensor = torch.einsum('ij->ji', sentences_idx_tensor)
         return sentences_idx_tensor
@@ -184,7 +184,7 @@ class Seq2Seq(torch.nn.Module):
             top1 = output.max(1)[1]
             trg_input = (trg_idx_tensor[t] if teacher_force else top1)
 
-        outputs = outputs[1:].view(-1, outputs.shape[-1])
+        outputs = torch.einsum('ijk->jki',outputs[1:])
 
         return outputs
 
@@ -199,7 +199,7 @@ class Seq2Seq(torch.nn.Module):
         src_idx_tensor = self.sentences_to_idx(src, self.src_dict)
 
         outputs = self.forward(src_idx_tensor, trg_idx_tensor)
-        loss = self.loss_function(outputs, trg_idx_tensor)
+        loss = self.loss_function(outputs, torch.einsum('ij->ji', trg_idx_tensor[1:, :]))
         return loss
 
     def save(self, model_file: Union[str, Path]):
