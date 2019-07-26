@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5269d0ee-3fe5-4872-b2c8-2bfa5fb734be" name="Default Changelist" comment="0716">
-      <change afterPath="$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/models/seq2seq.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/seq2seq.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,11 +24,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1787">
-              <caret line="268" column="16" lean-forward="true" selection-start-line="268" selection-start-column="16" selection-end-line="268" selection-end-column="16" />
+            <state relative-caret-position="318">
+              <caret line="190" column="55" selection-start-line="190" selection-start-column="44" selection-end-line="190" selection-end-column="55" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -51,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="22" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="22" />
+            <state relative-caret-position="749">
+              <caret line="113" column="45" selection-start-line="113" selection-start-column="44" selection-end-line="113" selection-end-column="45" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -168,8 +165,8 @@
         <option value="$PROJECT_DIR$/lensnlp/utils/data.py" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/__init__.py" />
-        <option value="$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/seq2seq.py" />
+        <option value="$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py" />
       </list>
     </option>
   </component>
@@ -289,7 +286,7 @@
       <workItem from="1563946947801" duration="779000" />
       <workItem from="1563953184255" duration="1068000" />
       <workItem from="1564030593686" duration="810000" />
-      <workItem from="1564105666696" duration="9997000" />
+      <workItem from="1564105666696" duration="11182000" />
     </task>
     <task id="LOCAL-00001" summary="0716">
       <created>1563357345642</created>
@@ -302,7 +299,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41039000" />
+    <option name="totallyTimeSpent" value="42224000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
@@ -530,16 +527,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="22" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="343">
@@ -552,10 +539,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1787">
-          <caret line="268" column="16" lean-forward="true" selection-start-line="268" selection-start-column="16" selection-end-line="268" selection-end-column="16" />
+        <state relative-caret-position="318">
+          <caret line="190" column="55" selection-start-line="190" selection-start-column="44" selection-end-line="190" selection-end-column="55" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/trainers/seq2seq_trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="749">
+          <caret line="113" column="45" selection-start-line="113" selection-start-column="44" selection-end-line="113" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
