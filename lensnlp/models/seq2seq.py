@@ -8,7 +8,6 @@ from typing import List, Union
 from lensnlp.embeddings import *
 from lensnlp.utils.data import Dictionary, Sentence, Label, Token, SentenceSrc, Seq2seqCorpus
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
 import os
 
 import random
@@ -108,21 +107,23 @@ class Decoder(torch.nn.Module):
         return prediction, hidden, cell
 
 
-class RNN2RNN(torch.nn.Module):
+class Seq2Seq(torch.nn.Module):
 
     def __init__(self,
                  encoder: torch.nn.Module,
                  decoder: torch.nn.Module,
-                 src_dict,
-                 trg_dict,
+                 src_dict: Dictionary,
+                 trg_dict: Dictionary,
                  ):
 
-        super(RNN2RNN,self).__init__()
+        super(Seq2Seq,self).__init__()
 
-        self.src_dict = src_dict
-        self.trg_dict = trg_dict
+        self.src_dict = src_dict.item2idx
+        self.trg_dict = trg_dict.item2idx
 
-        self.PAD_IDX = self.src_dict['_PAD_']
+        self.trg_vocab = trg_dict.idx2item
+
+        self.PAD_IDX = self.src_dict['_PAD_'.encode('utf-8')]
 
         self.encoder = encoder
         self.decoder = decoder
@@ -156,13 +157,7 @@ class RNN2RNN(torch.nn.Module):
         sentences_idx_tensor = torch.einsum('ij->ji', sentences_idx_tensor)
         return sentences_idx_tensor
 
-    def forward(self, sentences: List[SentenceSrc], teacher_forcing_ratio=0.5):
-
-        trg = [sent.trg for sent in sentences]
-        trg_idx_tensor = self.sentences_to_idx(trg, self.trg_dict)
-
-        src = [sent.src for sent in sentences]
-        src_idx_tensor = self.sentences_to_idx(src, self.src_dict)
+    def forward(self, src_idx_tensor, trg_idx_tensor, teacher_forcing_ratio=0.5):
 
         batch_size = trg_idx_tensor.shape[0]
 
@@ -193,10 +188,18 @@ class RNN2RNN(torch.nn.Module):
 
         return outputs
 
-    def forward_loss(self, src, trg):
+    def forward_loss(self, sentences: Union[SentenceSrc, List[SentenceSrc]]):
+        if isinstance(sentences, SentenceSrc):
+            sentences = [SentenceSrc]
 
-        outputs = self.forward(src, trg)
-        loss = self.loss_function(outputs, trg)
+        trg = [sent.trg for sent in sentences]
+        trg_idx_tensor = self.sentences_to_idx(trg, self.trg_dict)
+
+        src = [sent.src for sent in sentences]
+        src_idx_tensor = self.sentences_to_idx(src, self.src_dict)
+
+        outputs = self.forward(src_idx_tensor, trg_idx_tensor)
+        loss = self.loss_function(outputs, trg_idx_tensor)
         return loss
 
     def save(self, model_file: Union[str, Path]):
@@ -207,7 +210,6 @@ class RNN2RNN(torch.nn.Module):
             'state_dict': self.state_dict(),
             'src_dict': self.src_dict,
             'trg_dict': self.trg_dict,
-            'embeddings': self.embeddings,
             'encoder': self.encoder,
             'decoder': self.decoder
         }
@@ -229,12 +231,11 @@ class RNN2RNN(torch.nn.Module):
             for batch in batches:
                 outputs = self.forward(batch, teacher_forcing_ratio=0)
                 predicted_seq = torch.argmax(outputs, dim=1)
-
-                trg.append(predicted_seq)
-                # TODO
-                clear_embeddings(batch)
-
-            return src, trg
+                for i, sent in enumerate(batch):
+                    for idx in predicted_seq[i]:
+                        if idx != self.PAD_IDX:
+                            sent.trg.add_token(Token(self.trg_vocab[idx]))
+        return sentences
 
     @staticmethod
     def _filter_empty_sentences(sentences: List[Sentence]) -> List[Sentence]:
@@ -250,10 +251,9 @@ class RNN2RNN(torch.nn.Module):
         :param model_file: 模型地址
         :return: 加载好的模型
         """
-        state = RNN2RNN._load_state(model_file)
+        state = Seq2Seq._load_state(model_file)
 
-        model = RNN2RNN(
-            embeddings=state['relation_embeddings'],
+        model = Seq2Seq(
             encoder=state['encoder'],
             decoder=state['decoder'],
             src_dict=state['src_dict'],
@@ -277,10 +277,10 @@ class RNN2RNN(torch.nn.Module):
     @staticmethod
     def load(model_file: str):
         if model_file == 'seq2seq':
-            classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
+            classifier: Seq2Seq = Seq2Seq.load_from_file(Path(CACHE_ROOT) / 'seq2seq/best-mdoel.pt')
         else:
             try:
-                classifier: RNN2RNN = RNN2RNN.load_from_file(Path(CACHE_ROOT) / model_file)
+                classifier: Seq2Seq = Seq2Seq.load_from_file(Path(CACHE_ROOT) / model_file)
             except NameError('specify a model!'):
                 raise
         return classifier
