@@ -152,7 +152,7 @@ class Seq2Seq(torch.nn.Module):
             [len(sentences), max_length], dtype=torch.int64, device=device).fill_(self.PAD_IDX)
         for i, sent_zip in enumerate(zip(sentences,sentences_length)):
             sent, length = sent_zip
-            sent_idx = [map_dict[t.text] for t in sent]
+            sent_idx = [map_dict[t.text.encode('utf-8')] for t in sent]
             sentences_idx_tensor[i][:length] = torch.LongTensor(sent_idx)
         sentences_idx_tensor = torch.einsum('ij->ji', sentences_idx_tensor)
         return sentences_idx_tensor
