@@ -111,7 +111,6 @@ class Decoder(torch.nn.Module):
 class RNN2RNN(torch.nn.Module):
 
     def __init__(self,
-                 embeddings: WordEmbeddings,
                  encoder: torch.nn.Module,
                  decoder: torch.nn.Module,
                  src_dict,
@@ -125,12 +124,11 @@ class RNN2RNN(torch.nn.Module):
 
         PAD_IDX = self.src_dict['_PAD_']
 
-        self.embeddings = embeddings
         self.encoder = encoder
         self.decoder = decoder
         self.loss_function = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
 
-        self.start_embed = 0 #TODO
+        self.start_embed = '<sos>'
 
         assert self.encoder.hidden_size == self.decoder.hidden_size, \
             "Hidden dimensions of encoder and decoder must be equal!"
@@ -146,11 +144,21 @@ class RNN2RNN(torch.nn.Module):
         for name, param in m.named_parameters():
             torch.nn.init.uniform_(param.data, -0.08, 0.08)
 
-    def forward(self, src: List[SentenceSrc], teacher_forcing_ratio, trg=None):
+    def forward(self, sentences: List[SentenceSrc], teacher_forcing_ratio):
 
-        self.embeddings.embed(src)
+        trg = [sent.trg for sent in sentences]
+        trg_sentences_length = [len(sent) for sent in trg]
+        trg_max_length = max(trg_sentences_length)
 
-        batch_size = src.shape[1]
+        src = [sent.src for sent in sentences]
+        src_sentences_length = [len(sent) for sent in src]
+        src_max_length = max(src_sentences_length)
+
+        trg_sentences_idx = torch.zeros([len(trg), trg_max_length], dtype=torch.int64, device=device)
+
+
+        batch_size = src.shape[0]
+        
         if trg is not None:
             max_len = trg.shape[0]
         else:

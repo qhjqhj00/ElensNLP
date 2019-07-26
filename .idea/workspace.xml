@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5269d0ee-3fe5-4872-b2c8-2bfa5fb734be" name="Default Changelist" comment="0716" />
+    <list default="true" id="5269d0ee-3fe5-4872-b2c8-2bfa5fb734be" name="Default Changelist" comment="0716">
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/seq2seq.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/seq2seq.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="25" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="25" />
+            <state relative-caret-position="502">
+              <caret line="156" column="28" selection-start-line="156" selection-start-column="28" selection-end-line="158" selection-end-column="76" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -46,13 +48,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="683">
-              <caret line="702" column="40" selection-start-line="702" selection-start-column="40" selection-end-line="702" selection-end-column="40" />
+            <state relative-caret-position="379">
+              <caret line="334" column="8" lean-forward="true" selection-start-line="334" selection-start-column="8" selection-end-line="345" selection-end-column="71" />
               <folding>
-                <element signature="e#0#30#0" expanded="true" />
+                <element signature="e#0#15#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -61,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
+            <state relative-caret-position="165">
+              <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -71,9 +73,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="553">
+              <caret line="659" column="20" lean-forward="true" selection-start-line="659" selection-start-column="20" selection-end-line="659" selection-end-column="20" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/demo/app.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="195">
+              <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -134,15 +149,15 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/tokenizer.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/data_load.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/__init__.py" />
-        <option value="$PROJECT_DIR$/lensnlp/models/seq2seq.py" />
         <option value="$PROJECT_DIR$/demo/app_cn.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/data.py" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/lensnlp/models/seq2seq.py" />
       </list>
     </option>
   </component>
@@ -262,7 +277,7 @@
       <workItem from="1563946947801" duration="779000" />
       <workItem from="1563953184255" duration="1068000" />
       <workItem from="1564030593686" duration="810000" />
-      <workItem from="1564105666696" duration="3025000" />
+      <workItem from="1564105666696" duration="4600000" />
     </task>
     <task id="LOCAL-00001" summary="0716">
       <created>1563357345642</created>
@@ -275,7 +290,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34067000" />
+    <option name="totallyTimeSpent" value="35642000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
@@ -366,16 +381,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1027">
-          <caret line="194" column="49" lean-forward="true" selection-start-line="194" selection-start-column="49" selection-end-line="194" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/tokenizer.py" />
     <entry file="file://$PROJECT_DIR$/lensnlp/models/nn.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -410,25 +415,6 @@
           <caret line="16" column="18" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -473,22 +459,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
+    <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="25" selection-start-line="39" selection-start-column="22" selection-end-line="39" selection-end-column="25" />
+        <state relative-caret-position="165">
+          <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#0#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="683">
-          <caret line="702" column="40" selection-start-line="702" selection-start-column="40" selection-end-line="702" selection-end-column="40" />
+        <state relative-caret-position="553">
+          <caret line="659" column="20" lean-forward="true" selection-start-line="659" selection-start-column="20" selection-end-line="659" selection-end-column="20" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="334" column="8" lean-forward="true" selection-start-line="334" selection-start-column="8" selection-end-line="345" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/seq2seq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="156" column="28" selection-start-line="156" selection-start-column="28" selection-end-line="158" selection-end-column="76" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
