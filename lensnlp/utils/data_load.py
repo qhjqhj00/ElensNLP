@@ -276,7 +276,7 @@ def read_re_data(path):
 
 def read_seq2seq_data(path):
     data = []
-    lines = [line.strip().split('\t') for line in open(path)]
+    lines = [line.strip().split('\t') for line in open(path, encoding="utf-8")]
     for line in lines:
         src_sentence = Sentence(line[0])
         trg_sentence = Sentence(line[-1])
