@@ -7,7 +7,7 @@ import torch
 from typing import List, Union
 from lensnlp.embeddings import *
 from lensnlp.utils.data import Dictionary, Sentence, Label, Token, SentenceSrc, Seq2seqCorpus
-from lensnlp.hyper_parameters import Parameter,device
+from lensnlp.hyper_parameters import Parameter, device
 import os
 
 import random
@@ -116,7 +116,7 @@ class Seq2Seq(torch.nn.Module):
                  trg_dict: Dictionary,
                  ):
 
-        super(Seq2Seq,self).__init__()
+        super(Seq2Seq, self).__init__()
 
         self.src_dict = src_dict.item2idx
         self.trg_dict = trg_dict.item2idx
@@ -131,7 +131,7 @@ class Seq2Seq(torch.nn.Module):
 
         self.start_embed = '<sos>'
 
-        assert self.encoder.hidden_size == self.decoder.hidden_size, \
+        assert self.encoder.hid_dim == self.decoder.hid_dim, \
             "Hidden dimensions of encoder and decoder must be equal!"
         assert self.encoder.n_layers == self.decoder.n_layers, \
             "Encoder and decoder must have equal number of layers!"
@@ -150,7 +150,7 @@ class Seq2Seq(torch.nn.Module):
         max_length = max(sentences_length)
         sentences_idx_tensor = torch.zeros(
             [len(sentences), max_length], dtype=torch.int64, device=device).fill_(self.PAD_IDX)
-        for i, sent_zip in enumerate(zip(sentences,sentences_length)):
+        for i, sent_zip in enumerate(zip(sentences, sentences_length)):
             sent, length = sent_zip
             sent_idx = [map_dict[t.text.encode('utf-8')] for t in sent]
             sentences_idx_tensor[i][:length] = torch.LongTensor(sent_idx)
@@ -159,7 +159,7 @@ class Seq2Seq(torch.nn.Module):
 
     def forward(self, src_idx_tensor, trg_idx_tensor, teacher_forcing_ratio=0.5):
 
-        batch_size = trg_idx_tensor.shape[0]
+        batch_size = trg_idx_tensor.shape[1]
 
         if trg_idx_tensor.shape[1] != 1:
             max_len = trg_idx_tensor.shape[0]
@@ -178,13 +178,14 @@ class Seq2Seq(torch.nn.Module):
         trg_input = trg_idx_tensor[0, :]
 
         for t in range(1, max_len):
+
             output, hidden, cell = self.decoder(trg_input, hidden, cell)
             outputs[t] = output
             teacher_force = random.random() < teacher_forcing_ratio
             top1 = output.max(1)[1]
             trg_input = (trg_idx_tensor[t] if teacher_force else top1)
 
-        outputs = torch.einsum('ijk->jki',outputs[1:])
+        outputs = torch.einsum('ijk->jki', outputs[1:])
 
         return outputs
 
@@ -216,7 +217,7 @@ class Seq2Seq(torch.nn.Module):
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
 
-    def predict(self, sentences: Union[List[SentenceSrc],SentenceSrc], mini_batch_size: int = 32):
+    def predict(self, sentences: Union[List[SentenceSrc], SentenceSrc], mini_batch_size: int = 32):
         """
         预测
         输入为 Sentence 数量不限
@@ -243,7 +244,6 @@ class Seq2Seq(torch.nn.Module):
         if len(sentences) != len(filtered_sentences):
             log.warning('Ignore {} sentence(s) with no tokens.'.format(len(sentences) - len(filtered_sentences)))
         return filtered_sentences
-
 
     @classmethod
     def load_from_file(cls, model_file: Union[str, Path]):
@@ -284,4 +284,3 @@ class Seq2Seq(torch.nn.Module):
             except NameError('specify a model!'):
                 raise
         return classifier
-    
