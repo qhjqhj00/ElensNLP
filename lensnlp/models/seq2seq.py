@@ -122,11 +122,11 @@ class RNN2RNN(torch.nn.Module):
         self.src_dict = src_dict
         self.trg_dict = trg_dict
 
-        PAD_IDX = self.src_dict['_PAD_']
+        self.PAD_IDX = self.src_dict['_PAD_']
 
         self.encoder = encoder
         self.decoder = decoder
-        self.loss_function = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
+        self.loss_function = torch.nn.CrossEntropyLoss(ignore_index=self.PAD_IDX)
 
         self.start_embed = '<sos>'
 
@@ -144,39 +144,45 @@ class RNN2RNN(torch.nn.Module):
         for name, param in m.named_parameters():
             torch.nn.init.uniform_(param.data, -0.08, 0.08)
 
-    def forward(self, sentences: List[SentenceSrc], teacher_forcing_ratio):
+    def sentences_to_idx(self, sentences: List[Sentence], map_dict) -> torch.LongTensor:
+        sentences_length = [len(sent) for sent in sentences]
+        max_length = max(sentences_length)
+        sentences_idx_tensor = torch.zeros(
+            [len(sentences), max_length], dtype=torch.int64, device=device).fill_(self.PAD_IDX)
+        for i, sent_zip in enumerate(zip(sentences,sentences_length)):
+            sent, length = sent_zip
+            sent_idx = [map_dict[t.text] for t in sent]
+            sentences_idx_tensor[i][:length] = torch.LongTensor(sent_idx)
+        return sentences_idx_tensor
+
+    def forward(self, sentences: List[SentenceSrc], teacher_forcing_ratio=0.5):
 
         trg = [sent.trg for sent in sentences]
-        trg_sentences_length = [len(sent) for sent in trg]
-        trg_max_length = max(trg_sentences_length)
+        trg_idx_tensor = self.sentences_to_idx(trg, self.trg_dict)
 
         src = [sent.src for sent in sentences]
-        src_sentences_length = [len(sent) for sent in src]
-        src_max_length = max(src_sentences_length)
+        src_idx_tensor = self.sentences_to_idx(src, self.src_dict)
 
-        trg_sentences_idx = torch.zeros([len(trg), trg_max_length], dtype=torch.int64, device=device)
+        batch_size = trg_idx_tensor.shape[0]
 
-
-        batch_size = src.shape[0]
-        
-        if trg is not None:
-            max_len = trg.shape[0]
+        if trg_idx_tensor.shape[1] != 1:
+            max_len = trg_idx_tensor.shape[0]
         else:
-            max_len = src.shape[0] + 5
-            trg = self.start_embed
+            max_len = src_idx_tensor.shape[0] + 5
+
         trg_vocab_size = self.decoder.output_dim
 
         # tensor to store decoder outputs
-        outputs = torch.zeros(max_len, batch_size, trg_vocab_size).to(device)
+        outputs = torch.zeros(batch_size, max_len, trg_vocab_size).to(device)
 
         # last hidden state of the encoder is used as the initial hidden state of the decoder
-        hidden, cell = self.encoder(src)
+        hidden, cell = self.encoder(src_idx_tensor)
 
         # first input to the decoder is the <sos> tokens
-        input = trg[0, :]
+        trg_input = trg[:, 0]
 
         for t in range(1, max_len):
-            output, hidden, cell = self.decoder(input, hidden, cell)
+            output, hidden, cell = self.decoder(trg_input, hidden, cell)
             outputs[t] = output
             teacher_force = random.random() < teacher_forcing_ratio
             top1 = output.max(1)[1]
