@@ -153,6 +153,7 @@ class RNN2RNN(torch.nn.Module):
             sent, length = sent_zip
             sent_idx = [map_dict[t.text] for t in sent]
             sentences_idx_tensor[i][:length] = torch.LongTensor(sent_idx)
+        sentences_idx_tensor = torch.einsum('ij->ji', sentences_idx_tensor)
         return sentences_idx_tensor
 
     def forward(self, sentences: List[SentenceSrc], teacher_forcing_ratio=0.5):
@@ -173,27 +174,28 @@ class RNN2RNN(torch.nn.Module):
         trg_vocab_size = self.decoder.output_dim
 
         # tensor to store decoder outputs
-        outputs = torch.zeros(batch_size, max_len, trg_vocab_size).to(device)
+        outputs = torch.zeros(max_len, batch_size, trg_vocab_size).to(device)
 
         # last hidden state of the encoder is used as the initial hidden state of the decoder
         hidden, cell = self.encoder(src_idx_tensor)
 
         # first input to the decoder is the <sos> tokens
-        trg_input = trg[:, 0]
+        trg_input = trg_idx_tensor[0, :]
 
         for t in range(1, max_len):
             output, hidden, cell = self.decoder(trg_input, hidden, cell)
             outputs[t] = output
             teacher_force = random.random() < teacher_forcing_ratio
             top1 = output.max(1)[1]
-            input = (trg[t] if teacher_force else top1)
+            trg_input = (trg_idx_tensor[t] if teacher_force else top1)
 
         outputs = outputs[1:].view(-1, outputs.shape[-1])
 
         return outputs
 
-    def forward_loss(self, src, trg, teacher_forcing_ratio):
-        outputs = self.forward(src, trg, teacher_forcing_ratio)
+    def forward_loss(self, src, trg):
+
+        outputs = self.forward(src, trg)
         loss = self.loss_function(outputs, trg)
         return loss
 
@@ -212,20 +214,22 @@ class RNN2RNN(torch.nn.Module):
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
 
-    def predict(self, src: List[Sentence], mini_batch_size: int = 32):
+    def predict(self, sentences: Union[List[SentenceSrc],SentenceSrc], mini_batch_size: int = 32):
         """
         预测
         输入为 Sentence 数量不限
         返回 Sentence，标签存入对应的位置
         mini_batch_size为每个batch预测的数量
         """
+        if isinstance(sentences, SentenceSrc):
+            sentences = [sentences]
+
         with torch.no_grad():
-            filtered_sentences = self._filter_empty_sentences(src)
-            batches = [filtered_sentences[x:x + mini_batch_size] for x in range(0, len(filtered_sentences), mini_batch_size)]
-            trg = []
+            batches = [sentences[x:x + mini_batch_size] for x in range(0, len(sentences), mini_batch_size)]
             for batch in batches:
                 outputs = self.forward(batch, teacher_forcing_ratio=0)
                 predicted_seq = torch.argmax(outputs, dim=1)
+
                 trg.append(predicted_seq)
                 # TODO
                 clear_embeddings(batch)
