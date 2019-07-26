@@ -649,6 +649,8 @@ class SentenceSrc:
         self.src.tokens.append(Token('<eos>'))
         if trg is not None:
             self.trg = trg
+            self.trg.tokens.insert(0, Token('<sos>'))
+            self.trg.tokens.append(Token('<eos>'))
         else:
             self.trg = Sentence()
             token = Token('<sos>')
@@ -693,7 +695,7 @@ class Seq2seqCorpus:
         vocab_dictionary: Dictionary = Dictionary()
         for token in tokens:
             vocab_dictionary.add_item(token)
-
+        vocab_dictionary.add_item('_PAD_')
         return vocab_dictionary
 
     def _get_all_tokens(self, sentence_type) -> List[str]:
