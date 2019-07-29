@@ -1,4 +1,4 @@
-from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label, SentenceSrc, Seq2seqCorpus
+from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label
 from typing import List, Dict, Union
 import logging
 
@@ -272,25 +272,3 @@ def read_re_data(path):
     for sent in data:
         sent.generate_relative_pos(Parameter['re_max_length'])
     return data
-
-
-def read_seq2seq_data(path):
-    data = []
-    lines = [line.strip().split('\t') for line in open(path, encoding="utf-8")]
-    for line in lines:
-        src_sentence = Sentence(line[0])
-        trg_sentence = Sentence(line[-1])
-        sentence = SentenceSrc(src_sentence, trg_sentence)
-        data.append(sentence)
-    return data
-
-
-def load_seq2seq_data(train_file, test_file = None):
-    train_ = read_seq2seq_data(train_file)
-    if test_file is not None:
-        test_ = read_seq2seq_data(test_file)
-    else:
-        test_: List[SentenceSrc] = [train_[i] for i in __sample(len(train_), 0.2)]
-        train_ = [sentence for sentence in train_ if sentence not in test_]
-    seq_corpus = Seq2seqCorpus(train_, test_)
-    return seq_corpus

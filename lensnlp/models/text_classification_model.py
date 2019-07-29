@@ -33,8 +33,8 @@ class TextClassifier(nn.Model):
             Examples
             --------
              >>> from lensnlp.models import TextClassifier
-             >>> from lensnlp.Embeddings import WordEmbeddings,DocumentPoolEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import WordEmbeddings,DocumentPoolEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> emb_list = [WordEmbeddings('cn_glove')]
              >>> doc_emb = DocumentPoolEmbeddings(emb_list)
