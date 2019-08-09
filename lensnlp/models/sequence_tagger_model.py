@@ -101,8 +101,8 @@ class SequenceTagger(nn.Model):
             Examples
             --------
              >>> from lensnlp.models import SequenceTagger
-             >>> from lensnlp.Embeddings import WordEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import WordEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> emb = WordEmbeddings('cn_glove'
              >>> tagger = SequenceTagger(hidden_size=256,embeddings = emb)
@@ -122,7 +122,6 @@ class SequenceTagger(nn.Model):
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
                  ):
-
 
         super(SequenceTagger, self).__init__()
 
