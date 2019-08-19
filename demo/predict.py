@@ -1,4 +1,4 @@
-from lensnlp.utils.data_preprocess import cn_prepare,en_prepare,uy_prepare,clf_preprocess
+from lensnlp.utilis.data_preprocess import cn_prepare,en_prepare,uy_prepare,clf_preprocess
 from lensnlp.models import SequenceTagger,TextClassifier
 from lensnlp.hyper_parameters import id_to_label_15
 from pathlib import Path

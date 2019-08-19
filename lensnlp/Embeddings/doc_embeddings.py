@@ -7,7 +7,7 @@ import torch
 from lensnlp.models import nn
 import torch.nn.functional as F
 
-from lensnlp.utils.data import Token, Sentence
+from lensnlp.utilis.data import Token, Sentence
 from lensnlp.hyper_parameters import Parameter,device
 
 log = logging.getLogger('qhj')
@@ -175,8 +175,8 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
         self.word_reprojection_map = torch.nn.Linear(self.length_of_all_token_embeddings,
                                                      self.embeddings_dimension)
 
-        self.rnn = torch.nn.RNNBase(rnn_type, self.embeddings_dimension, hidden_size, num_layers=rnn_layers,
-                                    bidirectional=self.bidirectional)
+        self.rnn = torch.nn.LSTM(
+            self.embeddings_dimension, hidden_size, num_layers=rnn_layers,bidirectional=self.bidirectional)
 
         self.use_attention = use_attention
 

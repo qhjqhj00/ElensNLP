@@ -1,4 +1,4 @@
-from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label
+from lensnlp.utilis.data import TaggedCorpus, Sentence, Token, Label
 from typing import List, Dict, Union
 import logging
 
@@ -7,7 +7,7 @@ from lensnlp.hyper_parameters import tag_filter, Parameter
 from pathlib import Path
 from segtok.tokenizer import word_tokenizer
 
-from lensnlp.utils.data_preprocess import re_clean_str
+from lensnlp.utilis.data_preprocess import re_clean_str
 
 log = logging.getLogger('lensnlp')
 
@@ -52,7 +52,7 @@ def load_column_corpus(
     :return: corpus
     Examples
     --------
-    >>> from lensnlp.utilis.data_load import load_column_corpus
+    >>> from lensnlp.utils.data_load import load_column_corpus
     >>> corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
     """
 
@@ -138,7 +138,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
-            token = Token(fields[text_column], lang=lang)
+            token = Token(fields[text_column], sp=lang)
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
@@ -174,7 +174,7 @@ def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
-    train_ = [Sentence(train_X[i], tag, [train_y[i]],max_length=max_length)
+    train_ = [Sentence(train_X[i], tag, [train_y[i]], max_length=max_length)
               for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
@@ -272,4 +272,3 @@ def read_re_data(path):
     for sent in data:
         sent.generate_relative_pos(Parameter['re_max_length'])
     return data
-

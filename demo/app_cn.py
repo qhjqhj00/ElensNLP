@@ -1,5 +1,5 @@
 from flask import Flask, request, Response
-from lensnlp.utils.data_preprocess import cn_prepare,en_prepare, clf_preprocess,uy_prepare
+from lensnlp.utilis.data_preprocess import cn_prepare,en_prepare, clf_preprocess,uy_prepare
 from lensnlp.models import SequenceTagger, TextClassifier
 import json
 import sys
@@ -25,6 +25,7 @@ def model():
         result.append(neural_result)
 
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json; charset=utf-8')
+
 
 @app.route('/cn_ner/',methods=['GET'])
 def model_1():

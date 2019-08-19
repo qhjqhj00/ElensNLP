@@ -9,7 +9,7 @@ if not os.path.exists(CACHE_ROOT):
 
 setup(
     name="lensnlp",
-    version="2019.06.17",
+    version="2019.08.19",
     description="distributed by Elensdata",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
@@ -26,6 +26,8 @@ setup(
         "matplotlib>=2.2.3",
         "mpld3>=0.3",
         "sklearn",
+        "langid",
+        "pytorch-transformers",
         "sqlitedict>=1.6.0",
         "deprecated>=1.2.4",
         "hyperopt>=0.1.1",

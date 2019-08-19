@@ -6,9 +6,9 @@ from . import nn
 import torch
 from typing import List, Union
 from lensnlp.Embeddings import *
-from lensnlp.utils.data import Dictionary, Sentence, Label, Token
+from lensnlp.utilis.data import Dictionary, Sentence, Label, Token
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
+from lensnlp.utilis.training_utils import convert_labels_to_one_hot, clear_embeddings
 import os
 
 import torch.nn.functional as F
@@ -22,7 +22,7 @@ CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 class RelationExtraction(nn.Model):
 
     def __init__(self,
-                 embeddings: RelationEmbeddings,
+                 embeddings,
                  label_dictionary,
                  hidden_size: int = 300,
                  rnn_layer: int = 1,

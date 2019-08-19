@@ -10,8 +10,8 @@ import torch.nn.functional as F
 from lensnlp.hyper_parameters import Parameter,device
 from lensnlp.models import nn
 from lensnlp.Embeddings import TokenEmbeddings, DocumentEmbeddings,DocumentRNNEmbeddings,WordEmbeddings
-from lensnlp.utils.data import Dictionary, Sentence, Label
-from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
+from lensnlp.utilis.data import Dictionary, Sentence, Label
+from lensnlp.utilis.training_utils import convert_labels_to_one_hot, clear_embeddings
 
 
 log = logging.getLogger('lensnlp')
@@ -33,8 +33,8 @@ class TextClassifier(nn.Model):
             Examples
             --------
              >>> from lensnlp.models import TextClassifier
-             >>> from lensnlp.Embeddings import WordEmbeddings,DocumentPoolEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import WordEmbeddings,DocumentPoolEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> emb_list = [WordEmbeddings('cn_glove')]
              >>> doc_emb = DocumentPoolEmbeddings(emb_list)
@@ -186,7 +186,7 @@ class TextClassifier(nn.Model):
 
             for batch in batches:
                 scores = self.forward(batch)
-                predicted_labels = self._obtain_labels(scores,get_prob)
+                predicted_labels = self._obtain_labels(scores, get_prob)
 
                 for (sentence, labels) in zip(batch, predicted_labels):
                     sentence.labels = labels

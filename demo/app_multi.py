@@ -1,5 +1,5 @@
 from flask import Flask, request, Response
-from lensnlp.utils.data_preprocess import cn_prepare
+from lensnlp.utilis.data_preprocess import cn_prepare
 from lensnlp.models import SequenceTagger
 import json
 import requests

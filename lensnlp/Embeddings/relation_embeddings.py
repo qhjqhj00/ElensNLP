@@ -4,7 +4,7 @@ import logging
 from typing import List, Union
 
 import torch
-from lensnlp.utils.data import Sentence, Token, Dictionary
+from lensnlp.utilis.data import Sentence, Token, Dictionary
 from lensnlp.hyper_parameters import device
 
 log = logging.getLogger('lensnlp')

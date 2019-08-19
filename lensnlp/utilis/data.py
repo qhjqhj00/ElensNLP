@@ -5,18 +5,18 @@ import torch
 from pypinyin import pinyin, Style
 from collections import Counter
 from collections import defaultdict
-from bpemb import BPEmb
-import jieba
 
+from typing import List
+import langid
+
+import jieba
 from segtok.segmenter import split_single
 from segtok.tokenizer import split_contractions
 from segtok.tokenizer import word_tokenizer
-
 import re
 
 
 class Dictionary:
-
     """
     字典类
     """
@@ -80,7 +80,6 @@ class Dictionary:
 
 
 class Label:
-
     """
     标签类，包括序列标签和文本标签；
     value是标签的文本，score是标签的得分
@@ -143,12 +142,12 @@ class Token:
                  head_id: int = None,
                  whitespace_after: bool = True,
                  start_position: int = None,
-                 lang = None
+                 sp: str = None
                  ):
         self.text: str = text
-        if lang == 'UY':
+        if sp == 'lt':
             self.latin = self.uyghur_to_latin()
-        if lang == 'PY':
+        if sp == 'py':
             self.pinyin = self.converter()
         self.idx: int = idx
         self.head_id: int = head_id
@@ -161,7 +160,7 @@ class Token:
         self._embeddings: Dict = {}
         self._pos_embeddings: Dict = {}
         self.tags: Dict[str, Label] = {}
-            
+
     def converter(self):
         """将汉字变为拼音"""
         p = pinyin(self.text, style=Style.TONE2)
@@ -298,8 +297,7 @@ class Span:
 
 
 class Relation:
-    def __init__(self, entity_1, entity_2, e1_pos = None, e2_pos = None, relation_type = None):
-
+    def __init__(self, entity_1, entity_2, e1_pos=None, e2_pos=None, relation_type=None):
         self.ent_1 = entity_1
         self.ent_2 = entity_2
 
@@ -311,7 +309,6 @@ class Relation:
 
 
 class Sentence:
-
     """
     句子类，针对中文，英文，维语做了不同的分词。
 
@@ -328,11 +325,12 @@ class Sentence:
     英语分词：EN
     """
 
-    def __init__(self, text: str = None, language: str = None,
+    def __init__(self, text: str = None, language_type: str = None, sp_op: str = None,
                  labels: Union[List[Label], List[str]] = None,
                  max_length: int = None,
                  e1: str = None,
-                 e2: str = None,):
+                 e2: str = None,
+                 tokenizer=None):
 
         super(Sentence, self).__init__()
 
@@ -343,72 +341,20 @@ class Sentence:
 
         self.entity = {'e1': e1, 'e2': e2}
         self._embeddings: Dict = {}
-        self.lang = language
+        self.language_type = language_type
+        self.sp_op = sp_op
 
-        if text is not None:
-            if language == 'UY':
-                text = uy_preprocess(text)
-                word = ''
-                for index, char in enumerate(text):
-                    if char == ' ':
-                        if len(word) > 0:
-                            token = Token(word, start_position=index - len(word),lang=language)
-                            self.add_token(token)
+        if tokenizer is not None:
+            self.Tokenizer = tokenizer
+        elif self.language_type is not None:
+            self.Tokenizer = Tokenizer(self.language_type, self.sp_op)
+        else:
+            self.Tokenizer = Tokenizer(example=text)
 
-                        word = ''
-                    else:
-                        word += char
-                index += 1
-                if len(word) > 0:
-                    token = Token(word, start_position=index - len(word),lang = language)
-                    self.add_token(token)
+        tokenized = self.Tokenizer.word_tokenizer(text)
 
-            elif language == 'EN':
-
-                tokens = []
-                sentences = split_single(text)
-                for sentence in sentences:
-                    contractions = split_contractions(word_tokenizer(sentence))
-                    tokens.extend(contractions)
-
-                index = text.index
-                running_offset = 0
-                last_word_offset = -1
-                last_token = None
-                for word in tokens:
-                    try:
-                        word_offset = index(word, running_offset)
-                        start_position = word_offset
-                    except:
-                        word_offset = last_word_offset + 1
-                        start_position = running_offset + 1 if running_offset > 0 else running_offset
-
-                    token = Token(word, start_position=start_position)
-                    self.add_token(token)
-
-                    if word_offset - 1 == last_word_offset and last_token is not None:
-                        last_token.whitespace_after = False
-
-                    word_len = len(word)
-                    running_offset = word_offset + word_len
-                    last_word_offset = running_offset - 1
-                    last_token = token
-
-            elif language == 'CN_char':
-                for index, char in enumerate(text):
-                    token = Token(char, start_position=index)
-                    self.add_token(token)
-
-            elif language == 'CN_token':
-                seg_list = list(jieba.tokenize(text))
-                for t in seg_list:
-                    token = Token(t[0], start_position=t[1])
-                    self.add_token(token)
-
-            elif language == 'PY':
-                for index, char in enumerate(text):
-                    token = Token(char, start_position=index,lang=language)
-                    self.add_token(token)
+        for token in tokenized:
+            self.add_token(token)
 
         if max_length is not None:
             self.tokens = self.tokens[:max_length]
@@ -416,7 +362,7 @@ class Sentence:
     def generate_relative_pos(self, max_length):
         if self.entity['e1'] is None or self.entity['e2'] is None:
             print(self.tokens)
-        for i,token in enumerate(self.tokens):
+        for i, token in enumerate(self.tokens):
             self.tokens[i].relative_position['p1'] = str(max_length - 1 + i - int(self.entity['e1']))
             self.tokens[i].relative_position['p2'] = str(max_length - 1 + i - int(self.entity['e2']))
 
@@ -574,9 +520,9 @@ class Sentence:
 
     def to_tokenized_string(self, lang: str = None) -> str:
         """返回分词后的文本"""
-        if lang == 'UY':
+        if lang == 'ug':
             return ' '.join([t.latin for t in self.tokens])
-        elif lang == 'PY':
+        elif lang == 'py':
             return ' '.join([t.pinyin for t in self.tokens])
         else:
             return ' '.join([t.text for t in self.tokens])
@@ -585,9 +531,9 @@ class Sentence:
         """返回正常文本"""
         plain = ''
         for token in self.tokens:
-            if lang == 'UY':
+            if lang == 'ug':
                 plain += token.latin
-            elif lang == 'PY':
+            elif lang == 'py':
                 plain += token.pinyin
             else:
                 plain += token.text
@@ -612,8 +558,6 @@ class Sentence:
             tags = iob_iobes(tags)
             for index, tag in enumerate(tags):
                 self.tokens[index].add_tag(tag_type, tag)
-
-
 
     def infer_space_after(self):
         """判断token后是否有空格"""
@@ -702,6 +646,7 @@ class Corpus:
     """
     数据集类
     """
+
     @property
     @abstractmethod
     def train(self) -> List[Sentence]:
@@ -738,6 +683,7 @@ class TaggedCorpus(Corpus):
     """
     标注了的数据集类
     """
+
     def __init__(self, train: List[Sentence], dev: List[Sentence], test: List[Sentence], name: str = 'corpus'):
         self._train: List[Sentence] = train
         self._dev: List[Sentence] = dev
@@ -775,7 +721,7 @@ class TaggedCorpus(Corpus):
         all_sentences.extend(self.test)
         return all_sentences
 
-    def convert_scheme(self, type:str='ner',scheme:str='iob'):
+    def convert_scheme(self, type: str = 'ner', scheme: str = 'iob'):
         """更换标签策略"""
         for sent in self.train:
             sent.convert_tag_scheme(type, scheme)
@@ -977,18 +923,18 @@ def iob_iobes(tags):
 
 def uy_preprocess(text):
     """维吾尔语预处理"""
-    text = re.sub('،' ,' ، ',text)
+    text = re.sub('،', ' ، ', text)
     text = re.sub('\.', ' . ', text)
     text = re.sub('!', ' ! ', text)
     text = re.sub('؟', ' ؟ ', text)
     text = re.sub('\?', ' ? ', text)
-    text = re.sub('\(' ,'( ',text)
-    text = re.sub('\)' ,' )',text)
-    text = re.sub('»' ,' »',text)
-    text = re.sub('«' ,'« ',text)
-    text = re.sub(':' ,' :',text)
-    text = re.sub('"' ,' " ',text)
-    text = re.sub('><' ,'> <',text)
+    text = re.sub('\(', '( ', text)
+    text = re.sub('\)', ' )', text)
+    text = re.sub('»', ' »', text)
+    text = re.sub('«', '« ', text)
+    text = re.sub(':', ' :', text)
+    text = re.sub('"', ' " ', text)
+    text = re.sub('><', '> <', text)
     text = re.sub(r'( )*-( )*', '-', text)
 
     return text
@@ -998,6 +944,7 @@ class MultiCorpus(Corpus):
     """
     多数据集类
     """
+
     def __init__(self, corpora: List[TaggedCorpus]):
         self.corpora: List[TaggedCorpus] = corpora
 
@@ -1062,3 +1009,109 @@ class MultiCorpus(Corpus):
                 label_dictionary.add_item(label)
 
         return label_dictionary
+
+
+class Tokenizer:
+    def __init__(self, language_type: str = None, example: str = None, sp_op: str = None):
+
+        if language_type is None and example is None:
+            raise ValueError("Must specify language type or provides an example")
+
+        if sp_op is not None and sp_op not in ['char', 'lt', 'py']:
+            raise ValueError("Not support the operation yet")
+
+        if language_type is not None:
+            self.language_type = language_type
+        else:
+            self.language_type = langid.classify(example)[0]
+
+        self.sp_op = sp_op
+
+    def word_tokenizer(self, text) -> List[Token]:
+        tokenized = []
+        if self.language_type == 'zh':
+            if self.sp_op == 'char':
+                for index, char in enumerate(text):
+                    token = Token(char, start_position=index)
+                    tokenized.append(token)
+            elif self.sp_op == 'py':
+                for index, char in enumerate(text):
+                    token = Token(char, start_position=index, sp='py')
+                    tokenized.append(token)
+            else:
+                seg_list = list(jieba.tokenize(text))
+                for t in seg_list:
+                    token = Token(t[0], start_position=t[1])
+                    tokenized.append(token)
+
+        elif self.language_type == 'ug':
+            text = self.uy_preprocess(text)
+            word = ''
+            for index, char in enumerate(text):
+                if char == ' ':
+                    if len(word) > 0:
+                        token = Token(word, start_position=index - len(word), sp=self.sp_op)
+                        tokenized.append(token)
+
+                    word = ''
+                else:
+                    word += char
+            index += 1
+            if len(word) > 0:
+                token = Token(word, start_position=index - len(word), sp=self.sp_op)
+                tokenized.append(token)
+
+        elif self.language_type == 'en':
+            tokenized = []
+            tokens = []
+            sentences = split_single(text)
+            for sentence in sentences:
+                contractions = split_contractions(word_tokenizer(sentence))
+                tokens.extend(contractions)
+
+            index = text.index
+            running_offset = 0
+            last_word_offset = -1
+            last_token = None
+            for word in tokens:
+                try:
+                    word_offset = index(word, running_offset)
+                    start_position = word_offset
+                except:
+                    word_offset = last_word_offset + 1
+                    start_position = running_offset + 1 if running_offset > 0 else running_offset
+
+                token = Token(word, start_position=start_position)
+                tokenized.append(token)
+
+                if word_offset - 1 == last_word_offset and last_token is not None:
+                    last_token.whitespace_after = False
+
+                word_len = len(word)
+                running_offset = word_offset + word_len
+                last_word_offset = running_offset - 1
+                last_token = token
+
+        return tokenized
+
+    def sentence_split(self, text) -> List[str]:
+        pass
+
+    @staticmethod
+    def uy_preprocess(text):
+        """维吾尔语预处理"""
+        text = re.sub('،', ' ، ', text)
+        text = re.sub(r'\.', ' . ', text)
+        text = re.sub('!', ' ! ', text)
+        text = re.sub('؟', ' ؟ ', text)
+        text = re.sub(r'\?', ' ? ', text)
+        text = re.sub(r'\(', '( ', text)
+        text = re.sub(r'\)', ' )', text)
+        text = re.sub('»', ' »', text)
+        text = re.sub('«', '« ', text)
+        text = re.sub(':', ' :', text)
+        text = re.sub('"', ' " ', text)
+        text = re.sub('><', '> <', text)
+        text = re.sub(r'( )*-( )*', '-', text)
+
+        return text
