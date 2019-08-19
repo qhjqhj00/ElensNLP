@@ -1,4 +1,4 @@
-from lensnlp.utils.data import TaggedCorpus, Sentence, Token, Label
+from lensnlp.utilis.data import TaggedCorpus, Sentence, Token, Label
 from typing import List, Dict, Union
 import logging
 
@@ -7,7 +7,7 @@ from lensnlp.hyper_parameters import tag_filter, Parameter
 from pathlib import Path
 from segtok.tokenizer import word_tokenizer
 
-from lensnlp.utils.data_preprocess import re_clean_str
+from lensnlp.utilis.data_preprocess import re_clean_str
 
 log = logging.getLogger('lensnlp')
 

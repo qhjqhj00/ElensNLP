@@ -6,9 +6,9 @@ import logging
 from torch.optim.adadelta import Adadelta
 import torch
 import lensnlp.models.nn as nn
-from lensnlp.utils.data import Sentence, Corpus
+from lensnlp.utilis.data import Sentence, Corpus
 from lensnlp.models import RelationExtraction
-from lensnlp.utils.training_utils import Metric, clear_embeddings, log_line, init_log, WeightExtractor
+from lensnlp.utilis.training_utils import Metric, clear_embeddings, log_line, init_log, WeightExtractor
 
 from lensnlp.hyper_parameters import Parameter
 

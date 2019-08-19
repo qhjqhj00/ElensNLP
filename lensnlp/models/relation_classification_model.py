@@ -5,10 +5,10 @@ from pathlib import Path
 from . import nn
 import torch
 from typing import List, Union
-from lensnlp.embeddings import *
-from lensnlp.utils.data import Dictionary, Sentence, Label, Token
+from lensnlp.Embeddings import *
+from lensnlp.utilis.data import Dictionary, Sentence, Label, Token
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.utils.training_utils import convert_labels_to_one_hot, clear_embeddings
+from lensnlp.utilis.training_utils import convert_labels_to_one_hot, clear_embeddings
 import os
 
 import torch.nn.functional as F

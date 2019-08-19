@@ -1,8 +1,8 @@
-from lensnlp.utils.data_load import load_column_corpus
-from lensnlp.embeddings import WordEmbeddings, DocumentPoolEmbeddings
+from lensnlp.utilis.data_load import load_column_corpus
+from lensnlp.Embeddings import WordEmbeddings, DocumentPoolEmbeddings
 
 from torch.optim.adam import Adam
-from lensnlp.utils.data_load import load_clf_data
+from lensnlp.utilis.data_load import load_clf_data
 
 from pathlib import Path
 

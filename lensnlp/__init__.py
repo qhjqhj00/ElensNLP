@@ -1,8 +1,8 @@
-from . import utils
+from . import utilis
 from . import models
 from . import trainers
 from . import hyper_parameters
-from . import embeddings
+from . import Embeddings
 from . import modules
 
 import logging.config

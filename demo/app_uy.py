@@ -2,7 +2,7 @@ import pymongo
 import requests
 import re
 from flask import Flask, request, Response
-from lensnlp.utils.data_preprocess import uy_prepare,uy_segmentation
+from lensnlp.utilis.data_preprocess import uy_prepare,uy_segmentation
 from lensnlp.models import SequenceTagger
 import json
 import os
