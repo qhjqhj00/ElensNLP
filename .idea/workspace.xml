@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="7ac04311-d13b-471b-b811-97d2756736dd" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/demo/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_clf.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_clf.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_cn.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_cn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_en.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_en.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_multi.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_multi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_multi_less.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_multi_less.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/app_uy.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/app_uy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/demo/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/doc_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/doc_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/relation_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/relation_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/Embeddings/word_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/language_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/language_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/nn.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/nn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/models/text_classification_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/models/text_classification_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/train.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/trainers/re_trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/trainers/re_trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/trainers/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/trainers/trainer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utilis/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utilis/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utilis/data_load.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data_load.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utilis/data_preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utilis/training_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/training_utils.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_preprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="41" column="40" lean-forward="true" selection-start-line="41" selection-start-column="40" selection-end-line="41" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="930">
+              <caret line="345" selection-start-line="345" selection-end-line="345" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/text_classification_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2101">
+              <caret line="191" column="33" selection-start-line="191" selection-start-column="33" selection-end-line="191" selection-end-column="33" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="183">
+              <caret line="1031" column="29" selection-start-line="1031" selection-start-column="16" selection-end-line="1031" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#30#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_load.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2910">
+              <caret line="194" column="9" selection-start-line="194" selection-start-column="9" selection-end-line="194" selection-end-column="9" />
+              <folding>
+                <element signature="e#0#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/app_multi_less.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="926">
+              <caret line="100" column="13" selection-start-line="100" selection-start-column="13" selection-end-line="100" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#42#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/demo/app_clf.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="345">
+              <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+              <folding>
+                <element signature="e#0#57#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="53" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/doc_embeddings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="542">
+              <caret line="184" column="32" selection-start-line="184" selection-start-column="32" selection-end-line="184" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#53#0" expanded="true" />
+                <element signature="e#13#82#0" expanded="true" />
+                <element signature="e#13#81#0" expanded="true" />
+                <element signature="e#13#82#0" expanded="true" />
+                <element signature="e#17#85#0" expanded="true" />
+                <element signature="e#17#86#0" expanded="true" />
+                <element signature="e#8#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="23" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+              <folding>
+                <element signature="e#0#43#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="demo" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
+              <item name="embeddings" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ElensNLP" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ElensNLP" type="462c0819:PsiDirectoryNode" />
+              <item name="lensnlp" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="30000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-1920" y="0" width="1920" height="1080" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15388711" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32970297" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32970297" />
+      <window_info anchor="bottom" id="Database Changes" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32970297" />
+      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info anchor="right" id="R Graphics" order="4" />
+      <window_info anchor="right" id="R Packages" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+    </layout>
+  </component>
+</project>

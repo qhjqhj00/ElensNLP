@@ -7,9 +7,9 @@ import logging
 from torch.optim.sgd import SGD
 import torch
 import lensnlp.models.nn as nn
-from lensnlp.utilis.data import Sentence, Token, MultiCorpus, Corpus
+from lensnlp.utils.data import Sentence, Token, MultiCorpus, Corpus
 from lensnlp.models import TextClassifier, SequenceTagger
-from lensnlp.utilis.training_utils import Metric, init_output_file, clear_embeddings, EvaluationMetric, \
+from lensnlp.utils.training_utils import Metric, init_output_file, clear_embeddings, EvaluationMetric, \
     log_line, init_log, WeightExtractor
 
 from lensnlp.hyper_parameters import Parameter

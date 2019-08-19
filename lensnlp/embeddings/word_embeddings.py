@@ -1,4 +1,4 @@
-from lensnlp.Embeddings import TokenEmbeddings
+from lensnlp.embeddings import TokenEmbeddings
 
 import logging
 from typing import List, Union, Dict
@@ -14,7 +14,7 @@ from abc import abstractmethod
 import os
 from pathlib import Path
 
-from lensnlp.utilis.data import Token, Sentence
+from lensnlp.utils.data import Token, Sentence
 
 from pytorch_transformers import (
     BertTokenizer,

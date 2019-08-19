@@ -7,7 +7,7 @@ import torch
 from lensnlp.models import nn
 import torch.nn.functional as F
 
-from lensnlp.utilis.data import Token, Sentence
+from lensnlp.utils.data import Token, Sentence
 from lensnlp.hyper_parameters import Parameter,device
 
 log = logging.getLogger('qhj')

@@ -5,7 +5,7 @@ from collections import defaultdict
 from enum import Enum
 from pathlib import Path
 from typing import List
-from lensnlp.utilis.data import Dictionary, Sentence
+from lensnlp.utils.data import Dictionary, Sentence
 from functools import reduce
 
 

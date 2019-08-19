@@ -8,7 +8,7 @@ from typing import List, Union
 from lensnlp.hyper_parameters import device
 from torch.optim import Optimizer
 
-from lensnlp.utilis.data import Dictionary
+from lensnlp.utils.data import Dictionary
 
 
 class LanguageModel(nn.Module):

@@ -9,15 +9,15 @@ from . import nn
 import torch
 import os
 
-from lensnlp.Embeddings import TokenEmbeddings
-from lensnlp.utilis.data import Dictionary, Sentence, Token, Label
+from lensnlp.embeddings import TokenEmbeddings
+from lensnlp.utils.data import Dictionary, Sentence, Token, Label
 
 from typing import List, Union
 import torch.nn.functional as F
 
-from lensnlp.utilis.training_utils import clear_embeddings
+from lensnlp.utils.training_utils import clear_embeddings
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.Embeddings import WordEmbeddings
+from lensnlp.embeddings import WordEmbeddings
 
 log = logging.getLogger('lensnlp')
 
