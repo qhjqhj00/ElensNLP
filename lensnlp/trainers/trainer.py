@@ -81,7 +81,6 @@ class ModelTrainer:
               monitor_train: bool = False,
               embeddings_in_memory: bool = True,
               checkpoint: bool = False,
-              save_final_model: bool = True,
               anneal_with_restarts: bool = False,
               test_mode: bool = False,
               **kwargs
