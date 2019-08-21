@@ -19,6 +19,7 @@ def load_column_corpus(
         test_file=None,
         dev_file=None,
         tag_to_bioes=None,
+        sp=None) -> TaggedCorpus:
     """
     加载标准的序列标注数据
     格式例如：
