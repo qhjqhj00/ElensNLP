@@ -26,6 +26,7 @@ def model():
 
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json; charset=utf-8')
 
+
 @app.route('/cn_ner/',methods=['GET'])
 def model_1():
     data = request.args.get("cn_data")

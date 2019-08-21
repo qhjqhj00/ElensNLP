@@ -53,13 +53,13 @@ def clf_preprocess(text:Union[str,list],language, max_length: int = 1024):
     if type(text) is str:
         text = [text]
     if language == 'CN_char':
-        sentences: List[Sentence] = [(Sentence(s,'CN_char', max_length=max_length)) for s in text]
+        sentences: List[Sentence] = [(Sentence(s,language_type='zh', sp_op='char', max_length=max_length)) for s in text]
     elif language == 'CN_token':
-        sentences: List[Sentence] = [(Sentence(s, 'CN_token',max_length=max_length)) for s in text]
+        sentences: List[Sentence] = [(Sentence(s,language_type='zh', max_length=max_length)) for s in text]
     elif language == 'UY':
-        sentences: List[Sentence] = [(Sentence(s, 'UY', max_length=max_length)) for s in text]
+        sentences: List[Sentence] = [(Sentence(s,language_type='ug', max_length=max_length)) for s in text]
     elif language == 'EN':
-        sentences: List[Sentence] = [(Sentence(s, 'EN', max_length=max_length)) for s in text]
+        sentences: List[Sentence] = [(Sentence(s, language_type='en', max_length=max_length)) for s in text]
     else:
         raise ValueError('Not Yet!')
     return sentences

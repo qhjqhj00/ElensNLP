@@ -1,6 +1,6 @@
 from lensnlp.utils.data import TaggedCorpus
 from lensnlp.utils.data_load import load_column_corpus, load_clf_data
-from lensnlp.Embeddings import *
+from lensnlp.embeddings import *
 
 import argparse
 import json

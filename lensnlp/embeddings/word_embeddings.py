@@ -1,4 +1,4 @@
-from lensnlp.Embeddings import TokenEmbeddings
+from lensnlp.embeddings import TokenEmbeddings
 
 import logging
 from typing import List, Union, Dict
@@ -26,7 +26,7 @@ from pytorch_transformers import (
 
 from lensnlp.hyper_parameters import device
 
-log = logging.getLogger('qhj')
+log = logging.getLogger('lensnlp')
 
 CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
@@ -43,8 +43,8 @@ class StackedEmbeddings(TokenEmbeddings):
                 是否静态向量，True为静态
             Examples
             --------
-             >>> from lensnlp.Embeddings import WordEmbeddings, FlairEmbeddings, StackedEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import WordEmbeddings, FlairEmbeddings, StackedEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> Embed_list = [WordEmbeddings('cn_glove'),FlairEmbeddings('cn_forward_small')]
              >>> Word_embed = StackedEmbeddings(Embed_list)
              >>> sent = Sentence('北京一览群智数据有限公司。')
@@ -110,8 +110,8 @@ class WordEmbeddings(TokenEmbeddings):
                 是否静态向量，True为静态
             Examples
             --------
-             >>> from from lensnlp.Embeddings import WordEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from from lensnlp.embeddings import WordEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> Word_embed = WordEmbeddings('cn_glove')
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> Word_embed.embed((sent))
@@ -188,8 +188,8 @@ class FlairEmbeddings(TokenEmbeddings):
                 词向量的保存路径
             Examples
             --------
-             >>> from lensnlp.Embeddings import FlairEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import FlairEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> Word_embed = FlairEmbeddings('cn_forward_small')
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> Word_embed.embed((sent))
@@ -246,7 +246,7 @@ class FlairEmbeddings(TokenEmbeddings):
             from sqlitedict import SqliteDict
             self.cache = SqliteDict(str(cache_path), autocommit=True)
         dummy_sentence: Sentence = Sentence()
-        dummy_sentence.add_token(Token('hello',lang=self.trans))
+        dummy_sentence.add_token(Token('hello',sp=self.trans))
         embedded_dummy = self.embed(dummy_sentence)
         self.__embedding_length: int = len(embedded_dummy[0].get_token(1).get_embedding())
 
@@ -399,8 +399,8 @@ class BytePairEmbeddings(TokenEmbeddings):
                 缓存的路径
             Examples
             --------
-             >>> from lensnlp.Embeddings import BytePairEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import BytePairEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> Word_embed = BytePairEmbeddings('ug',300,50000)
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> Word_embed.embed((sent))
@@ -464,8 +464,8 @@ class BertEmbeddings(TokenEmbeddings):
                 词被拆分的时候怎么选择向量，"first":保留第一个向量; "pool":求均值
             Examples
             --------
-             >>> from lensnlp.Embeddings import BertEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import BertEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> Word_embed = BertEmbeddings('chinese-base-uncased')
              >>> sent = Sentence('北京一览群智数据有限公司。')
              >>> Word_embed.embed((sent))

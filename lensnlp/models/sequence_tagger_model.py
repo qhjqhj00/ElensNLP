@@ -2,22 +2,31 @@ import warnings
 import logging
 from pathlib import Path
 
-import torch.autograd as autograd
 import torch.nn
 
 from . import nn
 import torch
 import os
 
-from lensnlp.Embeddings import TokenEmbeddings
+<<<<<<< HEAD
+from lensnlp.embeddings import TokenEmbeddings
 from lensnlp.utils.data import Dictionary, Sentence, Token, Label
+=======
+<<<<<<< Updated upstream
+from lensnlp.Embeddings import TokenEmbeddings
+from lensnlp.utilis.data import Dictionary, Sentence, Token, Label
+=======
+from lensnlp.embeddings import TokenEmbeddings
+from lensnlp.utils.data import Dictionary, Sentence, Token, Label
+>>>>>>> Stashed changes
+>>>>>>> qhj-patch
 
 from typing import List, Union
 import torch.nn.functional as F
 
 from lensnlp.utils.training_utils import clear_embeddings
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.Embeddings import WordEmbeddings
+from lensnlp.embeddings import WordEmbeddings
 
 log = logging.getLogger('lensnlp')
 
@@ -101,10 +110,10 @@ class SequenceTagger(nn.Model):
             Examples
             --------
              >>> from lensnlp.models import SequenceTagger
-             >>> from lensnlp.Embeddings import WordEmbeddings
-             >>> from lensnlp.utilis.data import Sentence
+             >>> from lensnlp.embeddings import WordEmbeddings
+             >>> from lensnlp.utils.data import Sentence
              >>> sent = Sentence('北京一览群智数据有限公司。')
-             >>> emb = WordEmbeddings('cn_glove'
+             >>> emb = WordEmbeddings('cn_glove')
              >>> tagger = SequenceTagger(hidden_size=256,embeddings = emb)
              >>> cn_ner = SequenceTagger.load('cn_s') # 加载预训练模型
              >>> tagger.predict(sent) # 预测
@@ -122,7 +131,6 @@ class SequenceTagger(nn.Model):
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
                  ):
-
 
         super(SequenceTagger, self).__init__()
 
@@ -326,7 +334,7 @@ class SequenceTagger(nn.Model):
 
             return sentences
 
-    def forward(self, sentences: List[Sentence],sort=True):
+    def forward(self, sentences: List[Sentence], sort=True):
         """forward，获得特征"""
         self.zero_grad()
 
