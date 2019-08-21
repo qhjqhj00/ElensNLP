@@ -19,7 +19,7 @@ def load_column_corpus(
         test_file=None,
         dev_file=None,
         tag_to_bioes=None,
-        lang=None) -> TaggedCorpus:
+        sp=None) -> TaggedCorpus:
     """
     加载标准的序列标注数据
     格式例如：
@@ -75,10 +75,10 @@ def load_column_corpus(
     sentences_train: List[Sentence] = []
 
     for path in train_:
-        sentences_train.extend(read_column_data(path, column_format, lang))
+        sentences_train.extend(read_column_data(path, column_format, sp))
 
     if test_file is not None:
-        sentences_test: List[Sentence] = read_column_data(test_file, column_format, lang)
+        sentences_test: List[Sentence] = read_column_data(test_file, column_format, sp)
 
     else:
         sentences_test: List[Sentence] = [sentences_train[i] for i in
@@ -86,7 +86,7 @@ def load_column_corpus(
         sentences_train = [x for x in sentences_train if x not in sentences_test]
 
     if dev_file is not None:
-        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, lang)
+        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, sp)
 
     else:
         sentences_dev: List[Sentence] = [sentences_train[i] for i in
@@ -101,7 +101,7 @@ def load_column_corpus(
     return TaggedCorpus(sentences_train, sentences_dev, sentences_test, name=data_folder.name)
 
 
-def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], lang=None):
+def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], sp=None):
     """
     :param path_to_column_file: 数据文件夹路径
     :param column_name_map: 数据格式，两列ner为 {1:'token',2:'ner'}
@@ -138,7 +138,11 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
+<<<<<<< Updated upstream:lensnlp/utilis/data_load.py
             token = Token(fields[text_column], sp=lang)
+=======
+            token = Token(fields[text_column], sp=sp)
+>>>>>>> Stashed changes:lensnlp/utils/data_load.py
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
@@ -155,7 +159,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
     return sentences
 
 
-def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
+def load_clf_data(language, train_file, test_file=None, max_length: int = 1024, sp_op = None):
     """
     加载文本分类的数据
     :param tag: 语种 中文：CN_char（按字符分）CN_token（分词）维吾尔语：UY
@@ -170,11 +174,15 @@ def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
     train_data = [re.split("\t", doc) for doc in train_data]
     train_data = [doc for doc in train_data if len(doc) == 2]
     train_y = [doc[0] for doc in train_data]
-    if 'CN' in tag:
+    if language == 'zh':
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
+<<<<<<< Updated upstream:lensnlp/utilis/data_load.py
     train_ = [Sentence(train_X[i], tag, [train_y[i]], max_length=max_length)
+=======
+    train_ = [Sentence(train_X[i], language_type=language, labels=[train_y[i]], max_length=max_length, sp_op=sp_op)
+>>>>>>> Stashed changes:lensnlp/utils/data_load.py
               for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
@@ -186,11 +194,11 @@ def load_clf_data(tag, train_file, test_file=None, max_length: int = 1024):
         test_data = [doc for doc in test_data if len(doc) == 2]
         test_y = [doc[0] for doc in test_data]
 #         test_X = [doc[1].replace(' ','') for doc in test_data]
-        if 'CN' in tag:
+        if language == 'zh':
             test_X = [doc[1].replace(' ', '') for doc in test_data]
         else:
             test_X = [doc[1] for doc in test_data]
-        test_ = [Sentence(test_X[i], tag, [test_y[i]], max_length=max_length)
+        test_ = [Sentence(test_X[i], language_type=language, labels=[test_y[i]], max_length=max_length, sp_op=sp_op)
                  for i in range(len(test_X)) if len(test_X[i]) > 0]
     else:
         test_: List[Sentence] = [train_[i] for i in

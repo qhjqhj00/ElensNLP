@@ -1,4 +1,4 @@
-from lensnlp.Embeddings import TokenEmbeddings
+from lensnlp.embeddings import TokenEmbeddings
 
 import logging
 from typing import List, Union, Dict
@@ -246,7 +246,7 @@ class FlairEmbeddings(TokenEmbeddings):
             from sqlitedict import SqliteDict
             self.cache = SqliteDict(str(cache_path), autocommit=True)
         dummy_sentence: Sentence = Sentence()
-        dummy_sentence.add_token(Token('hello',lang=self.trans))
+        dummy_sentence.add_token(Token('hello',sp=self.trans))
         embedded_dummy = self.embed(dummy_sentence)
         self.__embedding_length: int = len(embedded_dummy[0].get_token(1).get_embedding())
 

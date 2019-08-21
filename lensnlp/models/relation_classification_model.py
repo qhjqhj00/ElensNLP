@@ -5,8 +5,13 @@ from pathlib import Path
 from . import nn
 import torch
 from typing import List, Union
+<<<<<<< Updated upstream
 from lensnlp.Embeddings import *
 from lensnlp.utilis.data import Dictionary, Sentence, Label, Token
+=======
+from lensnlp.embeddings import *
+from lensnlp.utils.data import Dictionary, Sentence, Label, Token
+>>>>>>> Stashed changes
 from lensnlp.hyper_parameters import Parameter,device
 from lensnlp.utilis.training_utils import convert_labels_to_one_hot, clear_embeddings
 import os

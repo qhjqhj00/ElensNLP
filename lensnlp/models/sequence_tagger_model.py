@@ -2,22 +2,26 @@ import warnings
 import logging
 from pathlib import Path
 
-import torch.autograd as autograd
 import torch.nn
 
 from . import nn
 import torch
 import os
 
+<<<<<<< Updated upstream
 from lensnlp.Embeddings import TokenEmbeddings
 from lensnlp.utilis.data import Dictionary, Sentence, Token, Label
+=======
+from lensnlp.embeddings import TokenEmbeddings
+from lensnlp.utils.data import Dictionary, Sentence, Token, Label
+>>>>>>> Stashed changes
 
 from typing import List, Union
 import torch.nn.functional as F
 
 from lensnlp.utilis.training_utils import clear_embeddings
 from lensnlp.hyper_parameters import Parameter,device
-from lensnlp.Embeddings import WordEmbeddings
+from lensnlp.embeddings import WordEmbeddings
 
 log = logging.getLogger('lensnlp')
 
@@ -104,7 +108,7 @@ class SequenceTagger(nn.Model):
              >>> from lensnlp.embeddings import WordEmbeddings
              >>> from lensnlp.utils.data import Sentence
              >>> sent = Sentence('北京一览群智数据有限公司。')
-             >>> emb = WordEmbeddings('cn_glove'
+             >>> emb = WordEmbeddings('cn_glove')
              >>> tagger = SequenceTagger(hidden_size=256,embeddings = emb)
              >>> cn_ner = SequenceTagger.load('cn_s') # 加载预训练模型
              >>> tagger.predict(sent) # 预测
