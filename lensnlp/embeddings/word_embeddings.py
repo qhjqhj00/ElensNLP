@@ -246,7 +246,7 @@ class FlairEmbeddings(TokenEmbeddings):
             from sqlitedict import SqliteDict
             self.cache = SqliteDict(str(cache_path), autocommit=True)
         dummy_sentence: Sentence = Sentence()
-        dummy_sentence.add_token(Token('hello',sp=self.trans))
+        dummy_sentence.add_token(Token('hello', sp=self.trans))
         embedded_dummy = self.embed(dummy_sentence)
         self.__embedding_length: int = len(embedded_dummy[0].get_token(1).get_embedding())
 
@@ -319,9 +319,9 @@ class FlairEmbeddings(TokenEmbeddings):
 
                 for token in sentence.tokens:
                     token: Token = token
-                    if self.trans == 'UY':
+                    if self.trans == 'lt':
                         offset_forward += len(token.latin)
-                    elif self.trans == 'PY':
+                    elif self.trans == 'py':
                         offset_forward += len(token.pinyin)
                     else:
                         offset_forward += len(token.text)
@@ -335,9 +335,9 @@ class FlairEmbeddings(TokenEmbeddings):
 
                     offset_forward += 1
                     offset_backward -= 1
-                    if self.trans == 'UY':
+                    if self.trans == 'lt':
                         offset_backward -= len(token.latin)
-                    elif self.trans == 'PY':
+                    elif self.trans == 'py':
                         offset_backward -= len(token.pinyin)
                     else:
                         offset_backward -= len(token.text)

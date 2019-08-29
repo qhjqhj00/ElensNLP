@@ -75,10 +75,10 @@ def load_column_corpus(
     sentences_train: List[Sentence] = []
 
     for path in train_:
-        sentences_train.extend(read_column_data(path, column_format, sp))
+        sentences_train.extend(read_column_data(path, column_format, sp=sp))
 
     if test_file is not None:
-        sentences_test: List[Sentence] = read_column_data(test_file, column_format, sp)
+        sentences_test: List[Sentence] = read_column_data(test_file, column_format, sp=sp)
 
     else:
         sentences_test: List[Sentence] = [sentences_train[i] for i in
@@ -86,7 +86,7 @@ def load_column_corpus(
         sentences_train = [x for x in sentences_train if x not in sentences_test]
 
     if dev_file is not None:
-        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, sp)
+        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, sp=sp)
 
     else:
         sentences_dev: List[Sentence] = [sentences_train[i] for i in
