@@ -138,11 +138,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             fields: List[str] = re.split("\s+", line)
             if len(fields[text_column]) == 0:
                 continue
-<<<<<<< Updated upstream:lensnlp/utilis/data_load.py
-            token = Token(fields[text_column], sp=lang)
-=======
             token = Token(fields[text_column], sp=sp)
->>>>>>> Stashed changes:lensnlp/utils/data_load.py
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
@@ -178,11 +174,7 @@ def load_clf_data(language, train_file, test_file=None, max_length: int = 1024, 
             train_X = [doc[1].replace(' ','') for doc in train_data]
     else:
             train_X = [doc[1] for doc in train_data]
-<<<<<<< Updated upstream:lensnlp/utilis/data_load.py
-    train_ = [Sentence(train_X[i], tag, [train_y[i]], max_length=max_length)
-=======
     train_ = [Sentence(train_X[i], language_type=language, labels=[train_y[i]], max_length=max_length, sp_op=sp_op)
->>>>>>> Stashed changes:lensnlp/utils/data_load.py
               for i in range(len(train_X)) if len(train_X[i]) > 0]
 
     import random
