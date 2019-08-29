@@ -8,18 +8,10 @@ from . import nn
 import torch
 import os
 
-<<<<<<< HEAD
-from lensnlp.embeddings import TokenEmbeddings
-from lensnlp.utils.data import Dictionary, Sentence, Token, Label
-=======
-<<<<<<< Updated upstream
-from lensnlp.Embeddings import TokenEmbeddings
 from lensnlp.utilis.data import Dictionary, Sentence, Token, Label
-=======
 from lensnlp.embeddings import TokenEmbeddings
 from lensnlp.utils.data import Dictionary, Sentence, Token, Label
->>>>>>> Stashed changes
->>>>>>> qhj-patch
+
 
 from typing import List, Union
 import torch.nn.functional as F

@@ -81,7 +81,7 @@ def get_uy_result(data):
             text_list = entity["text"].split()
             text_list[-1] = uy_segmentation(text_list[-1])[0]
             entity["no_affix"] = ' '.join(text_list)
-            entity["cn"] = translator(entity["no_affix"])
+            # entity["cn"] = translator(entity["no_affix"])
         result.append(neural_result)
     return result
 
@@ -111,5 +111,5 @@ def model_1():
     return Response(json.dumps(result, ensure_ascii=False), mimetype='application/json; charset=utf-8')
 
 if __name__ == '__main__':
-    app.run(host ='0.0.0.0',port=4502,threaded=True)
+    app.run(host ='0.0.0.0',port=30001,threaded=True)
 
