@@ -17,10 +17,10 @@ def cn_prepare(text: str) -> List[Sentence]:
     for s in text:
         if len(s) > 500:
             n = int(len(s)/500)+1
-            tem = [Sentence(s[i*500:(i+1)*500],'PY') for i in range(n)]
+            tem = [Sentence(s[i*500:(i+1)*500], language_type='zh', sp_op='py') for i in range(n)]
             sentences.extend(tem)
         else:
-            sentences.append(Sentence(s,'PY'))
+            sentences.append(Sentence(s, language_type='zh', sp_op='py'))
     return sentences
 
 
@@ -31,7 +31,7 @@ def en_prepare(text: str) -> List[Sentence]:
     text = [word_tokenize(s) for s in text]
     text = [' '.join(s) for s in text]
     for s in text:
-        sentences.append(Sentence(s,'EN'))
+        sentences.append(Sentence(s))
     return sentences
 
 
@@ -44,7 +44,7 @@ def uy_prepare(text:str) -> List[Sentence]:
     sentences: List[Sentence] = []
     for s in text:
         if len(s)>0:
-            sentences.append(Sentence(s,'UY'))
+            sentences.append(Sentence(s, language_type='ug', sp_op='lt'))
     return sentences
 
 

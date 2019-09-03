@@ -347,7 +347,7 @@ class Sentence:
         if tokenizer is not None:
             self.Tokenizer = tokenizer
         elif self.language_type is not None:
-            self.Tokenizer = Tokenizer(self.language_type, sp_op=self.sp_op)
+            self.Tokenizer = Tokenizer(language_type = self.language_type, sp_op=self.sp_op)
         elif text is not None:
             self.Tokenizer = Tokenizer(example=text)
         else:
