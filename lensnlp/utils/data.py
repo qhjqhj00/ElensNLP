@@ -149,6 +149,8 @@ class Token:
             self.latin = self.uyghur_to_latin()
         if sp == 'py':
             self.pinyin = self.converter()
+        if sp == '4c':
+            self.four_corner = self.four_corner()
         self.idx: int = idx
         self.head_id: int = head_id
         self.whitespace_after: bool = whitespace_after
@@ -166,6 +168,9 @@ class Token:
         p = pinyin(self.text, style=Style.TONE2)
         p = [t[0] for t in p]
         return ' '.join(p)
+
+    def four_corner(self):
+        pass
 
     def add_tag_label(self, tag_type: str, tag: Label):
         """增加一个标签"""

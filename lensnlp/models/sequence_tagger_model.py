@@ -8,7 +8,6 @@ from . import nn
 import torch
 import os
 
-from lensnlp.utilis.data import Dictionary, Sentence, Token, Label
 from lensnlp.embeddings import TokenEmbeddings
 from lensnlp.utils.data import Dictionary, Sentence, Token, Label
 
