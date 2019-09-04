@@ -14,6 +14,7 @@ from segtok.segmenter import split_single
 from segtok.tokenizer import split_contractions
 from segtok.tokenizer import word_tokenizer
 import re
+from lensnlp.utils import four_corner_dic
 
 
 class Dictionary:
@@ -170,7 +171,10 @@ class Token:
         return ' '.join(p)
 
     def four_corner(self):
-        pass
+        if self.text in four_corner_dic:
+            return four_corner_dic[self.text]
+        else:
+            return self.text
 
     def add_tag_label(self, tag_type: str, tag: Label):
         """增加一个标签"""
@@ -532,6 +536,8 @@ class Sentence:
             return ' '.join([t.latin for t in self.tokens])
         elif lang == 'py':
             return ' '.join([t.pinyin for t in self.tokens])
+        elif lang == '4c':
+            return ' '.join([t.four_corner for t in self.tokens])
         else:
             return ' '.join([t.text for t in self.tokens])
 

@@ -213,6 +213,10 @@ class FlairEmbeddings(TokenEmbeddings):
             model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_large.pt'
         elif model.lower() == 'cn_backward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_large.pt'
+        elif model.lower() == 'cn4_forward_large':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_forward_large.pt'
+        elif model.lower() == 'cn4_backward_large':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_backward_large.pt'
         elif model.lower() == 'cn_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_small.pt'
         elif model.lower() == 'cn_backward_small':
@@ -323,6 +327,8 @@ class FlairEmbeddings(TokenEmbeddings):
                         offset_forward += len(token.latin)
                     elif self.trans == 'py':
                         offset_forward += len(token.pinyin)
+                    elif self.trans == '4c':
+                        offset_forward += len (token.four_corner)
                     else:
                         offset_forward += len(token.text)
 
@@ -339,6 +345,8 @@ class FlairEmbeddings(TokenEmbeddings):
                         offset_backward -= len(token.latin)
                     elif self.trans == 'py':
                         offset_backward -= len(token.pinyin)
+                    elif self.trans == '4c':
+                        offset_backward -= len (token.four_corner)
                     else:
                         offset_backward -= len(token.text)
 
