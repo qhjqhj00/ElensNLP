@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9392ed77-2435-4828-86b5-1aa3a32df93e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lensnlp/utils/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,14 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="676">
-              <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-1737">
+              <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -41,7 +37,7 @@
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="195">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -85,11 +81,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5469">
-              <caret line="541" column="35" selection-start-line="541" selection-start-column="35" selection-end-line="541" selection-end-column="35" />
+            <state relative-caret-position="2616">
+              <caret line="324" column="40" lean-forward="true" selection-start-line="324" selection-start-column="40" selection-end-line="324" selection-end-column="40" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
               </folding>
@@ -152,11 +148,11 @@
         <option value="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" />
         <option value="$PROJECT_DIR$/lensnlp/__init__.py" />
-        <option value="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/relation_classification_model.py" />
         <option value="$PROJECT_DIR$/lensnlp/train.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/__init__.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/data.py" />
+        <option value="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" />
       </list>
     </option>
   </component>
@@ -271,12 +267,12 @@
       <workItem from="1567609791253" duration="122000" />
       <workItem from="1567617506838" duration="58000" />
       <workItem from="1567646671802" duration="2275000" />
-      <workItem from="1567905976462" duration="436000" />
+      <workItem from="1567905976462" duration="1876000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18159000" />
+    <option name="totallyTimeSpent" value="19599000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1920" height="1080" extended-state="0" />
@@ -464,6 +460,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/utils/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -473,33 +479,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/utils/__init__.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="2616">
+          <caret line="324" column="40" lean-forward="true" selection-start-line="324" selection-start-column="40" selection-end-line="324" selection-end-column="40" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#46#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="676">
-          <caret line="150" column="22" lean-forward="true" selection-start-line="150" selection-start-column="22" selection-end-line="150" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5469">
-          <caret line="541" column="35" selection-start-line="541" selection-start-column="35" selection-end-line="541" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#46#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-1737">
+          <caret line="4" selection-start-line="4" selection-end-line="4" selection-end-column="34" />
         </state>
       </provider>
     </entry>
