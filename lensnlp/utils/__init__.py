@@ -10,4 +10,4 @@ try:
     with open(CACHE_ROOT+'/four_corner.pkl', 'rb') as f:
         four_corner_dic = pickle.load(f)
 except:
-    log.info('4c mode is not supported.')
+    four_corner_dic = {'': ''}

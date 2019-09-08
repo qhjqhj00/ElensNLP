@@ -152,6 +152,9 @@ class Token:
             self.pinyin = self.converter()
         if sp == '4c':
             self.four_corner = self.four_corner()
+        if sp == 'py4c':
+            self.pinyin = self.converter()
+            self.four_corner = self.four_corner()
         self.idx: int = idx
         self.head_id: int = head_id
         self.whitespace_after: bool = whitespace_after
