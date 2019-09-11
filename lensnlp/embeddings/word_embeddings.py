@@ -203,20 +203,52 @@ class FlairEmbeddings(TokenEmbeddings):
 
         if model.lower() == 'uy_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/uyghur_forward_small.pt'
+            self.trans = 'lt'
         elif model.lower() == 'uy_backward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/uyghur_backward_small.pt'
+            self.trans = 'lt'
         elif model.lower() == 'uy_forward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/uyghur_forward_large.pt'
+            self.trans = 'lt'
         elif model.lower() == 'uy_backward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/uyghur_backward_large.pt'
+            self.trans = 'lt'
         elif model.lower() == 'cn_forward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_large.pt'
+            self.trans = 'py'
         elif model.lower() == 'cn_backward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_large.pt'
+            self.trans = 'py'
         elif model.lower() == 'cn_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_small.pt'
+            self.trans = 'py'
         elif model.lower() == 'cn_backward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_small.pt'
+            self.trans = 'py'
+        elif model.lower() == 'cn_forward_mini':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_mini.pt'
+            self.trans = 'py'
+        elif model.lower() == 'cn_backward_mini':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_mini.pt'
+            self.trans = 'py'
+        elif model.lower() == 'cn4_forward_large':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_forward_large.pt'
+            self.trans = '4c'
+        elif model.lower() == 'cn4_backward_large':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_backward_large.pt'
+            self.trans = '4c'
+        elif model.lower() == 'cn4_forward_small':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_small.pt'
+            self.trans = '4c'
+        elif model.lower() == 'cn4_backward_small':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_small.pt'
+            self.trans = '4c'
+        elif model.lower() == 'cn4_forward_mini':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_forward_mini.pt'
+            self.trans = '4c'
+        elif model.lower() == 'cn4_backward_mini':
+            model_path = Path(CACHE_ROOT) / 'language_model/cn4_backward_mini.pt'
+            self.trans = '4c'
         elif model.lower() == 'en_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/en_forward_small.pt'
         elif model.lower() == 'en_backward_small':
@@ -230,8 +262,6 @@ class FlairEmbeddings(TokenEmbeddings):
 
         self.name = str(model)
         self.static_embeddings = detach
-
-        self.trans = trans
 
         from lensnlp.models import LanguageModel
         self.lm = LanguageModel.load_language_model(Path(model_path))
