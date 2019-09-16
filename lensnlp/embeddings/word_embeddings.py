@@ -218,7 +218,7 @@ class FlairEmbeddings(TokenEmbeddings):
             self.trans = 'py'
         elif model.lower() == 'cn_backward_large':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_backward_large.pt'
-
+            self.trans = 'py'
         elif model.lower() == 'cn_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/cn_forward_small.pt'
             self.trans = 'py'
