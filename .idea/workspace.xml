@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9392ed77-2435-4828-86b5-1aa3a32df93e" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utils/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +16,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_load.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
+            <state relative-caret-position="1410">
               <caret line="103" column="83" selection-start-line="103" selection-start-column="81" selection-end-line="103" selection-end-column="83" />
               <folding>
                 <element signature="e#0#67#0" expanded="true" />
@@ -27,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/models/latticeLSTM.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-528">
-              <caret line="205" column="27" lean-forward="true" selection-start-line="205" selection-start-column="27" selection-end-line="205" selection-end-column="27" />
+            <state relative-caret-position="3000">
+              <caret line="205" column="27" selection-start-line="205" selection-start-column="27" selection-end-line="205" selection-end-column="27" />
               <folding>
                 <element signature="e#47#59#0" expanded="true" />
               </folding>
@@ -36,11 +37,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2605">
-              <caret line="1040" column="46" lean-forward="true" selection-start-line="1040" selection-start-column="46" selection-end-line="1040" selection-end-column="46" />
+            <state relative-caret-position="3544">
+              <caret line="552" column="30" lean-forward="true" selection-start-line="552" selection-start-column="30" selection-end-line="552" selection-end-column="30" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -48,13 +49,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10380">
-              <caret line="692" selection-start-line="692" selection-end-line="692" />
+            <state relative-caret-position="242">
+              <caret line="374" column="44" lean-forward="true" selection-start-line="374" selection-start-column="44" selection-end-line="374" selection-end-column="44" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
+                <element signature="e#17#66#0" expanded="true" />
+                <element signature="e#17#62#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -84,14 +87,16 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="x" value="1440" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -126,7 +131,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -172,17 +176,18 @@
       <workItem from="1567480173601" duration="2072000" />
       <workItem from="1567489502648" duration="712000" />
       <workItem from="1568266864193" duration="973000" />
+      <workItem from="1568603474612" duration="435000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14699000" />
+    <option name="totallyTimeSpent" value="15134000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="1440" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20100144" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1517572" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -196,7 +201,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32891566" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -349,7 +354,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_load.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="1410">
           <caret line="103" column="83" selection-start-line="103" selection-start-column="81" selection-end-line="103" selection-end-column="83" />
           <folding>
             <element signature="e#0#67#0" expanded="true" />
@@ -357,20 +362,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10380">
-          <caret line="692" selection-start-line="692" selection-end-line="692" />
-          <folding>
-            <element signature="e#0#46#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/models/latticeLSTM.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-528">
-          <caret line="205" column="27" lean-forward="true" selection-start-line="205" selection-start-column="27" selection-end-line="205" selection-end-column="27" />
+        <state relative-caret-position="3000">
+          <caret line="205" column="27" selection-start-line="205" selection-start-column="27" selection-end-line="205" selection-end-column="27" />
           <folding>
             <element signature="e#47#59#0" expanded="true" />
           </folding>
@@ -379,10 +374,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2605">
-          <caret line="1040" column="46" lean-forward="true" selection-start-line="1040" selection-start-column="46" selection-end-line="1040" selection-end-column="46" />
+        <state relative-caret-position="3544">
+          <caret line="552" column="30" lean-forward="true" selection-start-line="552" selection-start-column="30" selection-end-line="552" selection-end-column="30" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="374" column="44" lean-forward="true" selection-start-line="374" selection-start-column="44" selection-end-line="374" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+            <element signature="e#17#66#0" expanded="true" />
+            <element signature="e#17#62#0" expanded="true" />
           </folding>
         </state>
       </provider>

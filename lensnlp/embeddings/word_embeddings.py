@@ -375,7 +375,7 @@ class FlairEmbeddings(TokenEmbeddings):
                     elif self.trans == 'py':
                         offset_backward -= len(token.pinyin)
                     elif self.trans == '4c':
-                        offset_backward -= len (token.four_corner)
+                        offset_backward -= len (token.fc)
                     else:
                         offset_backward -= len(token.text)
 

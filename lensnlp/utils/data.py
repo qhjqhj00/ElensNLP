@@ -540,7 +540,7 @@ class Sentence:
         elif lang == 'py':
             return ' '.join([t.pinyin for t in self.tokens])
         elif lang == '4c':
-            return ' '.join([t.four_corner for t in self.tokens])
+            return ' '.join([t.fc for t in self.tokens])
         else:
             return ' '.join([t.text for t in self.tokens])
 
