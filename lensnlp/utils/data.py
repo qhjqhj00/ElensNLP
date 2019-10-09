@@ -1055,6 +1055,10 @@ class Tokenizer:
                 for index, char in enumerate(text):
                     token = Token(char, start_position=index, sp='py')
                     tokenized.append(token)
+            elif self.sp_op == 'py4c':
+                for index, char in enumerate(text):
+                    token = Token(char, start_position=index, sp='py4c')
+                    tokenized.append(token)
             else:
                 seg_list = list(jieba.tokenize(text))
                 for t in seg_list:
