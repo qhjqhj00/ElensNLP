@@ -1034,7 +1034,7 @@ class Tokenizer:
         if language_type is None and example is None:
             raise ValueError("Must specify language type or provides an example")
 
-        if sp_op is not None and sp_op not in ['char', 'lt', 'py']:
+        if sp_op is not None and sp_op not in ['char', 'lt', 'py', 'py4c']:
             raise ValueError("Not support the operation yet")
 
         if language_type is not None:
