@@ -17,10 +17,10 @@ def cn_prepare(text: str) -> List[Sentence]:
     for s in text:
         if len(s) > 500:
             n = int(len(s)/500)+1
-            tem = [Sentence(s[i*500:(i+1)*500], language_type='zh', sp_op='py') for i in range(n)]
+            tem = [Sentence(s[i*500:(i+1)*500], language_type='zh', sp_op='py4c') for i in range(n)]
             sentences.extend(tem)
         else:
-            sentences.append(Sentence(s, language_type='zh', sp_op='py'))
+            sentences.append(Sentence(s, language_type='zh', sp_op='py4c'))
     return sentences
 
 

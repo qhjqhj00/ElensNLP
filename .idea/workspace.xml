@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="9392ed77-2435-4828-86b5-1aa3a32df93e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lensnlp/utils/data.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" beforeDir="false" afterPath="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,10 +16,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_load.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="715">
               <caret line="157" column="85" selection-start-line="157" selection-start-column="80" selection-end-line="157" selection-end-column="85" />
               <folding>
                 <element signature="e#0#67#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_preprocess.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="330">
+              <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -37,11 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
-              <caret line="377" column="44" selection-start-line="377" selection-start-column="44" selection-end-line="377" selection-end-column="44" />
+            <state relative-caret-position="15300">
+              <caret line="1036" column="72" selection-start-line="1036" selection-start-column="72" selection-end-line="1036" selection-end-column="72" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -52,12 +64,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="499">
-              <caret line="199" column="21" selection-start-line="199" selection-start-column="12" selection-end-line="199" selection-end-column="21" />
+            <state relative-caret-position="4755">
+              <caret line="343" column="64" selection-start-line="343" selection-start-column="46" selection-end-line="343" selection-end-column="64" />
               <folding>
                 <element signature="e#0#46#0" expanded="true" />
-                <element signature="e#17#66#0" expanded="true" />
-                <element signature="e#17#62#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lensnlp/models/language_model.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="780">
+              <caret line="123" column="61" selection-start-line="123" selection-start-column="45" selection-end-line="123" selection-end-column="61" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -66,7 +88,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lensnlp/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1200">
+            <state>
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -103,23 +125,23 @@
         <option value="$PROJECT_DIR$/lensnlp/models/sequence_tagger_model.py" />
         <option value="$PROJECT_DIR$/demo/app_uy.py" />
         <option value="$PROJECT_DIR$/lensnlp/models/text_classification_model.py" />
-        <option value="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" />
         <option value="$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py" />
         <option value="$PROJECT_DIR$/lensnlp/utils/data.py" />
+        <option value="$PROJECT_DIR$/lensnlp/utils/data_preprocess.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="1698" />
-    <option name="y" value="23" />
-    <option name="width" value="1462" />
-    <option name="height" value="992" />
+    <option name="x" value="1440" />
+    <option name="width" value="1920" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectView">
     <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane" />
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -159,7 +181,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -211,18 +232,20 @@
       <workItem from="1569413357713" duration="190000" />
       <workItem from="1569463220519" duration="884000" />
       <workItem from="1569576042230" duration="168000" />
-      <workItem from="1570590592680" duration="723000" />
+      <workItem from="1570590592680" duration="2066000" />
+      <workItem from="1570665596435" duration="3000" />
+      <workItem from="1570773794177" duration="237000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17898000" />
+    <option name="totallyTimeSpent" value="19481000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1440" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2827476" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17838125" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -236,7 +259,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.2502533" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.24950495" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -258,16 +281,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" column="28" selection-start-line="1" selection-start-column="9" selection-end-line="1" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/models/language_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1380">
-          <caret line="92" column="27" selection-start-line="92" selection-start-column="27" selection-end-line="92" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -330,16 +343,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_preprocess.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2130">
-          <caret line="142" lean-forward="true" selection-start-line="142" selection-end-line="142" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/app_clf.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="321">
@@ -377,12 +380,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Downloads/zhao/data/person/杨开慧/brief.yaml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/models/latticeLSTM.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3000">
           <caret line="205" column="27" selection-start-line="205" selection-start-column="27" selection-end-line="205" selection-end-column="27" />
           <folding>
             <element signature="e#47#59#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15300">
+          <caret line="1036" column="72" selection-start-line="1036" selection-start-column="72" selection-end-line="1036" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4755">
+          <caret line="343" column="64" selection-start-line="343" selection-start-column="46" selection-end-line="343" selection-end-column="64" />
+          <folding>
+            <element signature="e#0#46#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lensnlp/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -397,30 +432,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/train.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/models/language_model.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1200">
+        <state relative-caret-position="780">
+          <caret line="123" column="61" selection-start-line="123" selection-start-column="45" selection-end-line="123" selection-end-column="61" />
           <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/embeddings/word_embeddings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="199" column="21" selection-start-line="199" selection-start-column="12" selection-end-line="199" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#46#0" expanded="true" />
-            <element signature="e#17#66#0" expanded="true" />
-            <element signature="e#17#62#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_load.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="715">
           <caret line="157" column="85" selection-start-line="157" selection-start-column="80" selection-end-line="157" selection-end-column="85" />
           <folding>
             <element signature="e#0#67#0" expanded="true" />
@@ -428,12 +452,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lensnlp/utils/data.py">
+    <entry file="file://$PROJECT_DIR$/lensnlp/utils/data_preprocess.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="620">
-          <caret line="377" column="44" selection-start-line="377" selection-start-column="44" selection-end-line="377" selection-end-column="44" />
+        <state relative-caret-position="330">
+          <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
           <folding>
-            <element signature="e#0#30#0" expanded="true" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
