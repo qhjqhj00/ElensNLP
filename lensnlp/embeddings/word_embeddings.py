@@ -16,11 +16,9 @@ from pathlib import Path
 
 from lensnlp.utils.data import Token, Sentence
 
-from pytorch_transformers import (
+from transformers import (
     BertTokenizer,
-    BertModel,
-    XLNetTokenizer,
-    XLNetModel,
+    BertModel
 )
 
 
