@@ -151,7 +151,6 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
     if len(sentence.tokens) > 0:
         sentence.infer_space_after()
         sentences.append(sentence)
-    sentences = [sent for sent in sentences if len(sent) < 200]
     return sentences
 
 
