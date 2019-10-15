@@ -174,11 +174,14 @@ class Token:
         return ' '.join(p)
 
     def four_corner(self):
-        if self.text in four_corner_dic:
-            return four_corner_dic[self.text]
-        else:
-            return self.text
-
+        fc_list = []
+        for char in self.text:
+            if self.text in four_corner_dic:
+                fc_list.append(four_corner_dic[self.text])
+            else:
+                fc_list.append(char)
+        return ' '.join(fc_list)
+    
     def add_tag_label(self, tag_type: str, tag: Label):
         """增加一个标签"""
         self.tags[tag_type] = tag
