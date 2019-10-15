@@ -1065,7 +1065,7 @@ class Tokenizer:
             else:
                 seg_list = list(jieba.tokenize(text))
                 for t in seg_list:
-                    token = Token(t[0], start_position=t[1])
+                    token = Token(t[0], start_position=t[1], sp='py4c')
                     tokenized.append(token)
 
         elif self.language_type == 'ug':
