@@ -14,7 +14,7 @@ from segtok.segmenter import split_single
 from segtok.tokenizer import split_contractions
 from segtok.tokenizer import word_tokenizer
 import re
-from lensnlp.utils import four_corner_dic
+from lensnlp.utils.four_corner import four_corner_dict
 
 
 class Dictionary:
@@ -176,8 +176,8 @@ class Token:
     def four_corner(self):
         fc_list = []
         for char in self.text:
-            if self.text in four_corner_dic:
-                fc_list.append(four_corner_dic[self.text])
+            if char in four_corner_dict:
+                fc_list.append(four_corner_dict[char])
             else:
                 fc_list.append(char)
         return ' '.join(fc_list)
