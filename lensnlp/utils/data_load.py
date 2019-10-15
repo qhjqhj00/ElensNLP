@@ -3,7 +3,7 @@ from typing import List, Dict, Union
 import logging
 
 import re
-from lensnlp.hyper_parameters import tag_filter, Parameter
+from lensnlp.hyper_parameters import Parameter
 from pathlib import Path
 from segtok.tokenizer import word_tokenizer
 
@@ -19,7 +19,7 @@ def load_column_corpus(
         test_file=None,
         dev_file=None,
         tag_to_bioes=None,
-        sp=None) -> TaggedCorpus:
+        sp=None) -> TaggedCorpus
     """
     加载标准的序列标注数据
     格式例如：
@@ -110,7 +110,7 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
     """
 
     sentences: List[Sentence] = []
-    ner_list = tag_filter  # 不在这个列表中的标签会被标称 O
+    # ner_list = tag_filter  # 不在这个列表中的标签会被标称 O
     try:
         lines: List[str] = open(str(path_to_column_file), encoding='utf-8').read().strip().split('\n')
     except:
@@ -142,8 +142,6 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
             for column in column_name_map:
                 if len(fields) > column:
                     if column != text_column:
-                        if column_name_map[column] == 'ner' and fields[column] not in ner_list:
-                            fields[column] = 'O'
                         token.add_tag(column_name_map[column], fields[column])
 
             sentence.add_token(token)
