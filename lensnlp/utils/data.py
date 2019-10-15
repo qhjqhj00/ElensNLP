@@ -14,7 +14,7 @@ from segtok.segmenter import split_single
 from segtok.tokenizer import split_contractions
 from segtok.tokenizer import word_tokenizer
 import re
-from lensnlp.utils import four_corner_dic
+from lensnlp.utils.four_corner import four_corner_dict
 
 
 class Dictionary:
@@ -174,11 +174,14 @@ class Token:
         return ' '.join(p)
 
     def four_corner(self):
-        if self.text in four_corner_dic:
-            return four_corner_dic[self.text]
-        else:
-            return self.text
-
+        fc_list = []
+        for char in self.text:
+            if char in four_corner_dict:
+                fc_list.append(four_corner_dict[char])
+            else:
+                fc_list.append(char)
+        return ' '.join(fc_list)
+    
     def add_tag_label(self, tag_type: str, tag: Label):
         """增加一个标签"""
         self.tags[tag_type] = tag

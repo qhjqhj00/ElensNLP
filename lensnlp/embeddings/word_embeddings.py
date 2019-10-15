@@ -16,11 +16,9 @@ from pathlib import Path
 
 from lensnlp.utils.data import Token, Sentence
 
-from pytorch_transformers import (
+from transformers import (
     BertTokenizer,
-    BertModel,
-    XLNetTokenizer,
-    XLNetModel,
+    BertModel
 )
 
 
@@ -517,7 +515,10 @@ class BertEmbeddings(TokenEmbeddings):
         super().__init__()
 
         self.tokenizer = BertTokenizer.from_pretrained(bert_model_or_path)
-        self.model = BertModel.from_pretrained(bert_model_or_path)
+        self.model = BertModel.from_pretrained(
+                pretrained_model_name_or_path=bert_model_or_path,
+                output_hidden_states=True,
+            )
         self.layer_indexes = [int(x) for x in layers.split(",")]
         self.pooling_operation = pooling_operation
         self.name = str(bert_model_or_path)
@@ -596,8 +597,7 @@ class BertEmbeddings(TokenEmbeddings):
         # forward bert模型
         self.model.to(device)
         self.model.eval()
-        all_encoder_layers, _ = self.model(all_input_ids, token_type_ids=None, attention_mask=all_input_masks)
-
+        all_encoder_layers = self.model(all_input_ids, attention_mask=all_input_masks)[-1]
         with torch.no_grad():
 
             for sentence_index, sentence in enumerate(sentences):
@@ -702,4 +702,14 @@ class XLNetEmbeddings(TokenEmbeddings):
     def __str__(self):
         return self.name
 
+def get_embeddings(words: List[str], embed: Embeddings):
+    s = Sentence()
+    for w in words:
+        token = Token(w, sp='py4c')
+        s.add_token(token)
+    embed.embed(s)
+    embeddings = []
+    for token in s:
+        embeddings.append(token.get_embedding())
+    return embeddings
 

@@ -9,7 +9,7 @@ if not os.path.exists(CACHE_ROOT):
 
 setup(
     name="lensnlp",
-    version="2019.08.19",
+    version="2019.10.14",
     description="distributed by Elensdata",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
@@ -27,13 +27,15 @@ setup(
         "mpld3>=0.3",
         "sklearn",
         "langid",
-        "pytorch-transformers",
+        "transformers",
         "sqlitedict>=1.6.0",
         "deprecated>=1.2.4",
         "hyperopt>=0.1.1",
         "bpemb>=0.2.9",
         "regex>=2018.1.10",
-        "pypinyin>=0.35.0"
+        "pypinyin>=0.35.0",
+        "langid",
+        "jieba"
     ],
     include_package_data=True,
     python_requires=">=3.6",
