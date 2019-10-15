@@ -597,8 +597,7 @@ class BertEmbeddings(TokenEmbeddings):
         # forward bert模型
         self.model.to(device)
         self.model.eval()
-        all_encoder_layers, _ = self.model(all_input_ids, token_type_ids=None, attention_mask=all_input_masks)
-
+        all_encoder_layers = self.model(all_input_ids, attention_mask=all_input_masks)[-1]
         with torch.no_grad():
 
             for sentence_index, sentence in enumerate(sentences):
@@ -703,4 +702,14 @@ class XLNetEmbeddings(TokenEmbeddings):
     def __str__(self):
         return self.name
 
+def get_embeddings(words: List[str], embed: Embeddings):
+    s = Sentence()
+    for w in words:
+        token = Token(w, sp='py4c')
+        s.add_token(token)
+    embed.embed(s)
+    embeddings = []
+    for token in s:
+        embeddings.append(token.get_embedding())
+    return embeddings
 
