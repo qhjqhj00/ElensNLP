@@ -515,7 +515,10 @@ class BertEmbeddings(TokenEmbeddings):
         super().__init__()
 
         self.tokenizer = BertTokenizer.from_pretrained(bert_model_or_path)
-        self.model = BertModel.from_pretrained(bert_model_or_path)
+        self.model = BertModel.from_pretrained(
+                pretrained_model_name_or_path=bert_model_or_path,
+                output_hidden_states=True,
+            )
         self.layer_indexes = [int(x) for x in layers.split(",")]
         self.pooling_operation = pooling_operation
         self.name = str(bert_model_or_path)
