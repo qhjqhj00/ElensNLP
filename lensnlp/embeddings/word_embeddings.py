@@ -1,4 +1,4 @@
-from lensnlp.embeddings import TokenEmbeddings
+from lensnlp.embeddings import TokenEmbeddings, Embeddings
 
 import logging
 from typing import List, Union, Dict

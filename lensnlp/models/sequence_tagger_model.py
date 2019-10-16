@@ -121,6 +121,8 @@ class SequenceTagger(nn.Model):
                  dropout: float = 0.0,
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
+                 dimension_reduce: int = 0,
+                 relearn_embeddings: bool = True
                  ):
 
         super(SequenceTagger, self).__init__()
@@ -157,21 +159,23 @@ class SequenceTagger(nn.Model):
             self.locked_dropout = nn.LockedDropout(locked_dropout)
 
         rnn_input_dim: int = self.embeddings.embedding_length
-
-        self.relearn_embeddings: bool = True
-
+        
+        self.relearn_embeddings: bool = relearn_embeddings
+        
+        if dimension_reduce == 0:
+            dimension_reduce = rnn_input_dim
         if self.relearn_embeddings:
-            self.embedding2nn = torch.nn.Linear(rnn_input_dim, rnn_input_dim)
+            self.embedding2nn = torch.nn.Linear(rnn_input_dim, dimension_reduce)
 
         self.rnn_type = 'LSTM'
         if self.rnn_type in ['LSTM', 'GRU']:
 
             if self.nlayers == 1:
-                self.rnn = getattr(torch.nn, self.rnn_type)(rnn_input_dim, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(dimension_reduce, hidden_size,
                                                             num_layers=self.nlayers,
                                                             bidirectional=True)
             else:
-                self.rnn = getattr(torch.nn, self.rnn_type)(rnn_input_dim, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(dimension_reduce, hidden_size,
                                                             num_layers=self.nlayers,
                                                             dropout=0.5,
                                                             bidirectional=True)
@@ -343,7 +347,7 @@ class SequenceTagger(nn.Model):
                                        longest_token_sequence_in_batch,
                                        self.embeddings.embedding_length],
                                       dtype=torch.float, device=device)
-
+        
         for s_id, sentence in enumerate(sentences):
             # 用词向量填充
             sentence_tensor[s_id][:len(sentence)] = torch.cat([token.get_embedding().unsqueeze(0)
