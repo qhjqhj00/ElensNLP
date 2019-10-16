@@ -161,11 +161,11 @@ class SequenceTagger(nn.Model):
         rnn_input_dim: int = self.embeddings.embedding_length
         
         self.relearn_embeddings: bool = relearn_embeddings
-        
-        if dimension_reduce == 0:
-            dimension_reduce = rnn_input_dim
+        self.dimension_reduce = dimension_reduce        
+        if self.dimension_reduce == 0:
+            self.dimension_reduce = rnn_input_dim
         if self.relearn_embeddings:
-            self.embedding2nn = torch.nn.Linear(rnn_input_dim, dimension_reduce)
+            self.embedding2nn = torch.nn.Linear(rnn_input_dim, self.dimension_reduce)
 
         self.rnn_type = 'LSTM'
         if self.rnn_type in ['LSTM', 'GRU']:
@@ -208,6 +208,7 @@ class SequenceTagger(nn.Model):
             'rnn_layers': self.rnn_layers,
             'use_word_dropout': self.use_word_dropout,
             'use_locked_dropout': self.use_locked_dropout,
+            'dimension_reduce': self.dimension_reduce
         }
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
@@ -255,6 +256,7 @@ class SequenceTagger(nn.Model):
             dropout=use_dropout,
             word_dropout=use_word_dropout,
             locked_dropout=use_locked_dropout,
+            dimension_reduce=state['dimension_reduce']
         )
         model.load_state_dict(state['state_dict'])
         model.eval()
