@@ -182,10 +182,11 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
         self.name = 'document_' + self.rnn._get_name()
 
-        if locked_dropout > 0.0:
-            self.dropout: torch.nn.Module = nn.LockedDropout(locked_dropout)
-        else:
-            self.dropout = torch.nn.Dropout(dropout_rate)
+        self.use_locked_dropout: bool = locked_dropout > 0.0
+        if self.use_locked_dropout:
+            self.l_dropout: torch.nn.Module = nn.LockedDropout(locked_dropout)
+
+        self.dropout = torch.nn.Dropout(dropout_rate)
 
         self.use_word_dropout: bool = word_dropout > 0.0
         if self.use_word_dropout:
@@ -248,8 +249,8 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
 
         if self.reproject_words:
             sentence_tensor = self.word_reprojection_map(sentence_tensor)
-
-        sentence_tensor = self.dropout(sentence_tensor)
+        if self.use_locked_dropout:
+            sentence_tensor = self.l_dropout(sentence_tensor)
         # 将变长序列进行padding之后压缩输入rnn模型中
         packed = torch.nn.utils.rnn.pack_padded_sequence(sentence_tensor, lengths)
 
