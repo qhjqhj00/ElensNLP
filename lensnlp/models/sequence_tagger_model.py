@@ -171,11 +171,11 @@ class SequenceTagger(nn.Model):
         if self.rnn_type in ['LSTM', 'GRU']:
 
             if self.nlayers == 1:
-                self.rnn = getattr(torch.nn, self.rnn_type)(dimension_reduce, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(self.dimension_reduce, hidden_size,
                                                             num_layers=self.nlayers,
                                                             bidirectional=True)
             else:
-                self.rnn = getattr(torch.nn, self.rnn_type)(dimension_reduce, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(self.dimension_reduce, hidden_size,
                                                             num_layers=self.nlayers,
                                                             dropout=0.5,
                                                             bidirectional=True)
