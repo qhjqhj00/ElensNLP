@@ -2,7 +2,6 @@ from lensnlp.utils.data import Sentence
 import re
 from nltk.tokenize import word_tokenize, sent_tokenize
 from typing import List,Union
-import pymongo
 import requests
 
 

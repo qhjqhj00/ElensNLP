@@ -19,7 +19,8 @@ def load_column_corpus(
         test_file=None,
         dev_file=None,
         tag_to_bioes=None,
-        sp=None) -> TaggedCorpus
+        sp=None,
+        max_length=1024) -> TaggedCorpus:
     """
     加载标准的序列标注数据
     格式例如：
@@ -75,10 +76,10 @@ def load_column_corpus(
     sentences_train: List[Sentence] = []
 
     for path in train_:
-        sentences_train.extend(read_column_data(path, column_format, sp=sp))
+        sentences_train.extend(read_column_data(path, column_format, sp=sp, max_length=max_length))
 
     if test_file is not None:
-        sentences_test: List[Sentence] = read_column_data(test_file, column_format, sp=sp)
+        sentences_test: List[Sentence] = read_column_data(test_file, column_format, sp=sp, max_length=max_length)
 
     else:
         sentences_test: List[Sentence] = [sentences_train[i] for i in
@@ -86,7 +87,7 @@ def load_column_corpus(
         sentences_train = [x for x in sentences_train if x not in sentences_test]
 
     if dev_file is not None:
-        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, sp=sp)
+        sentences_dev: List[Sentence] = read_column_data(dev_file, column_format, sp=sp, max_length=max_length)
 
     else:
         sentences_dev: List[Sentence] = [sentences_train[i] for i in
@@ -101,7 +102,7 @@ def load_column_corpus(
     return TaggedCorpus(sentences_train, sentences_dev, sentences_test, name=data_folder.name)
 
 
-def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], sp=None):
+def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str], sp=None, max_length=1024):
     """
     :param path_to_column_file: 数据文件夹路径
     :param column_name_map: 数据格式，两列ner为 {1:'token',2:'ner'}
@@ -148,7 +149,8 @@ def read_column_data(path_to_column_file: Path, column_name_map: Dict[int, str],
 
     if len(sentence.tokens) > 0:
         sentence.infer_space_after()
-        sentences.append(sentence)
+    sentences.append(sentence)
+    sentences = [sentence for sentence in sentences if len(sentence) < max_length]
     return sentences
 
 

@@ -310,7 +310,8 @@ class ModelTrainer:
         test_metric, test_loss = self.evaluate(self.model, self.corpus.test, eval_mini_batch_size=eval_mini_batch_size,
                                                embeddings_in_memory=embeddings_in_memory)
         if isinstance(self.model,SequenceTagger):
-            log.info(f'MICRO_AVG: acc {test_metric.micro_avg_accuracy()} - f1-score {test_metric.micro_avg_f_score()}')
+            log.info(f'MICRO_AVG: acc {test_metric.micro_avg_accuracy()} - f1-score {test_metric.micro_avg_f_score()}\n'
+                     f'Precision: {test_metric.precision()} - Recall: {test_metric.recall()}')
             log.info(f'MACRO_AVG: acc {test_metric.macro_avg_accuracy()} - f1-score {test_metric.macro_avg_f_score()}')
         elif isinstance(self.model,TextClassifier):
             log.info(f'acc {test_metric.macro_avg_f_score()} - f1-score {test_metric.micro_avg_f_score()}')
