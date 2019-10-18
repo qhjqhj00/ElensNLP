@@ -9,7 +9,7 @@ if not os.path.exists(CACHE_ROOT):
 
 setup(
     name="lensnlp",
-    version="2019.10.17",
+    version="2019.10.18",
     description="distributed by Elensdata",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",

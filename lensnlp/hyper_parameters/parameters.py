@@ -1,6 +1,5 @@
 import torch
-device = pi if torch.cuda.is_available() else 'cpu')
-
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from collections import OrderedDict
 
 Parameter = OrderedDict()

@@ -122,6 +122,7 @@ class SequenceTagger(nn.Model):
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
                  dimension_reduce: int = 0,
+                 part_relearn: bool = False,
                  relearn_embeddings: bool = True
                  ):
 
@@ -158,24 +159,43 @@ class SequenceTagger(nn.Model):
         if locked_dropout > 0.0:
             self.locked_dropout = nn.LockedDropout(locked_dropout)
 
-        rnn_input_dim: int = self.embeddings.embedding_length
+        length_list = [emb.embedding_length for emb in self.embeddings.embeddings]
+        total_length: int = self.embeddings.embedding_length
         
         self.relearn_embeddings: bool = relearn_embeddings
-        self.dimension_reduce = dimension_reduce        
+        self.part_relearn: bool = part_relearn
+        self.dimension_reduce = dimension_reduce
+
         if self.dimension_reduce == 0:
-            self.dimension_reduce = rnn_input_dim
-        if self.relearn_embeddings:
-            self.embedding2nn = torch.nn.Linear(rnn_input_dim, self.dimension_reduce)
+            self.rnn_input = total_length
+            self.dimension_reduce = total_length
+
+        if self.relearn_embeddings and not self.part_relearn:
+            self.embedding2nn = torch.nn.Linear(total_length, self.dimension_reduce)
+            self.rnn_input = self.dimension_reduce
+
+        elif self.part_relearn:
+            from collections import Counter
+            self.fc_input_dimension = Counter(length_list).most_common(1)[0][0]
+            self.rnn_input = 0
+            for embedding_length in length_list:
+                if embedding_length == self.fc_input_dimension:
+                    self.rnn_input += dimension_reduce
+                else:
+                    self.rnn_input += embedding_length
+
+            self.embedding2nn = torch.nn.Linear(
+                self.fc_input_dimension, self.dimension_reduce)
 
         self.rnn_type = 'LSTM'
         if self.rnn_type in ['LSTM', 'GRU']:
 
             if self.nlayers == 1:
-                self.rnn = getattr(torch.nn, self.rnn_type)(self.dimension_reduce, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(self.rnn_input, hidden_size,
                                                             num_layers=self.nlayers,
                                                             bidirectional=True)
             else:
-                self.rnn = getattr(torch.nn, self.rnn_type)(self.dimension_reduce, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(self.rnn_input, hidden_size,
                                                             num_layers=self.nlayers,
                                                             dropout=0.5,
                                                             bidirectional=True)
@@ -208,7 +228,8 @@ class SequenceTagger(nn.Model):
             'rnn_layers': self.rnn_layers,
             'use_word_dropout': self.use_word_dropout,
             'use_locked_dropout': self.use_locked_dropout,
-            'dimension_reduce': self.dimension_reduce
+            'dimension_reduce': self.dimension_reduce,
+            'part_relearn': self.part_relearn
         }
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
@@ -256,7 +277,8 @@ class SequenceTagger(nn.Model):
             dropout=use_dropout,
             word_dropout=use_word_dropout,
             locked_dropout=use_locked_dropout,
-            dimension_reduce=state['dimension_reduce']
+            dimension_reduce=state['dimension_reduce'],
+            part_relearn=state['part_relearn']
         )
         model.load_state_dict(state['state_dict'])
         model.eval()
@@ -343,17 +365,47 @@ class SequenceTagger(nn.Model):
         lengths: List[int] = [len(sentence.tokens) for sentence in sentences]
         tag_list: List = []
         longest_token_sequence_in_batch: int = lengths[0]
+        if not self.part_relearn:
+            #初始化0张量
+            sentence_tensor = torch.zeros([len(sentences),
+                                           longest_token_sequence_in_batch,
+                                           self.embeddings.embedding_length],
+                                          dtype=torch.float, device=device)
 
-        #初始化0张量
-        sentence_tensor = torch.zeros([len(sentences),
+            for s_id, sentence in enumerate(sentences):
+                # 用词向量填充
+                sentence_tensor[s_id][:len(sentence)] = torch.cat([token.get_embedding().unsqueeze(0)
+                                                                   for token in sentence], 0)
+
+        else:
+            sentence_tensor = torch.zeros([len(sentences),
+                                           longest_token_sequence_in_batch,
+                                           self.rnn_input],
+                                          dtype=torch.float, device=device)
+            begin = 0
+            for emb in self.embeddings.embeddings:
+                if emb.embedding_length == self.fc_input_dimension:
+                    current_dimension = self.dimension_reduce
+                else:
+                    current_dimension = emb.embedding_length
+                tmp = torch.zeros([len(sentences),
                                        longest_token_sequence_in_batch,
-                                       self.embeddings.embedding_length],
+                                       emb.embedding_length],
                                       dtype=torch.float, device=device)
-        
+
+                for s_id, sentence in enumerate(sentences):
+                    # 用词向量填充
+                    tmp[s_id][:len(sentence)] = torch.cat([token._embeddings[emb.name].unsqueeze(0)
+                                                                       for token in sentence], 0)
+
+                if emb.embedding_length == self.fc_input_dimension:
+                    tmp = self.embedding2nn(tmp)
+                sentence_tensor[:, :, begin:begin+current_dimension] = tmp
+                begin += current_dimension
+
+        sentence_tensor = sentence_tensor.transpose_(0, 1)
+
         for s_id, sentence in enumerate(sentences):
-            # 用词向量填充
-            sentence_tensor[s_id][:len(sentence)] = torch.cat([token.get_embedding().unsqueeze(0)
-                                                               for token in sentence], 0)
 
             # 得到标签序列
             tag_idx: List[int] = [self.tag_dictionary.get_idx_for_item(token.get_tag(self.tag_type).value)
@@ -362,9 +414,6 @@ class SequenceTagger(nn.Model):
             tag = torch.LongTensor(tag_idx).to(device)
             tag_list.append(tag)
 
-        sentence_tensor = sentence_tensor.transpose_(0, 1)
-
-        # 前向传播
 
         if self.use_dropout > 0.0:
             sentence_tensor = self.dropout(sentence_tensor)
@@ -373,7 +422,7 @@ class SequenceTagger(nn.Model):
         if self.use_locked_dropout > 0.0:
             sentence_tensor = self.locked_dropout(sentence_tensor)
 
-        if self.relearn_embeddings:
+        if self.relearn_embeddings and not self.part_relearn:
             sentence_tensor = self.embedding2nn(sentence_tensor)
 
         if self.use_rnn:
