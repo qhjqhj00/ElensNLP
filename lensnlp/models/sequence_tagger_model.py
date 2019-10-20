@@ -8,7 +8,7 @@ from . import nn
 import torch
 import os
 
-from lensnlp.embeddings import TokenEmbeddings
+from lensnlp.embeddings import TokenEmbeddings, StackedEmbeddings
 from lensnlp.utils.data import Dictionary, Sentence, Token, Label
 
 
@@ -121,9 +121,12 @@ class SequenceTagger(nn.Model):
                  dropout: float = 0.0,
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
-                 dimension_reduce: int = 0,
-                 part_relearn: bool = False,
-                 relearn_embeddings: bool = True
+                 bert_to: int = 0,
+                 flair_to: int = 0,
+                 all_to: int = 0,
+                 relearn_bert: bool = False,
+                 relearn_flair: bool = False,
+                 relearn_all: bool = False
                  ):
 
         super(SequenceTagger, self).__init__()
@@ -159,33 +162,57 @@ class SequenceTagger(nn.Model):
         if locked_dropout > 0.0:
             self.locked_dropout = nn.LockedDropout(locked_dropout)
 
-        length_list = [emb.embedding_length for emb in self.embeddings.embeddings]
         total_length: int = self.embeddings.embedding_length
         
-        self.relearn_embeddings: bool = relearn_embeddings
-        self.part_relearn: bool = part_relearn
-        self.dimension_reduce = dimension_reduce
+        self.relearn_all: bool = relearn_all
+        self.relearn_flair: bool = relearn_flair
+        self.relearn_bert: bool = relearn_bert
 
-        if self.dimension_reduce == 0:
+        self.all_to = all_to
+        self.bert_to = bert_to
+        self.flair_to = flair_to
+
+        self.relearn_dim = []
+
+        if isinstance(embeddings, StackedEmbeddings):
+            self.emb_dict = embeddings.embed_dict
+
+        if self.relearn_all:
+            self.all_linear = torch.nn.Linear(total_length, self.all_to)
+            self.rnn_input = self.all_to
+
+        if self.relearn_bert:
+            self.bert_length = 0
+            for k,v in self.emb_dict:
+                if 'bert' in k:
+                    self.bert_length = v
+                    self.relearn_dim.append(self.bert_to)
+
+            if self.bert_length == 0:
+                raise ValueError('No bert detected')
+
+            self.bert_linear = torch.nn.Linear(self.bert_length, self.bert_to)
+
+        if self.relearn_flair:
+            self.flair_length = 0
+            self.num_flair = 0
+            for k, v in self.emb_dict:
+                if 'ward' in k:
+                    self.flair_length = v
+                    self.relearn_dim.append(self.flair_to)
+                    self.num_flair += 1
+
+            if self.num_flair == 0:
+                raise ValueError('No flair detected')
+
+            self.flair_linear = torch.nn.Linear(self.flair_length, self.flair_to)
+
+        if not relearn_all:
+            self.rnn_input = sum(self.relearn_dim)
+
+        if not relearn_all and not relearn_bert and not relearn_flair:
+            self.relearn = False
             self.rnn_input = total_length
-            self.dimension_reduce = total_length
-
-        if self.relearn_embeddings and not self.part_relearn:
-            self.embedding2nn = torch.nn.Linear(total_length, self.dimension_reduce)
-            self.rnn_input = self.dimension_reduce
-
-        elif self.part_relearn:
-            from collections import Counter
-            self.fc_input_dimension = Counter(length_list).most_common(1)[0][0]
-            self.rnn_input = 0
-            for embedding_length in length_list:
-                if embedding_length == self.fc_input_dimension:
-                    self.rnn_input += dimension_reduce
-                else:
-                    self.rnn_input += embedding_length
-
-            self.embedding2nn = torch.nn.Linear(
-                self.fc_input_dimension, self.dimension_reduce)
 
         self.rnn_type = 'LSTM'
         if self.rnn_type in ['LSTM', 'GRU']:
@@ -214,7 +241,6 @@ class SequenceTagger(nn.Model):
 
         self.to(device)
 
-
     def save(self, model_file: Union[str, Path]):
         """保存模型"""
         model_state = {
@@ -228,33 +254,16 @@ class SequenceTagger(nn.Model):
             'rnn_layers': self.rnn_layers,
             'use_word_dropout': self.use_word_dropout,
             'use_locked_dropout': self.use_locked_dropout,
-            'dimension_reduce': self.dimension_reduce,
-            'part_relearn': self.part_relearn
+            'relear_all': self.relearn_all,
+            'relear_bert': self.relearn_bert,
+            'relear_flair': self.relearn_flair,
+            'all_to': self.all_to,
+            'flair_to': self.flair_to,
+            'bert_to': self.bert_to
         }
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
 
-    def save_checkpoint(self, model_file: Union[str, Path], optimizer_state: dict, scheduler_state: dict, epoch: int,
-                        loss: float):
-        """保存checkpoint"""
-        model_state = {
-            'state_dict': self.state_dict(),
-            'embeddings': self.embeddings,
-            'hidden_size': self.hidden_size,
-            'tag_dictionary': self.tag_dictionary,
-            'tag_type': self.tag_type,
-            'use_crf': self.use_crf,
-            'use_rnn': self.use_rnn,
-            'rnn_layers': self.rnn_layers,
-            'use_word_dropout': self.use_word_dropout,
-            'use_locked_dropout': self.use_locked_dropout,
-            'optimizer_state_dict': optimizer_state,
-            'scheduler_state_dict': scheduler_state,
-            'epoch': epoch,
-            'loss': loss
-        }
-
-        torch.save(model_state, str(model_file), pickle_protocol=4)
 
     @classmethod
     def load_from_file(cls, model_file: Union[str, Path]):
@@ -277,8 +286,12 @@ class SequenceTagger(nn.Model):
             dropout=use_dropout,
             word_dropout=use_word_dropout,
             locked_dropout=use_locked_dropout,
-            dimension_reduce=state['dimension_reduce'],
-            part_relearn=state['part_relearn']
+            relearn_all=state['relearn_all'],
+            relearn_bert=state['relearn_bert'],
+            relearn_flair=state['relearn_flair'],
+            all_to=state['all_to'],
+            flair_to=state['flair_to'],
+            bert_to=state['bert_to']
         )
         model.load_state_dict(state['state_dict'])
         model.eval()
@@ -365,7 +378,7 @@ class SequenceTagger(nn.Model):
         lengths: List[int] = [len(sentence.tokens) for sentence in sentences]
         tag_list: List = []
         longest_token_sequence_in_batch: int = lengths[0]
-        if not self.part_relearn:
+        if not self.relearn:
             #初始化0张量
             sentence_tensor = torch.zeros([len(sentences),
                                            longest_token_sequence_in_batch,
@@ -378,30 +391,35 @@ class SequenceTagger(nn.Model):
                                                                    for token in sentence], 0)
 
         else:
-            sentence_tensor = torch.zeros([len(sentences),
-                                           longest_token_sequence_in_batch,
-                                           self.rnn_input],
-                                          dtype=torch.float, device=device)
-            begin = 0
-            for emb in self.embeddings.embeddings:
-                if emb.embedding_length == self.fc_input_dimension:
-                    current_dimension = self.dimension_reduce
-                else:
-                    current_dimension = emb.embedding_length
-                tmp = torch.zeros([len(sentences),
-                                       longest_token_sequence_in_batch,
-                                       emb.embedding_length],
-                                      dtype=torch.float, device=device)
+            sentence_tensor = []
+
+            if self.relearn_flair:
+                sentence_flair = torch.zeros([len(sentences), longest_token_sequence_in_batch,
+                                              self.num_flair, self.flair_length],
+                                             dtype=torch.float, device=device)
 
                 for s_id, sentence in enumerate(sentences):
                     # 用词向量填充
-                    tmp[s_id][:len(sentence)] = torch.cat([token._embeddings[emb.name].unsqueeze(0)
-                                                                       for token in sentence], 0)
 
-                if emb.embedding_length == self.fc_input_dimension:
-                    tmp = self.embedding2nn(tmp)
-                sentence_tensor[:, :, begin:begin+current_dimension] = tmp
-                begin += current_dimension
+                    sentence_flair[s_id][:len(sentence)] = torch.cat([token.get_flair().unsqueeze(0)
+                                                                       for token in sentence], 0)
+                s = sentence_flair.shape
+                sentence_flair = self.flair_linear(sentence_flair).view(s[0], s[1], -1)
+                sentence_tensor.append(sentence_flair)
+
+            if self.relearn_bert:
+                sentence_bert = torch.zeros([len(sentences), longest_token_sequence_in_batch, self.bert_length],
+                                             dtype=torch.float, device=device)
+
+                for s_id, sentence in enumerate(sentences):
+                    # 用词向量填充
+
+                    sentence_bert[s_id][:len(sentence)] = torch.cat([token.get_bert().unsqueeze(0)
+                                                                      for token in sentence], 0)
+                sentence_bert = self.bert_linear(sentence_bert)
+                sentence_tensor.append(sentence_bert)
+
+            sentence_tensor = torch.cat(sentence_tensor, dim=-1)
 
         sentence_tensor = sentence_tensor.transpose_(0, 1)
 

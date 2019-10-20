@@ -233,6 +233,24 @@ class Token:
 
         return torch.FloatTensor()
 
+    def get_flair(self) -> torch.FloatTensor:
+        """获得向量"""
+        embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'ward' in embed]
+
+        if embeddings:
+            return torch.stack(embeddings, dim=0)
+
+        return torch.FloatTensor()
+
+    def get_bert(self) -> torch.FloatTensor:
+        """获得向量"""
+        embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'bert' in embed]
+
+        if embeddings:
+            return embeddings[0]
+
+        return torch.FloatTensor()
+
     @property
     def start_position(self) -> int:
         """起始位置"""
