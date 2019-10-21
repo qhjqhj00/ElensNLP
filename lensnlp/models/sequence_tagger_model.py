@@ -181,35 +181,37 @@ class SequenceTagger(nn.Model):
             self.all_linear = torch.nn.Linear(total_length, self.all_to)
             self.rnn_input = self.all_to
 
-        if self.relearn_bert:
-            self.bert_length = 0
-            for k,v in self.emb_dict:
-                if 'bert' in k:
-                    self.bert_length = v
-                    self.relearn_dim.append(self.bert_to)
+        self.bert_length = 0
+        for k, v in self.emb_dict.items():
+            if 'bert' in k:
+                self.bert_length = v
 
+        self.flair_length = 0
+        self.num_flair = 0
+        for k, v in self.emb_dict.items():
+            if 'ward' in k:
+                self.flair_length = v
+                self.relearn_dim.append(self.flair_to)
+                self.num_flair += 1
+
+        if self.relearn_bert:
             if self.bert_length == 0:
                 raise ValueError('No bert detected')
-
-            self.bert_linear = torch.nn.Linear(self.bert_length, self.bert_to)
+            else:
+                self.relearn_dim.append(self.bert_to)
+                self.bert_linear = torch.nn.Linear(self.bert_length, self.bert_to)
+        else:
+            self.relearn_dim.append(self.bert_length)
 
         if self.relearn_flair:
-            self.flair_length = 0
-            self.num_flair = 0
-            for k, v in self.emb_dict:
-                if 'ward' in k:
-                    self.flair_length = v
-                    self.relearn_dim.append(self.flair_to)
-                    self.num_flair += 1
-
             if self.num_flair == 0:
                 raise ValueError('No flair detected')
-
-            self.flair_linear = torch.nn.Linear(self.flair_length, self.flair_to)
+            else:
+                self.flair_linear = torch.nn.Linear(self.flair_length, self.flair_to)
 
         if not relearn_all:
             self.rnn_input = sum(self.relearn_dim)
-
+        self.relearn=True
         if not relearn_all and not relearn_bert and not relearn_flair:
             self.relearn = False
             self.rnn_input = total_length
@@ -254,9 +256,9 @@ class SequenceTagger(nn.Model):
             'rnn_layers': self.rnn_layers,
             'use_word_dropout': self.use_word_dropout,
             'use_locked_dropout': self.use_locked_dropout,
-            'relear_all': self.relearn_all,
-            'relear_bert': self.relearn_bert,
-            'relear_flair': self.relearn_flair,
+            'relearn_all': self.relearn_all,
+            'relearn_bert': self.relearn_bert,
+            'relearn_flair': self.relearn_flair,
             'all_to': self.all_to,
             'flair_to': self.flair_to,
             'bert_to': self.bert_to
@@ -407,17 +409,19 @@ class SequenceTagger(nn.Model):
                 sentence_flair = self.flair_linear(sentence_flair).view(s[0], s[1], -1)
                 sentence_tensor.append(sentence_flair)
 
-            if self.relearn_bert:
-                sentence_bert = torch.zeros([len(sentences), longest_token_sequence_in_batch, self.bert_length],
-                                             dtype=torch.float, device=device)
+            sentence_bert = torch.zeros([len(sentences), longest_token_sequence_in_batch, self.bert_length],
+                                         dtype=torch.float, device=device)
 
+            if self.bert_length != 0:
                 for s_id, sentence in enumerate(sentences):
                     # 用词向量填充
 
                     sentence_bert[s_id][:len(sentence)] = torch.cat([token.get_bert().unsqueeze(0)
                                                                       for token in sentence], 0)
+
+            if self.relearn_bert:
                 sentence_bert = self.bert_linear(sentence_bert)
-                sentence_tensor.append(sentence_bert)
+            sentence_tensor.append(sentence_bert)
 
             sentence_tensor = torch.cat(sentence_tensor, dim=-1)
 
@@ -432,16 +436,12 @@ class SequenceTagger(nn.Model):
             tag = torch.LongTensor(tag_idx).to(device)
             tag_list.append(tag)
 
-
         if self.use_dropout > 0.0:
             sentence_tensor = self.dropout(sentence_tensor)
         if self.use_word_dropout > 0.0:
             sentence_tensor = self.word_dropout(sentence_tensor)
         if self.use_locked_dropout > 0.0:
             sentence_tensor = self.locked_dropout(sentence_tensor)
-
-        if self.relearn_embeddings and not self.part_relearn:
-            sentence_tensor = self.embedding2nn(sentence_tensor)
 
         if self.use_rnn:
             packed = torch.nn.utils.rnn.pack_padded_sequence(sentence_tensor, lengths)

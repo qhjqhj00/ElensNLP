@@ -77,6 +77,7 @@ class StackedEmbeddings(TokenEmbeddings):
         for embedding in self.embeddings:
             embedding.embed(sentences)
 
+    @property
     def embed_dict(self) -> dict:
         return {emb.name: emb.embedding_length for emb in self.embeddings}
 
