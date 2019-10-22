@@ -207,11 +207,14 @@ class SequenceTagger(nn.Model):
                 raise ValueError('No flair detected')
             else:
                 self.flair_linear = torch.nn.Linear(self.flair_length*self.num_flair, self.flair_to)
+                torch.nn.init.xavier_uniform_(self.flair_linear.weight)
+
+                # self.flair_linear = torch.nn.Sequential(self.flair_fc, torch.nn.ReLU())
                 self.relearn_dim.append(self.flair_to)
 
         if not relearn_all:
             self.rnn_input = sum(self.relearn_dim)
-        self.relearn=True
+        self.relearn = True
         if not relearn_all and not relearn_bert and not relearn_flair:
             self.relearn = False
             self.rnn_input = total_length
