@@ -191,7 +191,6 @@ class SequenceTagger(nn.Model):
         for k, v in self.emb_dict.items():
             if 'ward' in k:
                 self.flair_length = v
-                self.relearn_dim.append(self.flair_to)
                 self.num_flair += 1
 
         if self.relearn_bert:
@@ -207,7 +206,8 @@ class SequenceTagger(nn.Model):
             if self.num_flair == 0:
                 raise ValueError('No flair detected')
             else:
-                self.flair_linear = torch.nn.Linear(self.flair_length, self.flair_to)
+                self.flair_linear = torch.nn.Linear(self.flair_length*self.num_flair, self.flair_to)
+                self.relearn_dim.append(self.flair_to)
 
         if not relearn_all:
             self.rnn_input = sum(self.relearn_dim)
@@ -397,7 +397,7 @@ class SequenceTagger(nn.Model):
 
             if self.relearn_flair:
                 sentence_flair = torch.zeros([len(sentences), longest_token_sequence_in_batch,
-                                              self.num_flair, self.flair_length],
+                                              self.num_flair*self.flair_length],
                                              dtype=torch.float, device=device)
 
                 for s_id, sentence in enumerate(sentences):
@@ -405,8 +405,7 @@ class SequenceTagger(nn.Model):
 
                     sentence_flair[s_id][:len(sentence)] = torch.cat([token.get_flair().unsqueeze(0)
                                                                        for token in sentence], 0)
-                s = sentence_flair.shape
-                sentence_flair = self.flair_linear(sentence_flair).view(s[0], s[1], -1)
+                sentence_flair = self.flair_linear(sentence_flair)
                 sentence_tensor.append(sentence_flair)
 
             sentence_bert = torch.zeros([len(sentences), longest_token_sequence_in_batch, self.bert_length],

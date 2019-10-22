@@ -238,7 +238,7 @@ class Token:
         embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'ward' in embed]
 
         if embeddings:
-            return torch.stack(embeddings, dim=0)
+            return torch.cat(embeddings, dim=0)
 
         return torch.FloatTensor()
 
