@@ -1,5 +1,5 @@
-from gensim.models import KeyedVectors
 from flask import Flask, request, Response, make_response
+from lensnlp.models import TextClassifier
 
 import json
 import os
@@ -7,7 +7,9 @@ import os
 
 CACHE_ROOT = os.path.expanduser(os.path.join('~', '.lensnlp'))
 
-word_embeddings = KeyedVectors.load(CACHE_ROOT+'/language_model/cn_glove_300d')
+clf = TextClassifier.load('cn_clf')
+
+word_embeddings = clf.document_embeddings.embeddings.embeddings[0].precomputed_word_embeddings
 
 app = Flask(__name__)
 

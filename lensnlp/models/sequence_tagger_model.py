@@ -408,6 +408,12 @@ class SequenceTagger(nn.Model):
 
                     sentence_flair[s_id][:len(sentence)] = torch.cat([token.get_flair().unsqueeze(0)
                                                                        for token in sentence], 0)
+
+                if self.use_word_dropout > 0.0:
+                    sentence_flair = self.word_dropout(sentence_flair)
+                if self.use_locked_dropout > 0.0:
+                    sentence_flair = self.locked_dropout(sentence_flair)
+
                 sentence_flair = self.flair_linear(sentence_flair)
                 sentence_tensor.append(sentence_flair)
 
