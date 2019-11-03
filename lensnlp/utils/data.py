@@ -233,16 +233,25 @@ class Token:
 
         return torch.FloatTensor()
 
-    def get_flair(self) -> torch.FloatTensor:
+    def get_glyph(self) -> torch.FloatTensor:
         """获得向量"""
-        embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'ward' in embed]
+        embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'cn4' in embed]
 
         if embeddings:
             return torch.cat(embeddings, dim=0)
 
         return torch.FloatTensor()
 
-    def get_bert(self) -> torch.FloatTensor:
+    def get_phonetics(self) -> torch.FloatTensor:
+        """获得向量"""
+        embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'cn_' in embed]
+
+        if embeddings:
+            return torch.cat(embeddings, dim=0)
+
+        return torch.FloatTensor()
+
+    def get_char(self) -> torch.FloatTensor:
         """获得向量"""
         embeddings = [self._embeddings[embed] for embed in sorted(self._embeddings.keys()) if 'bert' in embed]
 

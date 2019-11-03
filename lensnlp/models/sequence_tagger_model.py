@@ -121,12 +121,9 @@ class SequenceTagger(nn.Model):
                  dropout: float = 0.0,
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
-                 bert_to: int = 0,
-                 flair_to: int = 0,
-                 all_to: int = 0,
-                 relearn_bert: bool = False,
-                 relearn_flair: bool = False,
-                 relearn_all: bool = False
+                 char_relearn: int = 2048,
+                 glyph_relearn: int = 1024,
+                 phonetics_relearn: int = 1024,
                  ):
 
         super(SequenceTagger, self).__init__()
@@ -163,71 +160,46 @@ class SequenceTagger(nn.Model):
             self.locked_dropout = nn.LockedDropout(locked_dropout)
 
         total_length: int = self.embeddings.embedding_length
-        
-        self.relearn_all: bool = relearn_all
-        self.relearn_flair: bool = relearn_flair
-        self.relearn_bert: bool = relearn_bert
 
-        self.all_to = all_to
-        self.bert_to = bert_to
-        self.flair_to = flair_to
+        self.char_relearn = char_relearn
+        self.glyph_relearn = glyph_relearn
+        self.phonetics_relearn = phonetics_relearn
+
+        self.is_char_relearn: bool = self.char_relearn > 0
+        self.is_glyph_relearn: bool = self.glyph_relearn > 0
+        self.is_phonetics_relearn: bool = self.phonetics_relearn > 0
 
         self.relearn_dim = []
 
         if isinstance(embeddings, StackedEmbeddings):
             self.emb_dict = embeddings.embed_dict
 
-        if self.relearn_all:
-            self.all_linear = torch.nn.Linear(total_length, self.all_to)
-            self.rnn_input = self.all_to
+        if self.is_char_relearn:
+            self.char_length = self.emb_dict['bert-base-chinese']
+            self.char_linear = torch.nn.Linear(self.char_length, self.char_relearn)
+            self.relearn_dim.append(self.char_relearn)
 
-        self.bert_length = 0
-        for k, v in self.emb_dict.items():
-            if 'bert' in k:
-                self.bert_length = v
+        if self.is_glyph_relearn:
+            self.glyph_length = self.emb_dict['cn4_forward_large']+self.emb_dict['cn4_backward_large']
+            self.glyph_linear = torch.nn.Linear(self.glyph_length, self.glyph_relearn)
+            self.relearn_dim.append(self.glyph_relearn)
 
-        self.flair_length = 0
-        self.num_flair = 0
-        for k, v in self.emb_dict.items():
-            if 'ward' in k:
-                self.flair_length = v
-                self.num_flair += 1
+        if self.is_phonetics_relearn:
+            self.phonetics_length = self.emb_dict['cn_forward_large'] + self.emb_dict['cn_backward_large']
+            self.phonetics_linear = torch.nn.Linear(self.phonetics_length, self.glyph_relearn)
+            self.relearn_dim.append(self.phonetics_relearn)
 
-        if self.relearn_bert:
-            if self.bert_length == 0:
-                raise ValueError('No bert detected')
-            else:
-                self.relearn_dim.append(self.bert_to)
-                self.bert_linear = torch.nn.Linear(self.bert_length, self.bert_to)
-        else:
-            self.relearn_dim.append(self.bert_length)
-
-        if self.relearn_flair:
-            if self.num_flair == 0:
-                raise ValueError('No flair detected')
-            else:
-                self.flair_linear = torch.nn.Linear(self.flair_length*self.num_flair, self.flair_to)
-                torch.nn.init.xavier_uniform_(self.flair_linear.weight)
-
-                # self.flair_linear = torch.nn.Sequential(self.flair_fc, torch.nn.ReLU())
-                self.relearn_dim.append(self.flair_to)
-
-        if not relearn_all:
-            self.rnn_input = sum(self.relearn_dim)
-        self.relearn = True
-        if not relearn_all and not relearn_bert and not relearn_flair:
-            self.relearn = False
-            self.rnn_input = total_length
+        rnn_input_size = sum(self.relearn_dim)
 
         self.rnn_type = 'LSTM'
         if self.rnn_type in ['LSTM', 'GRU']:
 
             if self.nlayers == 1:
-                self.rnn = getattr(torch.nn, self.rnn_type)(self.rnn_input, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(rnn_input_size, hidden_size,
                                                             num_layers=self.nlayers,
                                                             bidirectional=True)
             else:
-                self.rnn = getattr(torch.nn, self.rnn_type)(self.rnn_input, hidden_size,
+                self.rnn = getattr(torch.nn, self.rnn_type)(rnn_input_size, hidden_size,
                                                             num_layers=self.nlayers,
                                                             dropout=0.5,
                                                             bidirectional=True)
@@ -259,12 +231,9 @@ class SequenceTagger(nn.Model):
             'rnn_layers': self.rnn_layers,
             'use_word_dropout': self.use_word_dropout,
             'use_locked_dropout': self.use_locked_dropout,
-            'relearn_all': self.relearn_all,
-            'relearn_bert': self.relearn_bert,
-            'relearn_flair': self.relearn_flair,
-            'all_to': self.all_to,
-            'flair_to': self.flair_to,
-            'bert_to': self.bert_to
+            'char_relearn': self.char_relearn,
+            'phonetics_relearn': self.phonetics_relearn,
+            'glyph_relearn': self.glyph_relearn,
         }
 
         torch.save(model_state, str(model_file), pickle_protocol=4)
@@ -291,12 +260,9 @@ class SequenceTagger(nn.Model):
             dropout=use_dropout,
             word_dropout=use_word_dropout,
             locked_dropout=use_locked_dropout,
-            relearn_all=state['relearn_all'],
-            relearn_bert=state['relearn_bert'],
-            relearn_flair=state['relearn_flair'],
-            all_to=state['all_to'],
-            flair_to=state['flair_to'],
-            bert_to=state['bert_to']
+            char_relearn=state['char_relearn'],
+            glyph_relearn=state['glyph_relearn'],
+            phonetics_relearn=state['phonetics_relearn'],
         )
         model.load_state_dict(state['state_dict'])
         model.eval()
@@ -383,56 +349,51 @@ class SequenceTagger(nn.Model):
         lengths: List[int] = [len(sentence.tokens) for sentence in sentences]
         tag_list: List = []
         longest_token_sequence_in_batch: int = lengths[0]
-        if not self.relearn:
+        sentence_tensor = []
+
+        if self.char_relearn:
             #初始化0张量
-            sentence_tensor = torch.zeros([len(sentences),
+            char_tensor = torch.zeros([len(sentences),
                                            longest_token_sequence_in_batch,
-                                           self.embeddings.embedding_length],
-                                          dtype=torch.float, device=device)
+                                           self.char_length], dtype=torch.float, device=device)
 
             for s_id, sentence in enumerate(sentences):
                 # 用词向量填充
-                sentence_tensor[s_id][:len(sentence)] = torch.cat([token.get_embedding().unsqueeze(0)
+                char_tensor[s_id][:len(sentence)] = torch.cat([token.get_char().unsqueeze(0)
                                                                    for token in sentence], 0)
 
-        else:
-            sentence_tensor = []
+            char_tensor = self.char_linear(char_tensor)
+            sentence_tensor.append(char_tensor)
 
-            if self.relearn_flair:
-                sentence_flair = torch.zeros([len(sentences), longest_token_sequence_in_batch,
-                                              self.num_flair*self.flair_length],
-                                             dtype=torch.float, device=device)
+        if self.glyph_relearn:
+            # 初始化0张量
+            glyph_tensor = torch.zeros([len(sentences),
+                                       longest_token_sequence_in_batch,
+                                       self.glyph_length], dtype=torch.float, device=device)
 
-                for s_id, sentence in enumerate(sentences):
-                    # 用词向量填充
+            for s_id, sentence in enumerate(sentences):
+                # 用词向量填充
+                glyph_tensor[s_id][:len(sentence)] = torch.cat([token.get_glyph().unsqueeze(0)
+                                                               for token in sentence], 0)
 
-                    sentence_flair[s_id][:len(sentence)] = torch.cat([token.get_flair().unsqueeze(0)
-                                                                       for token in sentence], 0)
+            glyph_tensor = self.glyph_linear(glyph_tensor)
+            sentence_tensor.append(glyph_tensor)
 
-                if self.use_word_dropout > 0.0:
-                    sentence_flair = self.word_dropout(sentence_flair)
-                if self.use_locked_dropout > 0.0:
-                    sentence_flair = self.locked_dropout(sentence_flair)
+        if self.phonetics_relearn:
+            # 初始化0张量
+            phonetics_tensor = torch.zeros([len(sentences),
+                                       longest_token_sequence_in_batch,
+                                       self.phonetics_length], dtype=torch.float, device=device)
 
-                sentence_flair = self.flair_linear(sentence_flair)
-                sentence_tensor.append(sentence_flair)
+            for s_id, sentence in enumerate(sentences):
+                # 用词向量填充
+                phonetics_tensor[s_id][:len(sentence)] = torch.cat([token.get_phonetics().unsqueeze(0)
+                                                               for token in sentence], 0)
 
-            sentence_bert = torch.zeros([len(sentences), longest_token_sequence_in_batch, self.bert_length],
-                                         dtype=torch.float, device=device)
+            phonetics_tensor = self.phonetics_linear(phonetics_tensor)
+            sentence_tensor.append(phonetics_tensor)
 
-            if self.bert_length != 0:
-                for s_id, sentence in enumerate(sentences):
-                    # 用词向量填充
-
-                    sentence_bert[s_id][:len(sentence)] = torch.cat([token.get_bert().unsqueeze(0)
-                                                                      for token in sentence], 0)
-
-            if self.relearn_bert:
-                sentence_bert = self.bert_linear(sentence_bert)
-            sentence_tensor.append(sentence_bert)
-
-            sentence_tensor = torch.cat(sentence_tensor, dim=-1)
-
+        sentence_tensor = torch.cat(sentence_tensor, dim=-1)
         sentence_tensor = sentence_tensor.transpose_(0, 1)
 
         for s_id, sentence in enumerate(sentences):
