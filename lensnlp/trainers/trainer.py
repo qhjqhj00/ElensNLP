@@ -154,6 +154,7 @@ class ModelTrainer:
         dev_score_history = []
         dev_loss_history = []
         train_loss_history = []
+        best_save_score = 0.0
 
         try:
             previous_learning_rate = learning_rate
@@ -218,11 +219,7 @@ class ModelTrainer:
                 log_line(log)
                 log.info(f'EPOCH {epoch + 1} done: loss {train_loss:.4f} - lr {learning_rate:.4f} - bad epochs {bad_epochs}')
 
-                dev_metric = None
-                dev_loss = '_'
-
                 train_metric = None
-                test_metric = None
                 if monitor_train:
                     train_metric, train_loss = self._calculate_evaluation_results_for(
                         'TRAIN', self.corpus.train, evaluation_metric, embeddings_in_memory, eval_mini_batch_size)
@@ -233,6 +230,8 @@ class ModelTrainer:
                 test_metric, test_loss = self._calculate_evaluation_results_for(
                     'TEST', self.corpus.test, evaluation_metric, embeddings_in_memory, eval_mini_batch_size,
                     base_path / 'test.tsv')
+
+                current_save_score = test_metric.macro_avg_f_score()
 
                 with open(loss_txt, 'a') as f:
                     train_metric_str = train_metric.to_tsv() if train_metric is not None else Metric.to_empty_tsv()
@@ -267,8 +266,12 @@ class ModelTrainer:
                                                optimizer.state_dict(), scheduler.state_dict(),
                                                epoch + 1, train_loss)
 
-                if current_score == scheduler.best:
+                if current_save_score > best_save_score:
                     self.model.save(base_path / 'best-model.pt')
+                    best_save_score = current_save_score
+
+                #if current_score == scheduler.best:
+                #    self.model.save(base_path / 'best-model.pt')
 
             self.model.save(base_path / 'final-model.pt')
 
