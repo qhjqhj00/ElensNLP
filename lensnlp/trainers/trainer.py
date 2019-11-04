@@ -38,8 +38,8 @@ class ModelTrainer:
             Examples
             --------
              >>> from lensnlp.models import SequenceTagger
-             >>> from lensnlp.Embeddings import WordEmbeddings
-             >>> from lensnlp.utilis.data_load import load_column_corpus
+             >>> from lensnlp.embeddings import WordEmbeddings
+             >>> from lensnlp.utils.data_load import load_column_corpus
              >>> corpus = load_column_corpus('./dataset/',{1:'token',2:'ner'},'train.txt','test.txt',lang='UY')
              >>> emb = WordEmbeddings('cn_glove')
              >>> tagger = SequenceTagger(hidden_size=256,embeddings = emb)
@@ -154,6 +154,7 @@ class ModelTrainer:
         dev_score_history = []
         dev_loss_history = []
         train_loss_history = []
+        best_score = 0.0
 
         try:
             previous_learning_rate = learning_rate
@@ -218,11 +219,9 @@ class ModelTrainer:
                 log_line(log)
                 log.info(f'EPOCH {epoch + 1} done: loss {train_loss:.4f} - lr {learning_rate:.4f} - bad epochs {bad_epochs}')
 
-                dev_metric = None
-                dev_loss = '_'
-
                 train_metric = None
-                test_metric = None
+
+
                 if monitor_train:
                     train_metric, train_loss = self._calculate_evaluation_results_for(
                         'TRAIN', self.corpus.train, evaluation_metric, embeddings_in_memory, eval_mini_batch_size)
@@ -234,6 +233,9 @@ class ModelTrainer:
                     'TEST', self.corpus.test, evaluation_metric, embeddings_in_memory, eval_mini_batch_size,
                     base_path / 'test.tsv')
 
+                current_score = test_metric.macro_avg_f_score()
+
+
                 with open(loss_txt, 'a') as f:
                     train_metric_str = train_metric.to_tsv() if train_metric is not None else Metric.to_empty_tsv()
                     dev_metric_str = dev_metric.to_tsv() if dev_metric is not None else Metric.to_empty_tsv()
@@ -242,7 +244,6 @@ class ModelTrainer:
                         f'{epoch}\t{datetime.datetime.now():%H:%M:%S}\t{bad_epochs}\t{learning_rate:.4f}\t'
                         f'{train_loss}\t{train_metric_str}\t{dev_loss}\t{dev_metric_str}\t_\t{test_metric_str}\n')
 
-                dev_score = 0.
                 if not train_with_dev:
                     if evaluation_metric == EvaluationMetric.MACRO_ACCURACY:
                         dev_score = dev_metric.macro_avg_accuracy()
@@ -267,8 +268,11 @@ class ModelTrainer:
                                                optimizer.state_dict(), scheduler.state_dict(),
                                                epoch + 1, train_loss)
 
-                if current_score == scheduler.best:
+                if current_score > best_score:
                     self.model.save(base_path / 'best-model.pt')
+                    best_score = current_score
+
+                # if current_score == scheduler.best:
 
             self.model.save(base_path / 'final-model.pt')
 
