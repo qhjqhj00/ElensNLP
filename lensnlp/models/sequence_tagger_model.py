@@ -121,9 +121,9 @@ class SequenceTagger(nn.Model):
                  dropout: float = 0.0,
                  word_dropout: float = 0.05,
                  locked_dropout: float = 0.5,
-                 char_relearn: int = 2048,
-                 glyph_relearn: int = 1024,
-                 phonetics_relearn: int = 1024,
+                 char_relearn: int = 3072,
+                 glyph_relearn: int = 2048,
+                 phonetics_relearn: int = 2048,
                  ):
 
         super(SequenceTagger, self).__init__()

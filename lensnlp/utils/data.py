@@ -169,7 +169,7 @@ class Token:
 
     def converter(self):
         """将汉字变为拼音"""
-        p = pinyin(self.text, style=Style.TONE2)
+        p = pinyin(self.text, style=Style.TONE3)
         p = [t[0] for t in p]
         return ' '.join(p)
 
