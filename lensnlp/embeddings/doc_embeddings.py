@@ -126,12 +126,6 @@ class DocumentRNNEmbeddings(DocumentEmbeddings):
             是否使用注意力
         Examples
         --------
-         >>> from lensnlp.Embeddings import WordEmbeddings, DocumentRNNEmbeddings
-         >>> from lensnlp.utilis.data import Sentence
-         >>> Embed_list = [WordEmbeddings('cn_glove')]
-         >>> Docum_embed = DocumentRNNEmbeddings(Embed_list)
-         >>> sent = Sentence('北京一览群智数据有限公司。')
-         >>> Docum_embed.embed((sent)
 
         """
     def __init__(self,

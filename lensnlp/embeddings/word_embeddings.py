@@ -258,8 +258,7 @@ class FlairEmbeddings(TokenEmbeddings):
         elif not Path(model).exists():
             raise ValueError(f'The given model "{model}" is not available or is not a valid path.')
         
-        if trans is not None:
-            self.trans = trans
+        self.trans = trans
 
         self.name = str(model)
         self.static_embeddings = detach
