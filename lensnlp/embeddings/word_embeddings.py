@@ -199,6 +199,8 @@ class FlairEmbeddings(TokenEmbeddings):
 
         super().__init__()
 
+        self.trans = trans
+
         if model.lower() == 'uy_forward_small':
             model_path = Path(CACHE_ROOT) / 'language_model/uyghur_forward_small.pt'
             self.trans = 'lt'
@@ -257,8 +259,6 @@ class FlairEmbeddings(TokenEmbeddings):
             model_path = Path(CACHE_ROOT) / 'language_model/en_backward_large.pt'
         elif not Path(model).exists():
             raise ValueError(f'The given model "{model}" is not available or is not a valid path.')
-        
-        self.trans = trans
 
         self.name = str(model)
         self.static_embeddings = detach
