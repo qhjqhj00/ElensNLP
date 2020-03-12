@@ -168,6 +168,34 @@ class WordEmbeddings(TokenEmbeddings):
         return self.name
 
 
+class AnyEmbeddings(TokenEmbeddings):
+    def __init__(self, model):
+        self.model = model
+        self.name: str = 'any'
+        self.static_embeddings = True
+        self.__embedding_length: int = model.args.hidden_size
+        super().__init__()
+
+    @property
+    def embedding_length(self) -> int:
+        return self.__embedding_length
+
+    def _add_embeddings_internal(self, sentences: List[Sentence]) -> List[Sentence]:
+
+        btokens = [sentence.to_tokenized_string().split() for sentence in sentences]
+
+        btensor = self.model.emb(btokens).to(device)
+
+        for i, sentence in enumerate(sentences):
+            for m, token in enumerate(sentence.tokens):
+                token.set_embedding(self.name, btensor[i][m])
+
+        return sentences
+
+    def __str__(self):
+        return self.name
+
+
 class FlairEmbeddings(TokenEmbeddings):
     """字符级 Contextualized Embedding，为每个单词根据前后文生成向量。
 

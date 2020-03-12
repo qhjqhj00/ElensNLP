@@ -608,17 +608,17 @@ class Sentence:
 
     def to_original_text(self) -> str:
         """生成原来的文本"""
-        str = ''
+        text = ''
         pos = 0
         for t in self.tokens:
             while t.start_pos != pos:
-                str += ' '
+                text += ' '
                 pos += 1
 
-            str += t.text
+            text += t.text
             pos += len(t.text)
 
-        return str
+        return text
 
     def to_dict(self, tag_type: str = None):
         """生成标签，spans词典"""
